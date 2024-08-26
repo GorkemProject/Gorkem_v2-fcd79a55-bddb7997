@@ -1,0 +1,6 @@
+@Gorkem__HostAddress = http://localhost:5214
+
+GET {{Gorkem__HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
