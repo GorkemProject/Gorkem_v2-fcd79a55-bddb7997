@@ -29,21 +29,21 @@ namespace Gorkem_.Features.KodTablo
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
 
-            private readonly GorkemDbContext context;
+            private readonly GorkemDbContext _context;
 
             public Handler(GorkemDbContext context)
             {
-                this.context=context;
+                _context=context;
             }
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await context.Birims.FirstOrDefaultAsync(r=>r.Id==request.Id && r.Aktifmi);
+                var currentBirim = await _context.Birims.FirstOrDefaultAsync(r=>r.Id==request.Id && r.Aktifmi);
                 if (currentBirim is null) return await Result<bool>.FailAsync($"With the {request.Id}  Id data could not found!");
 
                 currentBirim.Aktifmi=false;
                 currentBirim.T_Pasif=DateTime.UtcNow;
-                var isDeleted = await context.SaveChangesAsync()>0;
+                var isDeleted = await _context.SaveChangesAsync()>0;
 
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);

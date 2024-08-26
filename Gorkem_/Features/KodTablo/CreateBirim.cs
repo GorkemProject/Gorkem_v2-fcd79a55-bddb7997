@@ -26,16 +26,17 @@ namespace Gorkem_.Features.KodTablo
                 RuleFor(r => r.Name).NotEmpty().NotNull().Configure(r => r.MessageBuilder=_ => "Ad Boş Olamaz");
             }
         }
-
         public static KT_Birim ToBirim(this Command command)
         {
             return new KT_Birim
             {
                 Name= command.Name,
+                //Kayıt Esnasında aktiflik durumu false olarak geldiği için bu kısmı ekledim. Aktifleştirilme Tarihini de ekledim.
+                Aktifmi = true,
+                T_Aktif = DateTime.UtcNow
+
             };
         }
-
-
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
 
@@ -49,7 +50,7 @@ namespace Gorkem_.Features.KodTablo
             {
                 var isExists = _context.Birims.Any(r => r.Name==request.Name); 
                 if (isExists) return await Result<bool>.FailAsync($"{request.Name} is already exists");
-
+                
                 _context.Birims.Add(request.ToBirim());
                 var isSaved = await _context.SaveChangesAsync()>0;
 
