@@ -3,6 +3,6 @@
     public class BirimGetirRequest
     {
         public bool? Aktifmi { get; set; }
-        //jhk
+        //jhk444
     }
 }
