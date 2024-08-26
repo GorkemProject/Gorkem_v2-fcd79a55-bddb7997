@@ -4,5 +4,6 @@
     {
         public bool? Aktifmi { get; set; }
         //jhk444tdd dfdsf
+
     }
 }
