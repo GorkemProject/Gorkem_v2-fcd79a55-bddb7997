@@ -1,10 +1,8 @@
 ﻿namespace Gorkem_.Contracts.KodTablo
 {
-    public class BirimGetirRequest
+    public class BirimGetirResponse
     {
         public bool? Aktifmi { get; set; }
-        //jhk444tdd dfdsf
-        //denemeasdf
-        // akp
+        public string Name { get; set; }
     }
 }

@@ -12,24 +12,20 @@ using System.Reflection;
 
 namespace Gorkem_.Features.KodTablo
 {
-    public class GetAllBirim
+    public static class GetAllBirim
     {
-        public class Query : IRequest<Result<List<KT_Birim>>>
+        public class Query : IRequest<List<BirimGetirResponse>>
         {
-            public bool? Aktifmi { get; set; }
-            public string Name { get; set; }
         }
 
         public class BirimGetirValidation : AbstractValidator<Query>
         {
             public BirimGetirValidation()
             {
-                RuleFor(x => x.Aktifmi)
-                .Must(aktifMi => aktifMi == true)
-                .WithMessage("Nesne aktif olmalıdır.");
+                //Listeleme işlemi yaptığımız için herhangi bir validasyon yapmadım.
             }
         }
-        internal sealed class Handler : IRequestHandler<GetAllBirim.Query, Result<List<KT_Birim>>>
+        internal sealed class Handler : IRequestHandler<Query, List<BirimGetirResponse>>
         {
             private readonly GorkemDbContext _context;
 
@@ -38,32 +34,29 @@ namespace Gorkem_.Features.KodTablo
                 _context = context;
             }
 
-            public async Task<Result<List<KT_Birim>>> Handle(GetAllBirim.Query request, CancellationToken cancellationToken)
+            public async Task<List<BirimGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activeBirimler = await _context.Birims
-                    .Where(r => r.Aktifmi == request.Aktifmi)
-                    .ToListAsync();
-
-                if (activeBirimler.Count == 0)
-                    return await Result<List<KT_Birim>>.FailAsync("Aktif bir birim bulunamadı.");
-
-                return await Result<List<KT_Birim>>.SuccessAsync(activeBirimler);
-            }
+                var aktifBirimler = await _context.Birims
+                    .Where(b => b.Aktifmi == true)
+                    .Select(b => new BirimGetirResponse
+                    {
+                        Aktifmi = b.Aktifmi,
+                        Name = b.Name,
+                    }).ToListAsync(cancellationToken);
+                return aktifBirimler;
+            }  
         }
     }
     public class GetAllBirimEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kodtablo/birim", async ([FromQuery] bool? aktifMi, ISender sender) =>
+            app.MapGet("kodtablo/birim", async (ISender sender) =>
             {
-                var request = new GetAllBirim.Query() { Aktifmi = aktifMi };
+                var request = new GetAllBirim.Query();
                 var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response.Data); // Dönen veriyi response.Data ile döndür
-
-                return Results.BadRequest(response.Message);
+                return Results.Ok(response);
 
             }).WithTags(EndpointConstants.KODTABLO);
         }
