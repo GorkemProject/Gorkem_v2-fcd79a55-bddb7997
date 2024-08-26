@@ -22,7 +22,7 @@ namespace Gorkem_.Features.KodTablo
         {
             public BirimGetirValidation()
             {
-                //Listeleme işlemi yaptığımız için herhangi bir validasyon yapmadım.
+                //Listeleme işlemi yaptığımız için herhangi bir validasyon yapmadım. 
             }
         }
         internal sealed class Handler : IRequestHandler<Query, List<BirimGetirResponse>>
