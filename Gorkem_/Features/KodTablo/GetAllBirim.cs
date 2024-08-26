@@ -37,10 +37,10 @@ namespace Gorkem_.Features.KodTablo
             public async Task<List<BirimGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifBirimler = await _context.Birims
-                    .Where(b => b.Aktifmi == true)
+                    .Where(b => b.Aktifmi)
                     .Select(b => new BirimGetirResponse
                     {
-                        Aktifmi = b.Aktifmi,
+                        Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
                 return aktifBirimler;
