@@ -29,7 +29,7 @@ namespace Gorkem_.Features.KodTablo
             {
                 Name = command.Name,
                 Aktifmi = true,
-                T_Aktif=DateTime.UtcNow
+                T_Aktif=DateTime.Now
             };
         }
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>

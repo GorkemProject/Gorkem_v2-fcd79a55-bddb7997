@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.Results;
+using Azure.Core;
 using Carter;
 using FluentValidation;
 using Gorkem_.Context;
@@ -7,50 +8,49 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Transactions;
 
 namespace Gorkem_.Features.KodTablo
 {
-    public class DeleteBrans
+    public static class DeleteDurum
     {
-        public class Command : IRequest<Result<bool>> { public int Id { get; set; } }
-
-        public class DeleteBirimValidation: AbstractValidator<Command>
+        public class Command : IRequest<Result<bool>> { public int Id { get; set; } }   
+        public class DeleteDurumValidation : AbstractValidator<Command>
         {
-            public DeleteBirimValidation()
+            public DeleteDurumValidation() 
             {
-                RuleFor(r => r.Id).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder = _ => "Id Boş Olamaz.");
+                RuleFor(r=>r.Id).GreaterThanOrEqualTo(0).Configure(r=>r.MessageBuilder=_=>"Id Boş Olamaz.");
             }
         }
-        internal sealed class Handler : IRequestHandler<Command ,Result<bool>>
+        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
             private readonly GorkemDbContext _context;
             public Handler(GorkemDbContext context)
             {
                 _context = context;
             }
-
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await _context.KT_Branss.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
-                if (currentBirim is null) return await Result<bool>.FailAsync($"With the {request.Id}Id data could not found!");
-
+                var currentBirim = await _context.KT_Durums.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
+                if (currentBirim is null) return await Result<bool>.FailAsync($" With the {request.Id} Id data could not found'");
                 currentBirim.Aktifmi = false;
                 currentBirim.T_Pasif = DateTime.Now;
-                var isDeleted = await _context.SaveChangesAsync() > 0;
+                var isDeleted = await _context.SaveChangesAsync()>0;
+
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);
-                return await Result<bool>.FailAsync("Silme İşlemi Yapılamadı.");
+                return await Result<bool>.FailAsync("Silme İşlemi Yapılamadı");
+                
+                
             }
         }
     }
-    public class DeleteBransEndpoint : ICarterModule
+    public class DeleteDurumEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/brans", async ([FromBody] BransSilRequest model, ISender sender) =>
+            app.MapDelete("kodtablo/durum", async ([FromBody] DurumSilRequest model,ISender sender ) =>
             {
-                var request = new DeleteBrans.Command() { Id = model.Id };
+                var request = new DeleteDurum.Command() { Id = model.Id };
                 var response = await sender.Send(request);
                 if (response.Succeeded)
                     return Results.Ok($"With the {model.Id} id data has been deleted");

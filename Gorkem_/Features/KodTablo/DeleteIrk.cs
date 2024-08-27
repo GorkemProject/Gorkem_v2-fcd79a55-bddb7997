@@ -35,7 +35,7 @@ namespace Gorkem_.Features.KodTablo
                 if (currentBirim is null) return await Result<bool>.FailAsync($"With the {request.Id} Id data could not found!");
 
                 currentBirim.Aktifmi = false;
-                currentBirim.T_Pasif = DateTime.UtcNow;
+                currentBirim.T_Pasif = DateTime.Now;
                 var isDeleted = await _context.SaveChangesAsync() > 0;
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);

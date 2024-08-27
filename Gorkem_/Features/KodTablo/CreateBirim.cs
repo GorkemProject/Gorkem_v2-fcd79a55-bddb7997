@@ -33,7 +33,7 @@ namespace Gorkem_.Features.KodTablo
                 Name= command.Name,
                 //Kayıt Esnasında aktiflik durumu false olarak geldiği için bu kısmı ekledim. Aktifleştirilme Tarihini de ekledim.
                 Aktifmi = true,
-                T_Aktif = DateTime.UtcNow
+                T_Aktif = DateTime.Now
 
             };
         }
