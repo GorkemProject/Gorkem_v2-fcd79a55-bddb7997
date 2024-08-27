@@ -43,10 +43,10 @@ namespace Gorkem_.Features.KodTablo
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExists = _context.Branss.Any(r => r.Name == request.Name);
+                var isExists = _context.KT_Branss.Any(r => r.Name == request.Name);
                 if (isExists) return await Result<bool>.FailAsync($"{request.Name} is already exist");
 
-                _context.Branss.Add(request.ToBrans());
+                _context.KT_Branss.Add(request.ToBrans());
                 var isSaved = await _context.SaveChangesAsync()>0;
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);

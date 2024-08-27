@@ -31,7 +31,7 @@ namespace Gorkem_.Features.KodTablo
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await _context.Irks.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
+                var currentBirim = await _context.KT_Irks.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
                 if (currentBirim is null) return await Result<bool>.FailAsync($"With the {request.Id} Id data could not found!");
 
                 currentBirim.Aktifmi = false;

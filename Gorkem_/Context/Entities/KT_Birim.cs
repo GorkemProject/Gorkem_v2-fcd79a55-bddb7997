@@ -2,7 +2,6 @@
 {
     public class KT_Birim : BaseEntity
     {
-
-        public string Name { get; set; } = string.Empty;
+        public virtual ICollection<UT_Kopek_Kopek>? UT_Kopek_Kopek { get; set; }
     }
 }

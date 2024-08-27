@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827080904_TablolarEklendi")]
+    partial class TablolarEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Birims");
+                    b.ToTable("Birims");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Brans", b =>
@@ -71,7 +74,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Branss");
+                    b.ToTable("Branss");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Durum", b =>
@@ -97,7 +100,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Durums");
+                    b.ToTable("Durums");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Irk", b =>
@@ -123,7 +126,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Irks");
+                    b.ToTable("Irks");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KopekTuru", b =>
@@ -149,7 +152,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_KopekTurus");
+                    b.ToTable("KopekTurus");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Hibe", b =>
@@ -177,7 +180,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UT_Kopek_Hibes");
+                    b.ToTable("Kopek_Hibes");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Kopek", b =>

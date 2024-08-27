@@ -29,7 +29,7 @@ namespace Gorkem_.Features.KodTablo
             }
             public async Task<List<BransGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifBranslar = await _contex.Branss
+                var aktifBranslar = await _contex.KT_Branss
                     .Where(b => b.Aktifmi)
                     .Select(b => new BransGetirResponse
                     {

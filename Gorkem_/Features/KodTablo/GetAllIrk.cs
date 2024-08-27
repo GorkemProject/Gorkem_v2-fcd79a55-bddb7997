@@ -30,7 +30,7 @@ namespace Gorkem_.Features.KodTablo
 
             public async Task<List<IrkGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifIrklar = await _context.Irks
+                var aktifIrklar = await _context.KT_Irks
                     .Where(b=>b.Aktifmi)
                     .Select(b=>new IrkGetirResponse
                     {
