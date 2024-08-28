@@ -8,14 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Collections.Immutable;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class GetAllBrans
     {
         public class Query : IRequest<List<BransGetirResponse>> { }
         public class BransGetirValidation : AbstractValidator<Query>
         {
-            public BransGetirValidation() 
+            public BransGetirValidation()
             {
                 //Listeleme işlemi olduğu için herhangi bir validasyon yapmıyorum.
             }
@@ -25,7 +25,7 @@ namespace Gorkem_.Features.KodTablo
             private readonly GorkemDbContext _contex;
             public Handler(GorkemDbContext contex)
             {
-                _contex=contex;
+                _contex = contex;
             }
             public async Task<List<BransGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {

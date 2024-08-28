@@ -8,7 +8,7 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class CreateIrk
     {
@@ -29,7 +29,7 @@ namespace Gorkem_.Features.KodTablo
             {
                 Name = command.Name,
                 Aktifmi = true,
-                T_Aktif=DateTime.Now
+                T_Aktif = DateTime.Now
             };
         }
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>
@@ -42,15 +42,15 @@ namespace Gorkem_.Features.KodTablo
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExists = _context.KT_Irks.Any(r=>r.Name==request.Name);
+                var isExists = _context.KT_Irks.Any(r => r.Name == request.Name);
                 if (isExists) return await Result<bool>.FailAsync($"{request.Name} is already exist");
-                
+
                 _context.KT_Irks.Add(request.ToIrk());
                 var isSaved = await _context.SaveChangesAsync() > 0;
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");
-                
+
             }
         }
     }

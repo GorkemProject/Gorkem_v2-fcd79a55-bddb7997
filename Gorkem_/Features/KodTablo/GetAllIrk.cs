@@ -6,18 +6,18 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public class GetAllIrk
     {
         public class Query : IRequest<List<IrkGetirResponse>> { }
 
-        public class IrkGetirValidation : AbstractValidator<Query> 
+        public class IrkGetirValidation : AbstractValidator<Query>
         {
-            public IrkGetirValidation() 
+            public IrkGetirValidation()
             {
                 //Listeleme işlemi yapıldığı için herhangi bir validasyon işlemi yapmadım.
-            } 
+            }
         }
         internal sealed class Handler : IRequestHandler<Query, List<IrkGetirResponse>>
         {
@@ -31,8 +31,8 @@ namespace Gorkem_.Features.KodTablo
             public async Task<List<IrkGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifIrklar = await _context.KT_Irks
-                    .Where(b=>b.Aktifmi)
-                    .Select(b=>new IrkGetirResponse
+                    .Where(b => b.Aktifmi)
+                    .Select(b => new IrkGetirResponse
                     {
                         Id = b.Id,
                         Name = b.Name,

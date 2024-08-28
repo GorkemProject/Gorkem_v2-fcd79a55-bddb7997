@@ -8,7 +8,7 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class CreateBirim
     {
@@ -23,14 +23,14 @@ namespace Gorkem_.Features.KodTablo
         {
             public CreateBirimValidation()
             {
-                RuleFor(r => r.Name).NotEmpty().NotNull().Configure(r => r.MessageBuilder=_ => "Ad Boş Olamaz");
+                RuleFor(r => r.Name).NotEmpty().NotNull().Configure(r => r.MessageBuilder = _ => "Ad Boş Olamaz");
             }
         }
         public static KT_Birim ToBirim(this Command command)
         {
             return new KT_Birim
             {
-                Name= command.Name,
+                Name = command.Name,
                 //Kayıt Esnasında aktiflik durumu false olarak geldiği için bu kısmı ekledim. Aktifleştirilme Tarihini de ekledim.
                 Aktifmi = true,
                 T_Aktif = DateTime.Now
@@ -44,15 +44,15 @@ namespace Gorkem_.Features.KodTablo
 
             public Handler(GorkemDbContext context)
             {
-                _context=context;
-            } 
+                _context = context;
+            }
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExists = _context.KT_Birims.Any(r => r.Name==request.Name); 
+                var isExists = _context.KT_Birims.Any(r => r.Name == request.Name);
                 if (isExists) return await Result<bool>.FailAsync($"{request.Name} is already exists");
-                
+
                 _context.KT_Birims.Add(request.ToBirim());
-                var isSaved = await _context.SaveChangesAsync()>0;
+                var isSaved = await _context.SaveChangesAsync() > 0;
 
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
@@ -67,13 +67,13 @@ namespace Gorkem_.Features.KodTablo
         {
             app.MapPost("kodtablo/birim", async ([FromBody] BirimEkleRequest model, ISender sender) =>
             {
-                var request = new CreateBirim.Command() { Name=model.BirimAdi };
+                var request = new CreateBirim.Command() { Name = model.BirimAdi };
 
                 var response = await sender.Send(request);
 
                 if (response.Succeeded)
                     return Results.Ok();
-                return Results.BadRequest(response.Message); 
+                return Results.BadRequest(response.Message);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }

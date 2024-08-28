@@ -8,7 +8,7 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class CreateBrans
     {
@@ -47,7 +47,7 @@ namespace Gorkem_.Features.KodTablo
                 if (isExists) return await Result<bool>.FailAsync($"{request.Name} is already exist");
 
                 _context.KT_Branss.Add(request.ToBrans());
-                var isSaved = await _context.SaveChangesAsync()>0;
+                var isSaved = await _context.SaveChangesAsync() > 0;
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");

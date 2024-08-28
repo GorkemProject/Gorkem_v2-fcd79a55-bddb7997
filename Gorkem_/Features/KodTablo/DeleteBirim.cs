@@ -8,7 +8,7 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class DeleteBirim
     {
@@ -20,7 +20,7 @@ namespace Gorkem_.Features.KodTablo
 
             public DeleteBirimValidation()
             {
-                RuleFor(r => r.Id).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder=_ => "Id Boş Olamaz.");
+                RuleFor(r => r.Id).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder = _ => "Id Boş Olamaz.");
             }
         }
 
@@ -33,17 +33,17 @@ namespace Gorkem_.Features.KodTablo
 
             public Handler(GorkemDbContext context)
             {
-                _context=context;
+                _context = context;
             }
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await _context.KT_Birims.FirstOrDefaultAsync(r=>r.Id==request.Id && r.Aktifmi);
+                var currentBirim = await _context.KT_Birims.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
                 if (currentBirim is null) return await Result<bool>.FailAsync($"With the {request.Id}  Id data could not found!");
 
-                currentBirim.Aktifmi=false;
-                currentBirim.T_Pasif=DateTime.Now;
-                var isDeleted = await _context.SaveChangesAsync()>0;
+                currentBirim.Aktifmi = false;
+                currentBirim.T_Pasif = DateTime.Now;
+                var isDeleted = await _context.SaveChangesAsync() > 0;
 
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);
@@ -59,7 +59,7 @@ namespace Gorkem_.Features.KodTablo
         {
             app.MapDelete("kodtablo/birim", async ([FromBody] BirimSilRequest model, ISender sender) =>
             {
-                var request=new DeleteBirim.Command() { Id=model.Id};
+                var request = new DeleteBirim.Command() { Id = model.Id };
                 var response = await sender.Send(request);
 
                 if (response.Succeeded)

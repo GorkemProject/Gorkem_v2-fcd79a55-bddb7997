@@ -6,7 +6,7 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class GetAllDurum
     {
@@ -25,14 +25,14 @@ namespace Gorkem_.Features.KodTablo
             public readonly GorkemDbContext _context;
             public Handler(GorkemDbContext context)
             {
-                _context=context;
+                _context = context;
             }
 
             public async Task<List<DurumGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifDurumlar = await _context.KT_Durums
-                    .Where(b=>b.Aktifmi)
-                    .Select(b=>new DurumGetirResponse
+                    .Where(b => b.Aktifmi)
+                    .Select(b => new DurumGetirResponse
                     {
                         Id = b.Id,
                         Name = b.Name,

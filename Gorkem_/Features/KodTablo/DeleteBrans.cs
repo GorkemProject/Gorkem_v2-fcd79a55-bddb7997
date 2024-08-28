@@ -9,20 +9,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public class DeleteBrans
     {
         public class Command : IRequest<Result<bool>> { public int Id { get; set; } }
 
-        public class DeleteBirimValidation: AbstractValidator<Command>
+        public class DeleteBirimValidation : AbstractValidator<Command>
         {
             public DeleteBirimValidation()
             {
                 RuleFor(r => r.Id).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder = _ => "Id Boş Olamaz.");
             }
         }
-        internal sealed class Handler : IRequestHandler<Command ,Result<bool>>
+        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
             private readonly GorkemDbContext _context;
             public Handler(GorkemDbContext context)

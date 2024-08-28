@@ -9,16 +9,16 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class DeleteDurum
     {
-        public class Command : IRequest<Result<bool>> { public int Id { get; set; } }   
+        public class Command : IRequest<Result<bool>> { public int Id { get; set; } }
         public class DeleteDurumValidation : AbstractValidator<Command>
         {
-            public DeleteDurumValidation() 
+            public DeleteDurumValidation()
             {
-                RuleFor(r=>r.Id).GreaterThanOrEqualTo(0).Configure(r=>r.MessageBuilder=_=>"Id Boş Olamaz.");
+                RuleFor(r => r.Id).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder = _ => "Id Boş Olamaz.");
             }
         }
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>
@@ -34,13 +34,13 @@ namespace Gorkem_.Features.KodTablo
                 if (currentBirim is null) return await Result<bool>.FailAsync($" With the {request.Id} Id data could not found'");
                 currentBirim.Aktifmi = false;
                 currentBirim.T_Pasif = DateTime.Now;
-                var isDeleted = await _context.SaveChangesAsync()>0;
+                var isDeleted = await _context.SaveChangesAsync() > 0;
 
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Silme İşlemi Yapılamadı");
-                
-                
+
+
             }
         }
     }
@@ -48,7 +48,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/durum", async ([FromBody] DurumSilRequest model,ISender sender ) =>
+            app.MapDelete("kodtablo/durum", async ([FromBody] DurumSilRequest model, ISender sender) =>
             {
                 var request = new DeleteDurum.Command() { Id = model.Id };
                 var response = await sender.Send(request);

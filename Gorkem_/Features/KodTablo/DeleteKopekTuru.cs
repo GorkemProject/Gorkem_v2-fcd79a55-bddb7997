@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Diagnostics;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class DeleteKopekTuru
     {
@@ -25,13 +25,13 @@ namespace Gorkem_.Features.KodTablo
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
             private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context) 
+            public Handler(GorkemDbContext context)
             {
                 _context = context;
             }
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await _context.KT_KopekTurus.FirstOrDefaultAsync(r=>r.Id == request.Id && r.Aktifmi);
+                var currentBirim = await _context.KT_KopekTurus.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
                 if (currentBirim is null) return await Result<bool>.FailAsync($"With the {request.Id} Id data could not found!");
 
                 currentBirim.Aktifmi = false;
@@ -40,7 +40,7 @@ namespace Gorkem_.Features.KodTablo
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Silme İşlemi Yapılamadı.");
-                
+
             }
         }
     }
@@ -52,7 +52,7 @@ namespace Gorkem_.Features.KodTablo
             {
                 var request = new DeleteKopekTuru.Command() { Id = model.Id };
                 var response = await sender.Send(request);
-                if(response.Succeeded)
+                if (response.Succeeded)
                     return Results.Ok($"With the {model.Id} id data has been deleted");
                 return Results.BadRequest(response.Message);
             }).WithTags(EndpointConstants.KODTABLO);

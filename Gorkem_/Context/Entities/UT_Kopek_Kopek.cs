@@ -2,9 +2,8 @@
 
 namespace Gorkem_.Context.Entities
 {
-    public class UT_Kopek_Kopek
+    public class UT_Kopek_Kopek : BaseEntity
     {
-        public int Id { get; set; }
 
         public int IrkRef { get; set; }
         [ForeignKey(nameof(IrkRef))]

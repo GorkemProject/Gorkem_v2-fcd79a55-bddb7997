@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class CreateDurum
     {
@@ -21,7 +21,7 @@ namespace Gorkem_.Features.KodTablo
         {
             public CreateDurumValidation()
             {
-                RuleFor(r=>r.Name).NotEmpty().NotNull().Configure(r=>r.MessageBuilder=_=>"Ad Boş Olamaz");
+                RuleFor(r => r.Name).NotEmpty().NotNull().Configure(r => r.MessageBuilder = _ => "Ad Boş Olamaz");
             }
         }
         public static KT_Durum ToDurum(this Command command)
@@ -37,17 +37,17 @@ namespace Gorkem_.Features.KodTablo
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
             private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context) 
+            public Handler(GorkemDbContext context)
             {
-                _context=context;
+                _context = context;
             }
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = _context.KT_Durums.Any(r=>r.Name == request.Name);
+                var isExist = _context.KT_Durums.Any(r => r.Name == request.Name);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Name} is already exists");
 
                 _context.KT_Durums.Add(request.ToDurum());
-                var isSaved = await _context.SaveChangesAsync()>0;
+                var isSaved = await _context.SaveChangesAsync() > 0;
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Kayıt işlemi başarılı değil.");

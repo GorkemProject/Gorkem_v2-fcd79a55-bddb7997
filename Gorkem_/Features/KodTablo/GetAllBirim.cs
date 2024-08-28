@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class GetAllBirim
     {
@@ -44,7 +44,7 @@ namespace Gorkem_.Features.KodTablo
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
                 return aktifBirimler;
-            }  
+            }
         }
     }
     public class GetAllBirimEndpoint : ICarterModule

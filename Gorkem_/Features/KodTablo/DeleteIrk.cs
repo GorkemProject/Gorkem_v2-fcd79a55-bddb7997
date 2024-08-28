@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class DeleteIrk
     {
@@ -45,10 +45,10 @@ namespace Gorkem_.Features.KodTablo
     }
     public class DeleteIrkEndpoint : ICarterModule
     {
-        
+
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/irk", async([FromBody] IrkSilRequest model, ISender sender) =>
+            app.MapDelete("kodtablo/irk", async ([FromBody] IrkSilRequest model, ISender sender) =>
             {
                 var request = new DeleteIrk.Command() { Id = model.Id };
                 var response = await sender.Send(request);

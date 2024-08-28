@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240828080806_TablolarEklendi2")]
+    partial class TablolarEklendi2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,9 +191,6 @@ namespace Gorkem_.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Aktifmi")
-                        .HasColumnType("bit");
-
                     b.Property<int>("BirimRef")
                         .HasColumnType("int");
 
@@ -230,12 +230,6 @@ namespace Gorkem_.Migrations
 
                     b.Property<int?>("SatinAlmaId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("T_Aktif")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("T_Pasif")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("TeminSekli")
                         .HasColumnType("nvarchar(max)");

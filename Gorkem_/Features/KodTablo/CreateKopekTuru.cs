@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Gorkem_.Features.KodTablo
+namespace Gorkem_.Features.UygulamaTablo.KodTablo
 {
     public static class CreateKopekTuru
     {
@@ -30,7 +30,7 @@ namespace Gorkem_.Features.KodTablo
             {
                 Name = command.Name,
                 Aktifmi = true,
-                T_Aktif=DateTime.Now,
+                T_Aktif = DateTime.Now,
             };
 
         }
@@ -67,7 +67,7 @@ namespace Gorkem_.Features.KodTablo
                 if (response.Succeeded)
                     return Results.Ok();
                 return Results.BadRequest(response.Message);
-               
+
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }
