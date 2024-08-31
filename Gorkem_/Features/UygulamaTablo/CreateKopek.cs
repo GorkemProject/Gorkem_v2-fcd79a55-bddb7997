@@ -34,7 +34,12 @@ namespace Gorkem_.Features.UygulamaTablo
         public class CreateKopekValidation : AbstractValidator<Command>
         {
             public CreateKopekValidation()
-            {
+            {// string degerler null check yapalım
+                // integer degerler de greaterthen(0) uygulayalım
+                // tarih alanlarında valid bir datetime check yapalım
+
+
+
                 RuleFor(r => r.Name).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.IrkRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.BirimRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
