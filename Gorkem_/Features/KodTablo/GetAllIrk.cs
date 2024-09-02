@@ -6,7 +6,7 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorkem_.Features.UygulamaTablo.KodTablo
+namespace Gorkem_.Features.KodTablo
 {
     public class GetAllIrk
     {

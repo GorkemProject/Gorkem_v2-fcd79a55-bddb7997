@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace Gorkem_.Features.UygulamaTablo.KodTablo
+namespace Gorkem_.Features.KodTablo
 {
     public static class GetAllBirim
     {

@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Gorkem_.Features.UygulamaTablo
+namespace Gorkem_.Features.Kopek
 {
     public class UpdateKopek
     {
@@ -95,7 +95,7 @@ namespace Gorkem_.Features.UygulamaTablo
                     return Results.Ok();
                 }
                 return Results.BadRequest(result.Message);
-            }).WithTags(EndpointConstants.UYGULAMATABLO);
+            }).WithTags(EndpointConstants.KOPEK);
 
         }
     }

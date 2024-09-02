@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 
-namespace Gorkem_.Features.UygulamaTablo.KodTablo
+namespace Gorkem_.Features.KodTablo
 {
     public class DeleteBrans
     {

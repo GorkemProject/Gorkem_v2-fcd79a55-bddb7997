@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorkem_.Features.UygulamaTablo.KodTablo
+namespace Gorkem_.Features.KodTablo
 {
     public static class DeleteIrk
     {

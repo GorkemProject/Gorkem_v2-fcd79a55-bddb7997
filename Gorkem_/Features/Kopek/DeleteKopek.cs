@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Gorkem_.Features.UygulamaTablo
+namespace Gorkem_.Features.Kopek
 {
     public static class DeleteKopek
     {
@@ -61,7 +61,7 @@ namespace Gorkem_.Features.UygulamaTablo
                 if (response.Succeeded)
                     return Results.Ok($"With the {model.Id} id data has been deleted");
                 return Results.BadRequest(response.Message);
-            }).WithTags(EndpointConstants.UYGULAMATABLO);
+            }).WithTags(EndpointConstants.KOPEK);
         }
     }
 }

@@ -6,7 +6,7 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorkem_.Features.UygulamaTablo
+namespace Gorkem_.Features.Kopek
 {
     public static class GetAllKopek
     {
@@ -65,7 +65,7 @@ namespace Gorkem_.Features.UygulamaTablo
                 var request = new GetAllKopek.Query();
                 var response = await sender.Send(request);
                 return Results.Ok(response);
-            }).WithTags(EndpointConstants.UYGULAMATABLO);
+            }).WithTags(EndpointConstants.KOPEK);
         }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Diagnostics;
 
-namespace Gorkem_.Features.UygulamaTablo.KodTablo
+namespace Gorkem_.Features.KodTablo
 {
     public static class DeleteKopekTuru
     {

@@ -9,10 +9,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Gorkem_.Features.UygulamaTablo.KodTablo
+namespace Gorkem_.Features.KodTablo
 {
     public static class CreateKopekTuru
-    {
+    {   
         public class Command : IRequest<Result<bool>>
         {
             public string Name { get; set; }
