@@ -17,7 +17,8 @@ namespace Gorkem_.Context
         public DbSet<UT_Kopek_Kopek> UT_Kopek_Kopeks { get; set; }
         public DbSet<UT_Kopek_SatinAlma> UT_Kopek_SatinAlmas { get; set; }
         public DbSet<UT_Kopek_Uretim> UT_Kopek_Uretims { get; set; }
- 
+        public DbSet<UT_Idareci> UT_Idarecis { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
