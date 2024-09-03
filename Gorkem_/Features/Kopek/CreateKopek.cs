@@ -3,7 +3,7 @@ using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Context.Entities;
-using Gorkem_.Contracts.UygulamaTablo;
+using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -35,11 +35,8 @@ namespace Gorkem_.Features.Kopek
         {
             public CreateKopekValidation()
             {// string degerler null check yapalım
-                // integer degerler de greaterthen(0) uygulayalım
-                // tarih alanlarında valid bir datetime check yapalım
-
-
-
+             // integer degerler de greaterthen(0) uygulayalım
+             // tarih alanlarında valid bir datetime check yapalım
                 RuleFor(r => r.Name).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.IrkRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.BirimRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");

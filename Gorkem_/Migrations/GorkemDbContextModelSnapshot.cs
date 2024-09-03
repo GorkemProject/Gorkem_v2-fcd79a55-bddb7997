@@ -74,6 +74,32 @@ namespace Gorkem_.Migrations
                     b.ToTable("KT_Branss");
                 });
 
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Cins", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KT_Cinss");
+                });
+
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Durum", b =>
                 {
                     b.Property<int>("Id")
@@ -197,6 +223,9 @@ namespace Gorkem_.Migrations
                     b.Property<int>("BransRef")
                         .HasColumnType("int");
 
+                    b.Property<int>("CinsRef")
+                        .HasColumnType("int");
+
                     b.Property<int>("CipNumarasi")
                         .HasColumnType("int");
 
@@ -251,6 +280,8 @@ namespace Gorkem_.Migrations
                     b.HasIndex("BirimRef");
 
                     b.HasIndex("BransRef");
+
+                    b.HasIndex("CinsRef");
 
                     b.HasIndex("DurumRef");
 
@@ -334,6 +365,12 @@ namespace Gorkem_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Gorkem_.Context.Entities.KT_Cins", "CINS")
+                        .WithMany("UT_Kopek_Kopek")
+                        .HasForeignKey("CinsRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Gorkem_.Context.Entities.KT_Durum", "DURUM")
                         .WithMany("UT_Kopek_Kopek")
                         .HasForeignKey("DurumRef")
@@ -368,6 +405,8 @@ namespace Gorkem_.Migrations
 
                     b.Navigation("BRANS");
 
+                    b.Navigation("CINS");
+
                     b.Navigation("DURUM");
 
                     b.Navigation("Hibe");
@@ -387,6 +426,11 @@ namespace Gorkem_.Migrations
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Brans", b =>
+                {
+                    b.Navigation("UT_Kopek_Kopek");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Cins", b =>
                 {
                     b.Navigation("UT_Kopek_Kopek");
                 });

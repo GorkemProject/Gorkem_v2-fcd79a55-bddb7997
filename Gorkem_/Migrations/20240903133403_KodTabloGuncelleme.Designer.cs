@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    [Migration("20240828080806_TablolarEklendi2")]
-    partial class TablolarEklendi2
+    [Migration("20240903133403_KodTabloGuncelleme")]
+    partial class KodTabloGuncelleme
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,32 @@ namespace Gorkem_.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("KT_Branss");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Cins", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KT_Cinss");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Durum", b =>
@@ -191,10 +217,16 @@ namespace Gorkem_.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
                     b.Property<int>("BirimRef")
                         .HasColumnType("int");
 
                     b.Property<int>("BransRef")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CinsRef")
                         .HasColumnType("int");
 
                     b.Property<int>("CipNumarasi")
@@ -231,6 +263,12 @@ namespace Gorkem_.Migrations
                     b.Property<int?>("SatinAlmaId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("TeminSekli")
                         .HasColumnType("nvarchar(max)");
 
@@ -245,6 +283,8 @@ namespace Gorkem_.Migrations
                     b.HasIndex("BirimRef");
 
                     b.HasIndex("BransRef");
+
+                    b.HasIndex("CinsRef");
 
                     b.HasIndex("DurumRef");
 
@@ -328,6 +368,12 @@ namespace Gorkem_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Gorkem_.Context.Entities.KT_Cins", "CINS")
+                        .WithMany("UT_Kopek_Kopek")
+                        .HasForeignKey("CinsRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Gorkem_.Context.Entities.KT_Durum", "DURUM")
                         .WithMany("UT_Kopek_Kopek")
                         .HasForeignKey("DurumRef")
@@ -362,6 +408,8 @@ namespace Gorkem_.Migrations
 
                     b.Navigation("BRANS");
 
+                    b.Navigation("CINS");
+
                     b.Navigation("DURUM");
 
                     b.Navigation("Hibe");
@@ -381,6 +429,11 @@ namespace Gorkem_.Migrations
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Brans", b =>
+                {
+                    b.Navigation("UT_Kopek_Kopek");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Cins", b =>
                 {
                     b.Navigation("UT_Kopek_Kopek");
                 });
