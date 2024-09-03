@@ -2,7 +2,7 @@
 using Carter;
 using FluentValidation;
 using Gorkem_.Context;
-using Gorkem_.Contracts.UygulamaTablo;
+using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
