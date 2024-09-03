@@ -1,4 +1,4 @@
-﻿namespace Gorkem_.Contracts.UygulamaTablo
+﻿namespace Gorkem_.Contracts.Kopek
 {
     public class KopekSilRequest
     {

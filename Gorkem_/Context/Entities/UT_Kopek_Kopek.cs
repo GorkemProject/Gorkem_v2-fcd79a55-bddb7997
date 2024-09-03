@@ -8,6 +8,7 @@ namespace Gorkem_.Context.Entities
         public int IrkRef { get; set; }
         [ForeignKey(nameof(IrkRef))]
         public virtual KT_Irk? IRK { get; set; }
+
         public int BirimRef { get; set; }
         [ForeignKey(nameof(BirimRef))]
         public virtual KT_Birim? BIRIM { get; set; }
@@ -18,6 +19,9 @@ namespace Gorkem_.Context.Entities
         public int KuvveNumarasi { get; set; }
         public int CipNumarasi { get; set; }
 
+        public int CinsRef { get; set; }
+        [ForeignKey(nameof(CinsRef))]
+        public virtual KT_Cins? CINS { get; set; }
 
 
         public DateTime DogumTarihi { get; set; }
