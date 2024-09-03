@@ -13,8 +13,14 @@ namespace Gorkem_.ServiceCollection
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
             services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
+
             services.AddDbContext<GorkemDbContext>(options =>
-                                          options.UseSqlServer(configuration.GetConnectionString("GorkemAppConnection")));
+            {
+                options.UseMySql(configuration.GetConnectionString("GorkemAppConnection"), ServerVersion.AutoDetect(configuration.GetConnectionString("GorkemAppConnection")), options =>
+                {
+                    options.UseMicrosoftJson();
+                });
+            });
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), includeInternalTypes: true);
         }
     }
