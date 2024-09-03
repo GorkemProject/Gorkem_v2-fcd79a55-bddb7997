@@ -14,7 +14,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public class Command : IRequest<Result<bool>>
         {
-
+            //
             public string Name { get; set; }
         }
 
