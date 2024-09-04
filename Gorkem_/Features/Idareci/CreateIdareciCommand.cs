@@ -32,15 +32,20 @@ namespace Gorkem_.Features.Idareci
             UT_Idareci idareci = new UT_Idareci()
             {
                 AdSoyad = request.Idareci.AdSoyad,
-                AskerlikDurumu = request.Idareci.AskerlikDurumu,
+                Askerlik = request.Idareci.Askerlik,
+                AskerlikId = request.Idareci.AskerlikId,
                 Aktifmi = true,
                 Birim = request.Idareci.Birim,
+                BirimId = request.Idareci.BirimId,
+                Brans = request.Idareci.Brans,
+                BransId = request.Idareci.BransId,
                 CepTelefonu = request.Idareci.CepTelefonu,
                 DogumTarihi = request.Idareci.DogumTarihi,
-                Durum = request.Idareci.Durum,
-                Kurum = request.Idareci.Kurum,
-                Ogrenim = request.Idareci.Ogrenim,
+                IdareciDurum = request.Idareci.IdareciDurum,
+                IdareciDurumId = request.Idareci.IdareciDurumId,
+                OgrenimDurumu = request.Idareci.OgrenimDurumu,
                 Rutbe = request.Idareci.Rutbe,
+                RutbeId = request.Idareci.RutbeId,
                 Sicil = request.Idareci.Sicil,
                 YabanciDil = request.Idareci.YabanciDil,
                 T_Aktif = DateTime.Now,
@@ -93,27 +98,27 @@ namespace Gorkem_.Features.Idareci
                 .NotNull()
                 .WithMessage("Rütbe değeri boş olamaz");
 
-            RuleFor(r => r.Idareci.Kurum)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("Kurum değeri boş olamaz");
-
             RuleFor(r => r.Idareci.Birim)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Birim değeri boş olamaz");
+
+            RuleFor(r => r.Idareci.Brans)
+                .NotEmpty()
+                .NotNull()
+                .WithMessage("Branş değeri boş olamaz");
 
             RuleFor(r => r.Idareci.CepTelefonu)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Cep telefonu değeri boş olamaz");
 
-            RuleFor(r => r.Idareci.AskerlikDurumu)
+            RuleFor(r => r.Idareci.Askerlik)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Askerlik durumu değeri boş olamaz");
 
-            RuleFor(r => r.Idareci.Durum)
+            RuleFor(r => r.Idareci.IdareciDurum)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Durum değeri boş olamaz");
