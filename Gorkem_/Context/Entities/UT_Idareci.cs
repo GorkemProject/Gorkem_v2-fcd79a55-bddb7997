@@ -1,6 +1,6 @@
 ﻿namespace Gorkem_.Context.Entities
 {
-    public class UT_Idareci : BaseEntity
+    public class UT_Idareci : UTBaseEntity
     {
         public int Sicil { get; set; }
         public string AdSoyad { get; set; } = string.Empty;

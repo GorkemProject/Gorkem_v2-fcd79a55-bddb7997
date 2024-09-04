@@ -1,8 +1,6 @@
 ﻿namespace Gorkem_.Context.Entities
 {
-    public class KT_Cins : KTBaseEntity
+    public class KT_YabanciDil: KTBaseEntity    
     {
-     
-
     }
 }

@@ -52,9 +52,9 @@ namespace Gorkem_.Features.Kopek
                 RuleFor(r => r.TeminSekli).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
             }
         }
-        public static UT_Kopek_Kopek ToKopek(this Command command)
+        public static UT_Kopek ToKopek(this Command command)
         {
-            return new UT_Kopek_Kopek
+            return new UT_Kopek
             {
                 Name = command.Name,
                 IrkRef = command.IrkRef,
@@ -101,7 +101,6 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            //sss
             app.MapPost("uygulamatablo/kopek", async ([FromBody] KopekEkleRequest model, ISender sender) =>
             {
                 var request = new CreateKopek.Command() 

@@ -24,9 +24,9 @@ namespace Gorkem_.Features.KodTablo
                 RuleFor(r => r.Name).NotEmpty().NotNull().Configure(r => r.MessageBuilder = _ => "Ad Boş Olamaz");
             }
         }
-        public static KT_Durum ToDurum(this Command command)
+        public static KT_IdareciDurum ToDurum(this Command command)
         {
-            return new KT_Durum
+            return new KT_IdareciDurum
             {
                 Name = command.Name,
                 Aktifmi = true,

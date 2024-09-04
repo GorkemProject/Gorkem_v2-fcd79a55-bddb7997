@@ -2,7 +2,7 @@
 
 namespace Gorkem_.Context.Entities
 {
-    public class UT_Kopek_Kopek : BaseEntity
+    public class UT_Kopek : UTBaseEntity
     {
 
         public int IrkRef { get; set; }
@@ -36,7 +36,7 @@ namespace Gorkem_.Context.Entities
 
         public int DurumRef { get; set; }
         [ForeignKey(nameof(DurumRef))]
-        public virtual KT_Durum? DURUM { get; set; }
+        public virtual KT_IdareciDurum? DURUM { get; set; }
 
         public string? TeminSekli { get; set; }
 
