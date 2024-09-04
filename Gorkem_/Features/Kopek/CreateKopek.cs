@@ -16,7 +16,7 @@ namespace Gorkem_.Features.Kopek
         public class Command : IRequest<Result<bool>>
         {
             //Parametrelerimizi buraya yazıyoruz.
-            public string Name { get; set; }
+            
             public int IrkRef { get; set; }
             public int BirimRef { get; set; }
             public int BransRef { get; set; }
@@ -37,7 +37,7 @@ namespace Gorkem_.Features.Kopek
             {// string degerler null check yapalım
              // integer degerler de greaterthen(0) uygulayalım
              // tarih alanlarında valid bir datetime check yapalım
-                RuleFor(r => r.Name).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                
                 RuleFor(r => r.IrkRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.BirimRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.BransRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
@@ -56,8 +56,8 @@ namespace Gorkem_.Features.Kopek
         {
             return new UT_Kopek
             {
-                Name = command.Name,
-                IrkRef = command.IrkRef,
+              
+                IrkId = command.IrkRef,
                 BirimRef = command.BirimRef,
                 BransRef = command.BransRef,
                 KuvveNumarasi = command.KuvveNumarasi,
@@ -105,7 +105,7 @@ namespace Gorkem_.Features.Kopek
             {
                 var request = new CreateKopek.Command() 
                 {
-                    Name = model.Name,
+                   
                     IrkRef = model.IrkRef,
                     BirimRef = model.BirimRef,
                     BransRef = model.BransRef,

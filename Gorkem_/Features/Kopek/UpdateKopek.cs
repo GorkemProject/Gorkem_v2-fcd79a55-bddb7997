@@ -59,8 +59,8 @@ namespace Gorkem_.Features.Kopek
                     return await Result<bool>.FailAsync("Köpek Bulunamadı..");
                 }
                     
-                kopek.Name=request.Name;
-                kopek.IrkRef = request.IrkRef;
+            
+                kopek.IrkId = request.IrkRef;
                 kopek.BirimRef = request.BirimRef;
                 kopek.BransRef = request.BransRef;
                 kopek.KopekTuruRef = request.KopekTuruRef;
