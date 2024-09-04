@@ -5,9 +5,8 @@ namespace Gorkem_.Context.Entities
     public class UT_Kopek : UTBaseEntity
     {
 
-        public int IrkRef { get; set; }
-        [ForeignKey(nameof(IrkRef))]
-        public virtual KT_Irk? IRK { get; set; }
+        public int IrkId { get; set; } 
+        public virtual KT_Irk? Irk { get; set; }
 
         public int BirimRef { get; set; }
         [ForeignKey(nameof(BirimRef))]
@@ -36,7 +35,7 @@ namespace Gorkem_.Context.Entities
 
         public int DurumRef { get; set; }
         [ForeignKey(nameof(DurumRef))]
-        public virtual KT_IdareciDurum? DURUM { get; set; }
+        public virtual KT_KopekDurumu? DURUM { get; set; }
 
         public string? TeminSekli { get; set; }
 
