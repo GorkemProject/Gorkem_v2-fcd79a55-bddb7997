@@ -15,12 +15,8 @@ namespace Gorkem_.ServiceCollection
             services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
 
             services.AddDbContext<GorkemDbContext>(options =>
-            {
-                options.UseMySql(configuration.GetConnectionString("GorkemAppConnection"), ServerVersion.AutoDetect(configuration.GetConnectionString("GorkemAppConnection")), options =>
-                {
-                    options.UseMicrosoftJson();
-                });
-            });
+                                        options.UseSqlServer(configuration.GetConnectionString("GorkemAppConnection")));
+
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), includeInternalTypes: true);
         }
     }
