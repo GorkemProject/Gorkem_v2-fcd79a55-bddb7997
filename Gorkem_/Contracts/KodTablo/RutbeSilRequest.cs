@@ -1,8 +1,8 @@
 ﻿namespace Gorkem_.Contracts.KodTablo
 {
-    public class DurumGetirResponse
+    public class RutbeSilRequest
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+
     }
 }

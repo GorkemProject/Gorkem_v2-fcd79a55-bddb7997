@@ -1,6 +1,6 @@
 ﻿namespace Gorkem_.Contracts.KodTablo
 {
-    public class DurumSilRequest
+    public class AskerlikSilRequest
     {
         public int Id { get; set; }
     }

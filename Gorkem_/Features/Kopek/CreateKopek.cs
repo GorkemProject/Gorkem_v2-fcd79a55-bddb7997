@@ -58,16 +58,16 @@ namespace Gorkem_.Features.Kopek
             {
               
                 IrkId = command.IrkRef,
-                BirimRef = command.BirimRef,
-                BransRef = command.BransRef,
+                BirimId = command.BirimRef,
+                BransId = command.BransRef,
                 KuvveNumarasi = command.KuvveNumarasi,
                 CipNumarasi = command.CipNumarasi,
                 DogumTarihi = command.DogumTarihi,
                 YapilanIslem = command.YapilanIslem,
                 NihaiKanaat = command.NihaiKanaat,
-                KopekTuruRef = command.KopekTuruRef,
+                KopekTuruId = command.KopekTuruRef,
                 Karar = command.Karar,
-                DurumRef = command.DurumRef,
+                DurumId = command.DurumRef,
                 TeminSekli = command.TeminSekli,
                 T_Aktif = DateTime.Now,
                 Aktifmi = true
@@ -101,7 +101,7 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("uygulamatablo/kopek", async ([FromBody] KopekEkleRequest model, ISender sender) =>
+            app.MapGet("kopek", async ([FromBody] KopekEkleRequest model, ISender sender) =>
             {
                 var request = new CreateKopek.Command() 
                 {

@@ -5,50 +5,52 @@ using Gorkem_.Contracts.KodTablo;
 using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace Gorkem_.Features.KodTablo
 {
-    public static class GetAllDurum
+    public static class GetAllRutbe
     {
-        public class Query : IRequest<List<DurumGetirResponse>>
+        public class Query : IRequest<List<RutbeGetirResponse>>
         {
         }
-        public class DurumGetirValidation : AbstractValidator<Query>
+        public class RutbeGetirValidation : AbstractValidator<Query>
         {
-            public DurumGetirValidation()
+            public RutbeGetirValidation()
             {
-                //Listeleme işlemi yapılacağı için bir validasyon koymadım.
+                //listeleme işlemi yaptığım için validasyon yapmıyoruz.
             }
         }
-        internal sealed class Handler : IRequestHandler<Query, List<DurumGetirResponse>>
+        internal sealed class Handler : IRequestHandler<Query, List<RutbeGetirResponse>>
         {
-            public readonly GorkemDbContext _context;
+            private readonly GorkemDbContext _context;
             public Handler(GorkemDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<List<DurumGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<RutbeGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifDurumlar = await _context.KT_Durums
+                var aktifRutbeler = await _context.KT_Rutbes
                     .Where(b => b.Aktifmi)
-                    .Select(b => new DurumGetirResponse
+                    .Select(b => new RutbeGetirResponse
                     {
                         Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
-                return aktifDurumlar;
+                return aktifRutbeler;
             }
         }
     }
-    public class GetAllDurumEndpoint : ICarterModule
+    public class GetAllRutbeEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kodtablo/durum", async (ISender sender) =>
+            app.MapGet("kodtablo/rutbe", async (ISender sender) =>
             {
-                var request = new GetAllDurum.Query();
+                var request = new GetAllRutbe.Query();
                 var response = await sender.Send(request);
+
                 return Results.Ok(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }

@@ -37,10 +37,10 @@ namespace Gorkem_.Features.Kopek
                     {
                         Id = a.Id, 
                         IrkRef = a.IrkId,
-                        BirimRef = a.BirimRef,
-                        BransRef = a.BransRef,
-                        KopekTuruRef = a.KopekTuruRef,
-                        DurumRef = a.DurumRef,
+                        BirimRef = a.BirimId,
+                        BransRef = a.BransId,
+                        KopekTuruRef = a.KopekTuruId,
+                        DurumRef = a.DurumId,
                         KuvveNumarasi = a.KuvveNumarasi,
                         CipNumarasi = a.CipNumarasi,
                         Karar = a.Karar,
@@ -59,7 +59,7 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("uygulamatablo/kopek", async (ISender sender) =>
+            app.MapGet("kopek", async (ISender sender) =>
             {
                 var request = new GetAllKopek.Query();
                 var response = await sender.Send(request);

@@ -61,10 +61,10 @@ namespace Gorkem_.Features.Kopek
                     
             
                 kopek.IrkId = request.IrkRef;
-                kopek.BirimRef = request.BirimRef;
-                kopek.BransRef = request.BransRef;
-                kopek.KopekTuruRef = request.KopekTuruRef;
-                kopek.DurumRef = request.DurumRef;
+                kopek.BirimId = request.BirimRef;
+                kopek.BransId = request.BransRef;
+                kopek.KopekTuruId = request.KopekTuruRef;
+                kopek.DurumId = request.DurumRef;
                 kopek.KuvveNumarasi = request.KuvveNumarasi;
                 kopek.CipNumarasi = request.CipNumarasi;
                 kopek.DogumTarihi = request.DogumTarihi;
@@ -85,7 +85,7 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("uygulamatablo/kopek/{id}", async (int id, [FromBody] UpdateKopek.Command model, ISender sender) =>
+            app.MapPut("kopek/{id}", async (int id, [FromBody] UpdateKopek.Command model, ISender sender) =>
             {
                
                 model.Id = id;

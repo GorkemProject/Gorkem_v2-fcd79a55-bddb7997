@@ -54,7 +54,7 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("uygulamatablo/kopek", async ([FromBody] KopekSilRequest model, ISender sender) =>
+            app.MapDelete("kopek", async ([FromBody] KopekSilRequest model, ISender sender) =>
             {
                 var request = new DeleteKopek.Command() { Id = model.Id };
                 var response = await sender.Send(request);

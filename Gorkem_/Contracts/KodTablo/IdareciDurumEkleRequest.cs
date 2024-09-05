@@ -1,6 +1,6 @@
 ﻿namespace Gorkem_.Contracts.KodTablo
 {
-    public class DurumEkleRequest
+    public class IdareciDurumEkleRequest
     {
         public string DurumAdi { get; set; }
 

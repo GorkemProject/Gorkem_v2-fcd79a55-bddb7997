@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.KodTablo
 {
-    public static class DeleteDurum
+    public static class DeleteIdareciDurum
     {
         public class Command : IRequest<Result<bool>> { public int Id { get; set; } }
         public class DeleteDurumValidation : AbstractValidator<Command>
@@ -30,7 +30,7 @@ namespace Gorkem_.Features.KodTablo
             }
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await _context.KT_Durums.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
+                var currentBirim = await _context.KT_IdareciDurum.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
                 if (currentBirim is null) return await Result<bool>.FailAsync($" With the {request.Id} Id data could not found'");
                 currentBirim.Aktifmi = false;
                 currentBirim.T_Pasif = DateTime.Now;
@@ -48,9 +48,9 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/durum", async ([FromBody] DurumSilRequest model, ISender sender) =>
+            app.MapDelete("kodtablo/durum", async ([FromBody] IdareciDurumSilRequest model, ISender sender) =>
             {
-                var request = new DeleteDurum.Command() { Id = model.Id };
+                var request = new DeleteIdareciDurum.Command() { Id = model.Id };
                 var response = await sender.Send(request);
                 if (response.Succeeded)
                     return Results.Ok($"With the {model.Id} id data has been deleted");
