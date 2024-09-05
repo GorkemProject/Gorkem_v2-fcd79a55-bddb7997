@@ -101,7 +101,7 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopek", async ([FromBody] KopekEkleRequest model, ISender sender) =>
+            app.MapPost("kopek", async ([FromBody] KopekEkleRequest model, ISender sender) =>
             {
                 var request = new CreateKopek.Command() 
                 {

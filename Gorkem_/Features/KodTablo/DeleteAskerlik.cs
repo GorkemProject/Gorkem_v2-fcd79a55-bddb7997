@@ -56,7 +56,7 @@ namespace Gorkem_.Features.KodTablo
         {
             app.MapDelete("kodtablo/askerlik", async ([FromBody] AskerlikSilRequest model, ISender sender) =>
             {
-                var request = new DeleteBirim.Command() { Id = model.Id };
+                var request = new DeleteAskerlik.Command() { Id = model.Id };
                 var response = await sender.Send(request);
 
                 if (response.Succeeded)
