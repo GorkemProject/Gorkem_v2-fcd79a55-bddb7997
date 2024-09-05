@@ -1,4 +1,6 @@
-﻿namespace Gorkem_.Context.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Gorkem_.Context.Entities
 {
     public class UT_Idareci : UTBaseEntity
     {
@@ -24,5 +26,7 @@
 
         public List<KT_OgrenimDurumu> OgrenimDurumu { get; set; } = new();
         public List<KT_YabanciDil> YabanciDil { get; set; } = new();
+  
+        public virtual ICollection<UT_IdareciKopekleri>? Kopek { get; set; }  
     }
 }

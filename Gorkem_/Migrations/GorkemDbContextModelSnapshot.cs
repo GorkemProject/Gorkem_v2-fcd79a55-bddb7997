@@ -379,6 +379,38 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_Idarecis");
                 });
 
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_IdareciKopekleri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("IdareciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KopekId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdareciId");
+
+                    b.HasIndex("KopekId");
+
+                    b.ToTable("UT_IdareciKopekleri");
+                });
+
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.Property<int>("Id")
@@ -435,8 +467,8 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime?>("T_Pasif")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TeminSekli")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TeminSekli")
+                        .HasColumnType("int");
 
                     b.Property<int?>("URETİMId")
                         .HasColumnType("int");
@@ -605,6 +637,25 @@ namespace Gorkem_.Migrations
                     b.Navigation("Rutbe");
                 });
 
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_IdareciKopekleri", b =>
+                {
+                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", "Idareci")
+                        .WithMany("Kopek")
+                        .HasForeignKey("IdareciId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kopek", "Kopek")
+                        .WithMany("Idareci")
+                        .HasForeignKey("KopekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Idareci");
+
+                    b.Navigation("Kopek");
+                });
+
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.HasOne("Gorkem_.Context.Entities.KT_Birim", "Birim")
@@ -676,9 +727,16 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
                 {
+                    b.Navigation("Kopek");
+
                     b.Navigation("OgrenimDurumu");
 
                     b.Navigation("YabanciDil");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
+                {
+                    b.Navigation("Idareci");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Hibe", b =>

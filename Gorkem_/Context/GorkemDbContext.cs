@@ -23,8 +23,7 @@ namespace Gorkem_.Context
         public DbSet<KT_Rutbe> KT_Rutbes  { get; set; }
         public DbSet<KT_KopekDurumu> KT_KopekDurumus   { get; set; }
         public DbSet<KT_OgrenimDurumu> KT_OgrenimDurumus { get; set; }
-        public DbSet<KT_YabanciDil> KT_YabanciDils { get; set; }
-
+        public DbSet<KT_YabanciDil> KT_YabanciDils { get; set; }   
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    [Migration("20240904122605_Initial")]
-    partial class Initial
+    [Migration("20240905124953_IdareciKopekleriAddedss")]
+    partial class IdareciKopekleriAddedss
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,32 @@ namespace Gorkem_.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Askerlik", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KT_Askerliks");
+                });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Birim", b =>
                 {
@@ -103,7 +129,7 @@ namespace Gorkem_.Migrations
                     b.ToTable("KT_Cinss");
                 });
 
-            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Durum", b =>
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_IdareciDurum", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,7 +152,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Durums");
+                    b.ToTable("KT_IdareciDurum");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Irk", b =>
@@ -155,6 +181,32 @@ namespace Gorkem_.Migrations
                     b.ToTable("KT_Irks");
                 });
 
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_KopekDurumu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KT_KopekDurumus");
+                });
+
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KopekTuru", b =>
                 {
                     b.Property<int>("Id")
@@ -181,6 +233,94 @@ namespace Gorkem_.Migrations
                     b.ToTable("KT_KopekTurus");
                 });
 
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_OgrenimDurumu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UT_IdareciId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UT_IdareciId");
+
+                    b.ToTable("KT_OgrenimDurumus");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Rutbe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KT_Rutbes");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_YabanciDil", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UT_IdareciId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UT_IdareciId");
+
+                    b.ToTable("KT_YabanciDils");
+                });
+
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
                 {
                     b.Property<int>("Id")
@@ -196,13 +336,14 @@ namespace Gorkem_.Migrations
                     b.Property<bool>("Aktifmi")
                         .HasColumnType("bit");
 
-                    b.Property<string>("AskerlikDurumu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AskerlikId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Birim")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("BirimId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BransId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CepTelefonu")
                         .IsRequired()
@@ -211,25 +352,11 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime>("DogumTarihi")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Durum")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("IdareciDurumId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Kurum")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ogrenim")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Rutbe")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RutbeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Sicil")
                         .HasColumnType("int");
@@ -240,13 +367,139 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime?>("T_Pasif")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("YabanciDil")
-                        .IsRequired()
+                    b.HasKey("Id");
+
+                    b.HasIndex("AskerlikId");
+
+                    b.HasIndex("BirimId");
+
+                    b.HasIndex("BransId");
+
+                    b.HasIndex("IdareciDurumId");
+
+                    b.HasIndex("RutbeId");
+
+                    b.ToTable("UT_Idarecis");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_IdareciKopekleri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("IdareciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KopekId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdareciId");
+
+                    b.HasIndex("KopekId");
+
+                    b.ToTable("UT_IdareciKopekleri");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("BirimId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BransId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CinsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CipNumarasi")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DogumTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DurumId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HibeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IrkId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Karar")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KopekTuruId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KuvveNumarasi")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NihaiKanaat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SatinAlmaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TeminSekli")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("URETİMId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("YapilanIslem")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UT_Idarecis");
+                    b.HasIndex("BirimId");
+
+                    b.HasIndex("BransId");
+
+                    b.HasIndex("CinsId");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("HibeId");
+
+                    b.HasIndex("IrkId");
+
+                    b.HasIndex("KopekTuruId");
+
+                    b.HasIndex("SatinAlmaId");
+
+                    b.HasIndex("URETİMId");
+
+                    b.ToTable("UT_Kopek_Kopeks");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Hibe", b =>
@@ -275,98 +528,6 @@ namespace Gorkem_.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UT_Kopek_Hibes");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Kopek", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Aktifmi")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("BirimRef")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BransRef")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CinsRef")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CipNumarasi")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DogumTarihi")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DurumRef")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HibeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IrkRef")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Karar")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("KopekTuruRef")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KuvveNumarasi")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NihaiKanaat")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SatinAlmaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("T_Aktif")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("T_Pasif")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TeminSekli")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("URETİMId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("YapilanIslem")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BirimRef");
-
-                    b.HasIndex("BransRef");
-
-                    b.HasIndex("CinsRef");
-
-                    b.HasIndex("DurumRef");
-
-                    b.HasIndex("HibeId");
-
-                    b.HasIndex("IrkRef");
-
-                    b.HasIndex("KopekTuruRef");
-
-                    b.HasIndex("SatinAlmaId");
-
-                    b.HasIndex("URETİMId");
-
-                    b.ToTable("UT_Kopek_Kopeks");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_SatinAlma", b =>
@@ -422,29 +583,105 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_Kopek_Uretims");
                 });
 
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Kopek", b =>
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_OgrenimDurumu", b =>
                 {
-                    b.HasOne("Gorkem_.Context.Entities.KT_Birim", "BIRIM")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("BirimRef")
+                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", null)
+                        .WithMany("OgrenimDurumu")
+                        .HasForeignKey("UT_IdareciId");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.KT_YabanciDil", b =>
+                {
+                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", null)
+                        .WithMany("YabanciDil")
+                        .HasForeignKey("UT_IdareciId");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
+                {
+                    b.HasOne("Gorkem_.Context.Entities.KT_Askerlik", "Askerlik")
+                        .WithMany()
+                        .HasForeignKey("AskerlikId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gorkem_.Context.Entities.KT_Brans", "BRANS")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("BransRef")
+                    b.HasOne("Gorkem_.Context.Entities.KT_Birim", "Birim")
+                        .WithMany()
+                        .HasForeignKey("BirimId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gorkem_.Context.Entities.KT_Cins", "CINS")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("CinsRef")
+                    b.HasOne("Gorkem_.Context.Entities.KT_Brans", "Brans")
+                        .WithMany()
+                        .HasForeignKey("BransId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gorkem_.Context.Entities.KT_Durum", "DURUM")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("DurumRef")
+                    b.HasOne("Gorkem_.Context.Entities.KT_IdareciDurum", "IdareciDurum")
+                        .WithMany()
+                        .HasForeignKey("IdareciDurumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.KT_Rutbe", "Rutbe")
+                        .WithMany()
+                        .HasForeignKey("RutbeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Askerlik");
+
+                    b.Navigation("Birim");
+
+                    b.Navigation("Brans");
+
+                    b.Navigation("IdareciDurum");
+
+                    b.Navigation("Rutbe");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_IdareciKopekleri", b =>
+                {
+                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", "Idareci")
+                        .WithMany("Kopek")
+                        .HasForeignKey("IdareciId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kopek", "Kopek")
+                        .WithMany("Idareci")
+                        .HasForeignKey("KopekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Idareci");
+
+                    b.Navigation("Kopek");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
+                {
+                    b.HasOne("Gorkem_.Context.Entities.KT_Birim", "Birim")
+                        .WithMany()
+                        .HasForeignKey("BirimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.KT_Brans", "Brans")
+                        .WithMany()
+                        .HasForeignKey("BransId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.KT_Cins", "Cins")
+                        .WithMany()
+                        .HasForeignKey("CinsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.KT_KopekDurumu", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -452,15 +689,15 @@ namespace Gorkem_.Migrations
                         .WithMany("UT_Kopek_Kopek")
                         .HasForeignKey("HibeId");
 
-                    b.HasOne("Gorkem_.Context.Entities.KT_Irk", "IRK")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("IrkRef")
+                    b.HasOne("Gorkem_.Context.Entities.KT_Irk", "Irk")
+                        .WithMany()
+                        .HasForeignKey("IrkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gorkem_.Context.Entities.KT_KopekTuru", "KOPEKTURU")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("KopekTuruRef")
+                    b.HasOne("Gorkem_.Context.Entities.KT_KopekTuru", "KopekTuru")
+                        .WithMany()
+                        .HasForeignKey("KopekTuruId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -472,53 +709,37 @@ namespace Gorkem_.Migrations
                         .WithMany("UT_Kopek_Kopek")
                         .HasForeignKey("URETİMId");
 
-                    b.Navigation("BIRIM");
+                    b.Navigation("Birim");
 
-                    b.Navigation("BRANS");
+                    b.Navigation("Brans");
 
-                    b.Navigation("CINS");
+                    b.Navigation("Cins");
 
-                    b.Navigation("DURUM");
+                    b.Navigation("Durum");
 
                     b.Navigation("Hibe");
 
-                    b.Navigation("IRK");
+                    b.Navigation("Irk");
 
-                    b.Navigation("KOPEKTURU");
+                    b.Navigation("KopekTuru");
 
                     b.Navigation("SatinAlma");
 
                     b.Navigation("URETİM");
                 });
 
-            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Birim", b =>
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
                 {
-                    b.Navigation("UT_Kopek_Kopek");
+                    b.Navigation("Kopek");
+
+                    b.Navigation("OgrenimDurumu");
+
+                    b.Navigation("YabanciDil");
                 });
 
-            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Brans", b =>
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
-                    b.Navigation("UT_Kopek_Kopek");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Cins", b =>
-                {
-                    b.Navigation("UT_Kopek_Kopek");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Durum", b =>
-                {
-                    b.Navigation("UT_Kopek_Kopek");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.KT_Irk", b =>
-                {
-                    b.Navigation("UT_Kopek_Kopek");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.KT_KopekTuru", b =>
-                {
-                    b.Navigation("UT_Kopek_Kopek");
+                    b.Navigation("Idareci");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Hibe", b =>

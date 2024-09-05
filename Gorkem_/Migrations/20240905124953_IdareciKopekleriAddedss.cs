@@ -6,11 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gorkem_.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class IdareciKopekleriAddedss : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "KT_Askerliks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KT_Askerliks", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "KT_Birims",
                 columns: table => new
@@ -60,7 +76,7 @@ namespace Gorkem_.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "KT_Durums",
+                name: "KT_IdareciDurum",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -72,7 +88,7 @@ namespace Gorkem_.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KT_Durums", x => x.Id);
+                    table.PrimaryKey("PK_KT_IdareciDurum", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,6 +108,22 @@ namespace Gorkem_.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KT_KopekDurumus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KT_KopekDurumus", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KT_KopekTurus",
                 columns: table => new
                 {
@@ -108,22 +140,11 @@ namespace Gorkem_.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UT_Idarecis",
+                name: "KT_Rutbes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Sicil = table.Column<int>(type: "int", nullable: false),
-                    AdSoyad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rutbe = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Kurum = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birim = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CepTelefonu = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AskerlikDurumu = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Durum = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Ogrenim = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    YabanciDil = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Aktifmi = table.Column<bool>(type: "bit", nullable: false),
                     T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -131,7 +152,7 @@ namespace Gorkem_.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UT_Idarecis", x => x.Id);
+                    table.PrimaryKey("PK_KT_Rutbes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,28 +206,81 @@ namespace Gorkem_.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UT_Idarecis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Sicil = table.Column<int>(type: "int", nullable: false),
+                    AdSoyad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CepTelefonu = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdareciDurumId = table.Column<int>(type: "int", nullable: false),
+                    BirimId = table.Column<int>(type: "int", nullable: false),
+                    BransId = table.Column<int>(type: "int", nullable: false),
+                    RutbeId = table.Column<int>(type: "int", nullable: false),
+                    AskerlikId = table.Column<int>(type: "int", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UT_Idarecis", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UT_Idarecis_KT_Askerliks_AskerlikId",
+                        column: x => x.AskerlikId,
+                        principalTable: "KT_Askerliks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Idarecis_KT_Birims_BirimId",
+                        column: x => x.BirimId,
+                        principalTable: "KT_Birims",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Idarecis_KT_Branss_BransId",
+                        column: x => x.BransId,
+                        principalTable: "KT_Branss",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Idarecis_KT_IdareciDurum_IdareciDurumId",
+                        column: x => x.IdareciDurumId,
+                        principalTable: "KT_IdareciDurum",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Idarecis_KT_Rutbes_RutbeId",
+                        column: x => x.RutbeId,
+                        principalTable: "KT_Rutbes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UT_Kopek_Kopeks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IrkRef = table.Column<int>(type: "int", nullable: false),
-                    BirimRef = table.Column<int>(type: "int", nullable: false),
-                    BransRef = table.Column<int>(type: "int", nullable: false),
+                    IrkId = table.Column<int>(type: "int", nullable: false),
+                    BirimId = table.Column<int>(type: "int", nullable: false),
+                    BransId = table.Column<int>(type: "int", nullable: false),
                     KuvveNumarasi = table.Column<int>(type: "int", nullable: false),
                     CipNumarasi = table.Column<int>(type: "int", nullable: false),
-                    CinsRef = table.Column<int>(type: "int", nullable: false),
+                    CinsId = table.Column<int>(type: "int", nullable: false),
                     DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     YapilanIslem = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NihaiKanaat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    KopekTuruRef = table.Column<int>(type: "int", nullable: false),
+                    KopekTuruId = table.Column<int>(type: "int", nullable: false),
                     Karar = table.Column<bool>(type: "bit", nullable: false),
-                    DurumRef = table.Column<int>(type: "int", nullable: false),
-                    TeminSekli = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DurumId = table.Column<int>(type: "int", nullable: false),
+                    TeminSekli = table.Column<int>(type: "int", nullable: false),
                     HibeId = table.Column<int>(type: "int", nullable: true),
                     SatinAlmaId = table.Column<int>(type: "int", nullable: true),
                     URETİMId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Aktifmi = table.Column<bool>(type: "bit", nullable: false),
                     T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
                     T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -215,38 +289,38 @@ namespace Gorkem_.Migrations
                 {
                     table.PrimaryKey("PK_UT_Kopek_Kopeks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_Birims_BirimRef",
-                        column: x => x.BirimRef,
+                        name: "FK_UT_Kopek_Kopeks_KT_Birims_BirimId",
+                        column: x => x.BirimId,
                         principalTable: "KT_Birims",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_Branss_BransRef",
-                        column: x => x.BransRef,
+                        name: "FK_UT_Kopek_Kopeks_KT_Branss_BransId",
+                        column: x => x.BransId,
                         principalTable: "KT_Branss",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_Cinss_CinsRef",
-                        column: x => x.CinsRef,
+                        name: "FK_UT_Kopek_Kopeks_KT_Cinss_CinsId",
+                        column: x => x.CinsId,
                         principalTable: "KT_Cinss",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_Durums_DurumRef",
-                        column: x => x.DurumRef,
-                        principalTable: "KT_Durums",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_Irks_IrkRef",
-                        column: x => x.IrkRef,
+                        name: "FK_UT_Kopek_Kopeks_KT_Irks_IrkId",
+                        column: x => x.IrkId,
                         principalTable: "KT_Irks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_KopekTurus_KopekTuruRef",
-                        column: x => x.KopekTuruRef,
+                        name: "FK_UT_Kopek_Kopeks_KT_KopekDurumus_DurumId",
+                        column: x => x.DurumId,
+                        principalTable: "KT_KopekDurumus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Kopek_Kopeks_KT_KopekTurus_KopekTuruId",
+                        column: x => x.KopekTuruId,
                         principalTable: "KT_KopekTurus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -267,25 +341,143 @@ namespace Gorkem_.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_BirimRef",
-                table: "UT_Kopek_Kopeks",
-                column: "BirimRef");
+            migrationBuilder.CreateTable(
+                name: "KT_OgrenimDurumus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UT_IdareciId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KT_OgrenimDurumus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_KT_OgrenimDurumus_UT_Idarecis_UT_IdareciId",
+                        column: x => x.UT_IdareciId,
+                        principalTable: "UT_Idarecis",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KT_YabanciDils",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UT_IdareciId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KT_YabanciDils", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_KT_YabanciDils_UT_Idarecis_UT_IdareciId",
+                        column: x => x.UT_IdareciId,
+                        principalTable: "UT_Idarecis",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UT_IdareciKopekleri",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    KopekId = table.Column<int>(type: "int", nullable: false),
+                    IdareciId = table.Column<int>(type: "int", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UT_IdareciKopekleri", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UT_IdareciKopekleri_UT_Idarecis_IdareciId",
+                        column: x => x.IdareciId,
+                        principalTable: "UT_Idarecis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_UT_IdareciKopekleri_UT_Kopek_Kopeks_KopekId",
+                        column: x => x.KopekId,
+                        principalTable: "UT_Kopek_Kopeks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_BransRef",
-                table: "UT_Kopek_Kopeks",
-                column: "BransRef");
+                name: "IX_KT_OgrenimDurumus_UT_IdareciId",
+                table: "KT_OgrenimDurumus",
+                column: "UT_IdareciId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_CinsRef",
-                table: "UT_Kopek_Kopeks",
-                column: "CinsRef");
+                name: "IX_KT_YabanciDils_UT_IdareciId",
+                table: "KT_YabanciDils",
+                column: "UT_IdareciId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_DurumRef",
+                name: "IX_UT_IdareciKopekleri_IdareciId",
+                table: "UT_IdareciKopekleri",
+                column: "IdareciId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_IdareciKopekleri_KopekId",
+                table: "UT_IdareciKopekleri",
+                column: "KopekId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Idarecis_AskerlikId",
+                table: "UT_Idarecis",
+                column: "AskerlikId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Idarecis_BirimId",
+                table: "UT_Idarecis",
+                column: "BirimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Idarecis_BransId",
+                table: "UT_Idarecis",
+                column: "BransId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Idarecis_IdareciDurumId",
+                table: "UT_Idarecis",
+                column: "IdareciDurumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Idarecis_RutbeId",
+                table: "UT_Idarecis",
+                column: "RutbeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Kopek_Kopeks_BirimId",
                 table: "UT_Kopek_Kopeks",
-                column: "DurumRef");
+                column: "BirimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Kopek_Kopeks_BransId",
+                table: "UT_Kopek_Kopeks",
+                column: "BransId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Kopek_Kopeks_CinsId",
+                table: "UT_Kopek_Kopeks",
+                column: "CinsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Kopek_Kopeks_DurumId",
+                table: "UT_Kopek_Kopeks",
+                column: "DurumId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UT_Kopek_Kopeks_HibeId",
@@ -293,14 +485,14 @@ namespace Gorkem_.Migrations
                 column: "HibeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_IrkRef",
+                name: "IX_UT_Kopek_Kopeks_IrkId",
                 table: "UT_Kopek_Kopeks",
-                column: "IrkRef");
+                column: "IrkId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_KopekTuruRef",
+                name: "IX_UT_Kopek_Kopeks_KopekTuruId",
                 table: "UT_Kopek_Kopeks",
-                column: "KopekTuruRef");
+                column: "KopekTuruId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UT_Kopek_Kopeks_SatinAlmaId",
@@ -317,10 +509,28 @@ namespace Gorkem_.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "KT_OgrenimDurumus");
+
+            migrationBuilder.DropTable(
+                name: "KT_YabanciDils");
+
+            migrationBuilder.DropTable(
+                name: "UT_IdareciKopekleri");
+
+            migrationBuilder.DropTable(
                 name: "UT_Idarecis");
 
             migrationBuilder.DropTable(
                 name: "UT_Kopek_Kopeks");
+
+            migrationBuilder.DropTable(
+                name: "KT_Askerliks");
+
+            migrationBuilder.DropTable(
+                name: "KT_IdareciDurum");
+
+            migrationBuilder.DropTable(
+                name: "KT_Rutbes");
 
             migrationBuilder.DropTable(
                 name: "KT_Birims");
@@ -332,10 +542,10 @@ namespace Gorkem_.Migrations
                 name: "KT_Cinss");
 
             migrationBuilder.DropTable(
-                name: "KT_Durums");
+                name: "KT_Irks");
 
             migrationBuilder.DropTable(
-                name: "KT_Irks");
+                name: "KT_KopekDurumus");
 
             migrationBuilder.DropTable(
                 name: "KT_KopekTurus");

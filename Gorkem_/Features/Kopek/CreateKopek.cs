@@ -28,7 +28,7 @@ namespace Gorkem_.Features.Kopek
             public int KopekTuruRef { get; set; }
             public bool Karar { get; set; }
             public int DurumRef { get; set; }
-            public string? TeminSekli { get; set; }
+            public int TeminSekli { get; set; }
 
         }
         public class CreateKopekValidation : AbstractValidator<Command>

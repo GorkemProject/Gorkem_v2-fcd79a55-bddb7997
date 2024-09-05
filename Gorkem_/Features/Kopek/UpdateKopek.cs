@@ -26,7 +26,7 @@ namespace Gorkem_.Features.Kopek
             public DateTime DogumTarihi { get; set; }
             public string YapilanIslem { get; set; }
             public string NihaiKanaat { get; set; }
-            public string TeminSekli { get; set; }
+            public int TeminSekli { get; set; }
         }
         public class UpdateKopekValidation : AbstractValidator<Command>
         {
