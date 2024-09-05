@@ -1,6 +1,7 @@
 using Carter;
 using Gorkem_.Context;
 using Gorkem_.ServiceCollection;
+using Gorkem_.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+AutoMigrate.ApplyMigration(app);
 
 app.MapCarter();
 app.Run();
