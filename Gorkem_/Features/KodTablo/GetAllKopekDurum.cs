@@ -47,7 +47,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kodtablo/kopekdurum", async ([FromBody] KopekDurumGetirResponse model, ISender sender) =>
+            app.MapGet("kodtablo/kopekdurum", async (ISender sender) =>
             {
                 var request = new GetAllKopekDurum.Query();
                 var response = await sender.Send(request);

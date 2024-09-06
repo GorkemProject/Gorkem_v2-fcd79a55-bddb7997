@@ -48,7 +48,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/durum", async ([FromBody] IdareciDurumSilRequest model, ISender sender) =>
+            app.MapDelete("kodtablo/idarecidurum", async ([FromBody] IdareciDurumSilRequest model, ISender sender) =>
             {
                 var request = new DeleteIdareciDurum.Command() { Id = model.Id };
                 var response = await sender.Send(request);

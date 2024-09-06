@@ -31,7 +31,7 @@ namespace Gorkem_.Features.KodTablo
 
             public async Task<List<OgrenimDurumuGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifOgrenimDurumlari = await _context.KT_Birims
+                var aktifOgrenimDurumlari = await _context.KT_OgrenimDurumus
                     .Where(b => b.Aktifmi)
                     .Select(b => new OgrenimDurumuGetirResponse
                     {

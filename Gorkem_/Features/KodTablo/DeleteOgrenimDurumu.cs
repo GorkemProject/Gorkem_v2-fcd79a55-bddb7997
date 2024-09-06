@@ -52,7 +52,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/ogrenimdurum", async ([FromBody] OgrenimDurumuSilRequest model, ISender sender) =>
+            app.MapDelete("kodtablo/ogrenimdurumu", async ([FromBody] OgrenimDurumuSilRequest model, ISender sender) =>
             {
                 var request = new DeleteOgrenimDurumu.Command() { Id = model.Id };
                 var response = await sender.Send(request);

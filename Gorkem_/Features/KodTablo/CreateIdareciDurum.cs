@@ -60,7 +60,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kodtablo/durum", async ([FromBody] IdareciDurumEkleRequest model, ISender sender) =>
+            app.MapPost("kodtablo/idarecidurum", async ([FromBody] IdareciDurumEkleRequest model, ISender sender) =>
             {
                 var request = new CreateIdareciDurum.Command() { Name = model.DurumAdi };
                 var response = await sender.Send(request);
