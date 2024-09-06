@@ -1,5 +1,6 @@
 using Carter;
 using Gorkem_.Context;
+using Gorkem_.Pipeline;
 using Gorkem_.ServiceCollection;
 using Gorkem_.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCarter();
 builder.Services.RegisterApiServiceCollection(builder.Configuration);
-
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();   
 
 var app = builder.Build();
+
+
+
+AutoMigrate.ApplyMigration(app);
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -24,10 +31,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-AutoMigrate.ApplyMigration(app);
-
+app.UseHttpsRedirection(); 
+app.UseExceptionHandler();
 app.MapCarter();
 app.Run();
 
