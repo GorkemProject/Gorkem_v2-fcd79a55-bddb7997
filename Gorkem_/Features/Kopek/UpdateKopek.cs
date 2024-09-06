@@ -16,11 +16,12 @@ namespace Gorkem_.Features.Kopek
         {
             public int Id { get; set; }
             public string Name { get; set; }
-            public int IrkRef { get; set; }
-            public int BirimRef { get; set; }
-            public int BransRef { get; set; }
-            public int KopekTuruRef { get; set; }
-            public int DurumRef { get; set; }
+            public int IrkId { get; set; }
+            public int BirimId { get; set; }
+            public int BransId { get; set; }
+            public int CinsId { get; set; }
+            public int KopekTuruId { get; set; }
+            public int DurumId { get; set; }
             public int KuvveNumarasi { get; set; }
             public int CipNumarasi { get; set; }
             public DateTime DogumTarihi { get; set; }
@@ -33,10 +34,10 @@ namespace Gorkem_.Features.Kopek
             public UpdateKopekValidation()
             {
                 RuleFor(r => r.Name).NotEmpty().NotNull().WithMessage("İsim Alanı Boş Bırakılamaz.");
-                RuleFor(r => r.IrkRef).NotEmpty().NotNull().WithMessage("Irk Alanı Boş Bırakılamaz.");
-                RuleFor(r => r.BirimRef).NotEmpty().NotNull().WithMessage("Birim Alanı Boş Bırakılamaz.");
-                RuleFor(r => r.KopekTuruRef).NotEmpty().NotNull().WithMessage("Köpek Türü Alanı Boş Bırakılamaz.");
-                RuleFor(r => r.DurumRef).NotEmpty().NotNull().WithMessage("Durum Alanı Boş Bırakılamaz.");
+                RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("Irk Alanı Boş Bırakılamaz.");
+                RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("Birim Alanı Boş Bırakılamaz.");
+                RuleFor(r => r.KopekTuruId).NotEmpty().NotNull().WithMessage("Köpek Türü Alanı Boş Bırakılamaz.");
+                RuleFor(r => r.DurumId).NotEmpty().NotNull().WithMessage("Durum Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.KuvveNumarasi).NotEmpty().NotNull().WithMessage("Kuvve Numarası Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.CipNumarasi).NotEmpty().NotNull().WithMessage("Çip Numarası Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.YapilanIslem).NotEmpty().NotNull().WithMessage("Yapılan işlem Alanı Boş Bırakılamaz.");
@@ -60,11 +61,11 @@ namespace Gorkem_.Features.Kopek
                 }
                     
             
-                kopek.IrkId = request.IrkRef;
-                kopek.BirimId = request.BirimRef;
-                kopek.BransId = request.BransRef;
-                kopek.KopekTuruId = request.KopekTuruRef;
-                kopek.DurumId = request.DurumRef;
+                kopek.IrkId = request.IrkId;
+                kopek.BirimId = request.BirimId;
+                kopek.BransId = request.BransId;
+                kopek.KopekTuruId = request.KopekTuruId;
+                kopek.DurumId = request.DurumId;
                 kopek.KuvveNumarasi = request.KuvveNumarasi;
                 kopek.CipNumarasi = request.CipNumarasi;
                 kopek.DogumTarihi = request.DogumTarihi;

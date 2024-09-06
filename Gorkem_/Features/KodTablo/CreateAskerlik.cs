@@ -34,7 +34,7 @@ namespace Gorkem_.Features.KodTablo
                 T_Aktif = DateTime.Now,
             };
         }
-        internal sealed record Handler(GorkemDbContext Context,Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         { 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {

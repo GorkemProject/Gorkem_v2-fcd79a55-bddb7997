@@ -17,17 +17,19 @@ namespace Gorkem_.Features.Kopek
         {
             //Parametrelerimizi buraya yazıyoruz.
             
-            public int IrkRef { get; set; }
-            public int BirimRef { get; set; }
-            public int BransRef { get; set; }
+            public int IrkId { get; set; }
+            public int CinsId { get; set; }
+
+            public int BirimId { get; set; }
+            public int BransId { get; set; }
             public int KuvveNumarasi { get; set; }
             public int CipNumarasi { get; set; }
             public DateTime DogumTarihi { get; set; }
             public string? YapilanIslem { get; set; }
             public string? NihaiKanaat { get; set; }
-            public int KopekTuruRef { get; set; }
+            public int KopekTuruId { get; set; }
             public bool Karar { get; set; }
-            public int DurumRef { get; set; }
+            public int DurumId { get; set; }
             public int TeminSekli { get; set; }
 
         }
@@ -38,18 +40,20 @@ namespace Gorkem_.Features.Kopek
              // integer degerler de greaterthen(0) uygulayalım
              // tarih alanlarında valid bir datetime check yapalım
                 
-                RuleFor(r => r.IrkRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.BirimRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.BransRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                RuleFor(r => r.BransId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.KuvveNumarasi).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.CipNumarasi).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.DogumTarihi).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.YapilanIslem).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.NihaiKanaat).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.KopekTuruRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                RuleFor(r => r.KopekTuruId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.Karar).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.DurumRef).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                RuleFor(r => r.DurumId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
                 RuleFor(r => r.TeminSekli).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                RuleFor(r => r.CinsId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                
             }
         }
         public static UT_Kopek ToKopek(this Command command)
@@ -57,17 +61,18 @@ namespace Gorkem_.Features.Kopek
             return new UT_Kopek
             {
               
-                IrkId = command.IrkRef,
-                BirimId = command.BirimRef,
-                BransId = command.BransRef,
+                IrkId = command.IrkId,
+                BirimId = command.BirimId,
+                BransId = command.BransId,
                 KuvveNumarasi = command.KuvveNumarasi,
+                CinsId = command.CinsId,
                 CipNumarasi = command.CipNumarasi,
                 DogumTarihi = command.DogumTarihi,
                 YapilanIslem = command.YapilanIslem,
                 NihaiKanaat = command.NihaiKanaat,
-                KopekTuruId = command.KopekTuruRef,
+                KopekTuruId = command.KopekTuruId,
                 Karar = command.Karar,
-                DurumId = command.DurumRef,
+                DurumId = command.DurumId,
                 TeminSekli = command.TeminSekli,
                 T_Aktif = DateTime.Now,
                 Aktifmi = true
@@ -105,18 +110,19 @@ namespace Gorkem_.Features.Kopek
             {
                 var request = new CreateKopek.Command() 
                 {
-                   
-                    IrkRef = model.IrkRef,
-                    BirimRef = model.BirimRef,
-                    BransRef = model.BransRef,
+
+                    IrkId = model.IrkId,
+                    BirimId = model.BirimId,
+                    BransId = model.BransId,
+                    CinsId = model.CinsId,
                     KuvveNumarasi = model.KuvveNumarasi,
                     CipNumarasi = model.CipNumarasi,
                     DogumTarihi = model.DogumTarihi,
                     YapilanIslem = model.YapilanIslem,
                     NihaiKanaat = model.NihaiKanaat,
-                    KopekTuruRef = model.KopekTuruRef,
+                    KopekTuruId = model.KopekTuruId,
                     Karar = model.Karar,
-                    DurumRef = model.DurumRef,
+                    DurumId = model.DurumId,
                     TeminSekli = model.TeminSekli,
                 };
                 var response = await sender.Send(request);

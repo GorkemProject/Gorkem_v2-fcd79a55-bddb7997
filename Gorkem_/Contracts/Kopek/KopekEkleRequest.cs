@@ -3,11 +3,13 @@
     public class KopekEkleRequest
     {
         public string Name { get; set; }
-        public int IrkRef { get; set; }
-        public int BirimRef { get; set; }
-        public int BransRef { get; set; }
-        public int KopekTuruRef { get; set; }
-        public int DurumRef { get; set; }
+        public int IrkId { get; set; }
+        public int BirimId { get; set; }
+        public int BransId { get; set; }
+        public int CinsId { get; set; }
+
+        public int KopekTuruId { get; set; }
+        public int DurumId { get; set; }
         public int KuvveNumarasi { get; set; }
         public int CipNumarasi { get; set; }
         public bool Karar { get; set; }
