@@ -5,9 +5,9 @@ namespace Gorkem_.Pipeline
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {
-        private readonly ILogger<GlobalExceptionHandler> _logger;
+        private readonly  Serilog.ILogger  _logger;
 
-        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+        public GlobalExceptionHandler(Serilog.ILogger  logger)
         {
             _logger = logger;
         }
@@ -17,8 +17,7 @@ namespace Gorkem_.Pipeline
             Exception exception,
             CancellationToken cancellationToken)
         {
-            _logger.LogError(
-                exception, "Exception occurred: {Message}", exception.Message);
+            _logger.Fatal("Hata Açıklaması: {0}", exception);
 
             var problemDetails = new ProblemDetails
             {
@@ -26,6 +25,8 @@ namespace Gorkem_.Pipeline
                 Title = "Server error",
                 Detail=exception.Message
             };
+
+         
 
             httpContext.Response.StatusCode = problemDetails.Status.Value;
 
