@@ -22,17 +22,13 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi yaptığımız için herhangi bir validasyon yapmadım. 
             }
         }
-        internal sealed class Handler : IRequestHandler<Query, List<KopekDurumGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<KopekDurumGetirResponse>>
         {
-            private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+ 
 
             public async Task<List<KopekDurumGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifKopekDurumlari = await _context.KT_KopekDurumus
+                var aktifKopekDurumlari = await Context.KT_KopekDurumus
                     .Where(b=>b.Aktifmi)
                     .Select(b=> new KopekDurumGetirResponse
                     {

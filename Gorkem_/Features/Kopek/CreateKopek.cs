@@ -80,23 +80,22 @@ namespace Gorkem_.Features.Kopek
             };
 
         }
-        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
-            private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+ 
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = _context.UT_Kopek_Kopeks.Any(r=>r.CipNumarasi ==request.CipNumarasi);
+                var isExist = Context.UT_Kopek_Kopeks.Any(r=>r.CipNumarasi ==request.CipNumarasi);
                 if (isExist) return await Result<bool>.FailAsync($"{request.CipNumarasi} is already exist");
 
-                _context.UT_Kopek_Kopeks.Add(request.ToKopek());
-                var isSaved = await _context.SaveChangesAsync() > 0;
+                Context.UT_Kopek_Kopeks.Add(request.ToKopek());
+                var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
+                {
+                    Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.KuvveNumarasi, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
+                }
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");
 
             }

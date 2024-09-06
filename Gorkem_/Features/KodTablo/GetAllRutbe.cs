@@ -21,17 +21,13 @@ namespace Gorkem_.Features.KodTablo
                 //listeleme işlemi yaptığım için validasyon yapmıyoruz.
             }
         }
-        internal sealed class Handler : IRequestHandler<Query, List<RutbeGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<RutbeGetirResponse>>
         {
-            private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+ 
 
             public async Task<List<RutbeGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifRutbeler = await _context.KT_Rutbes
+                var aktifRutbeler = await Context.KT_Rutbes
                     .Where(b => b.Aktifmi)
                     .Select(b => new RutbeGetirResponse
                     {

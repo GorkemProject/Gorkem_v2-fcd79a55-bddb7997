@@ -22,17 +22,13 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi yaptığımız için herhangi bir validasyon yapmadım.
             }
         }
-        internal sealed class Handler : IRequestHandler<Query, List<YabanciDilGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<YabanciDilGetirResponse>>
         {
-            private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+ 
 
             public async Task<List<YabanciDilGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifYabanciDiller = await _context.KT_YabanciDils
+                var aktifYabanciDiller = await Context.KT_YabanciDils
                     .Where(b=>b.Aktifmi)
                     .Select(b=> new YabanciDilGetirResponse
                     {

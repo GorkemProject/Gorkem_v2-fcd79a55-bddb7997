@@ -45,16 +45,12 @@ namespace Gorkem_.Features.Kopek
                 RuleFor(r => r.TeminSekli).NotEmpty().NotNull().WithMessage("Temin Şekli Alanı Boş Bırakılamaz.");
             }
         }
-        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
-            private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+ 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var kopek = await _context.UT_Kopek_Kopeks.FindAsync(request.Id);
+                var kopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Id);
                 if (kopek==null)
                 {
                     return await Result<bool>.FailAsync("Köpek Bulunamadı..");
@@ -73,9 +69,10 @@ namespace Gorkem_.Features.Kopek
                 kopek.NihaiKanaat = request.NihaiKanaat;
                 kopek.TeminSekli = request.TeminSekli;
                 
-                var isSaved = await _context.SaveChangesAsync(cancellationToken)>0;
+                var isSaved = await Context.SaveChangesAsync(cancellationToken)>0;
                 if (isSaved)
                 {
+                    Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.Name, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
                 }
                 return await Result<bool>.FailAsync("Köpek Güncelleme Başarısız");

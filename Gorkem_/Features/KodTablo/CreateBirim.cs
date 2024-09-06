@@ -37,25 +37,21 @@ namespace Gorkem_.Features.KodTablo
 
             };
         }
-        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
 
-            private readonly GorkemDbContext _context;
-
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+            
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExists = _context.KT_Birims.Any(r => r.Name == request.Name);
+                var isExists = Context.KT_Birims.Any(r => r.Name == request.Name);
                 if (isExists) return await Result<bool>.FailAsync($"{request.Name} is already exists");
 
-                _context.KT_Birims.Add(request.ToBirim());
-                var isSaved = await _context.SaveChangesAsync() > 0;
+                Context.KT_Birims.Add(request.ToBirim());
+                var isSaved = await Context.SaveChangesAsync() > 0;
 
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
+                    
 
                 return await Result<bool>.FailAsync("Kayıt başarılı değil");
             }

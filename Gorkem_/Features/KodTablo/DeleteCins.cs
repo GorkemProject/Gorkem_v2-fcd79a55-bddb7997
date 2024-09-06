@@ -24,21 +24,17 @@ namespace Gorkem_.Features.KodTablo
                 RuleFor(r=>r.Id).GreaterThanOrEqualTo(0).Configure(r=>r.MessageBuilder =_=> "Id değeri boş olamaz");
             }
         }
-        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
-            private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+ 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await _context.KT_Cinss.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
+                var currentBirim = await Context.KT_Cinss.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
                 if (currentBirim is null) return await Result<bool>.FailAsync($"With the {request.Id}  Id data could not found!");
 
                 currentBirim.Aktifmi = false;
                 currentBirim.T_Pasif = DateTime.Now;
-                var isDeleted = await _context.SaveChangesAsync()>0;
+                var isDeleted = await Context.SaveChangesAsync()>0;
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Silme işlemi Yapılamadı.");

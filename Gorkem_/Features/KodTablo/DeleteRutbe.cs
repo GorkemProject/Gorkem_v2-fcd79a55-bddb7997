@@ -23,21 +23,17 @@ namespace Gorkem_.Features.KodTablo
                 RuleFor(r => r.Id).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder = _ => "Id Değeri Boş Olamaz.");
             }
         }
-        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
-            private readonly GorkemDbContext _context;
-            public Handler(GorkemDbContext context)
-            {
-                _context = context;
-            }
+ 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentRutbe = await _context.KT_Rutbes.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
+                var currentRutbe = await Context.KT_Rutbes.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
                 if (currentRutbe is null) return await Result<bool>.FailAsync($"With the {request.Id} Id data could not found!");
 
                 currentRutbe.Aktifmi = false;
                 currentRutbe.T_Pasif = DateTime.Now;
-                var isDeleted = await _context.SaveChangesAsync() > 0;
+                var isDeleted = await Context.SaveChangesAsync() > 0;
 
                 if (isDeleted)
                     return await Result<bool>.SuccessAsync(true);

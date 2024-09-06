@@ -20,16 +20,12 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi olduğu için herhangi bir validasyon yapmıyorum.
             }
         }
-        internal sealed class Handler : IRequestHandler<Query, List<BransGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<BransGetirResponse>>
         {
-            private readonly GorkemDbContext _contex;
-            public Handler(GorkemDbContext contex)
-            {
-                _contex = contex;
-            }
+ 
             public async Task<List<BransGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifBranslar = await _contex.KT_Branss
+                var aktifBranslar = await Context.KT_Branss
                     .Where(b => b.Aktifmi)
                     .Select(b => new BransGetirResponse
                     {
