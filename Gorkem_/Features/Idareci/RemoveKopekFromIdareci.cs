@@ -31,7 +31,7 @@ namespace Gorkem_.Features.Idareci
             }
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                //İlgili idareci ve köpeği bulma
+                
                 var idareciKopek = await _context.UT_IdareciKopekleri
                     .FirstOrDefaultAsync(r => r.IdareciId == request.Request.IdareciId && r.KopekId == request.Request.KopekId);
                 if (idareciKopek == null)
@@ -44,8 +44,6 @@ namespace Gorkem_.Features.Idareci
 
                 if (isDataRemoved) return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Köpek idareciden çıkartılamadı");
-               
-
             }
         }
     }
