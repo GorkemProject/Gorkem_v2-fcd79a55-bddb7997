@@ -12,7 +12,7 @@ namespace Gorkem_.Features.Idareci
 {
     public static class ListKopekFromIdareci
     {
-        public record Query (IdareciKopekListeleRequest Request) : IRequest<Result<List<KopekIdareciResponse>>> { }
+        public record Query(IdareciKopekListeleRequest Request) : IRequest<Result<List<KopekIdareciResponse>>> { }
 
         internal sealed class Handler : IRequestHandler<Query, Result<List<KopekIdareciResponse>>>
         {
@@ -25,34 +25,22 @@ namespace Gorkem_.Features.Idareci
 
             public async Task<Result<List<KopekIdareciResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var kopekler = _context.UT_Kopek_Kopeks.AsQueryable();
+                var idareciKopekleri = _context.UT_IdareciKopekleri.Where(r => r.Aktifmi==request.Request.Aktifmi &&
+                                                                                r.IdareciId==request.Request.IdareciId).AsQueryable();
+                var idareciler = _context.UT_Idarecis.AsQueryable();
+                var query = await (from kopek in kopekler
+                                   join idareciKopek in idareciKopekleri on kopek.Id equals idareciKopek.KopekId
+                                   join idareci in idareciler on idareciKopek.IdareciId equals idareci.Id
+                                   select new KopekIdareciResponse
+                                   {
+                                       IdareciId=idareciKopek.IdareciId,
+                                       KopekCipNumarasi=kopek.CipNumarasi,
+                                       KopekKuvveNumarasi=kopek.KuvveNumarasi
+                                   }).ToListAsync(cancellationToken);
 
-                
-                var query = from kopek in _context.UT_Kopek_Kopeks
-                            join idareciKopek in _context.UT_IdareciKopekleri on kopek.Id equals idareciKopek.KopekId 
-                            join idareci in _context.UT_Idarecis on idareciKopek.IdareciId equals idareci.Id
-                            select new
-                            {
-                                IdareciKopek = idareciKopek,
-                                Kopek = kopek,
-                                Idareci = idareci
-                            };
 
-               
-                if (request.Request.Aktifmi.HasValue)
-                {
-                    // bu kısımı böyle bıraktım çünkü sildiğimde false olan sonuçları göstermiyor
-                    query = query.Where(x => x.IdareciKopek.Aktifmi == request.Request.Aktifmi.Value);
-                }
-
-                
-                var result = await query.Select(x => new KopekIdareciResponse
-                {
-                    IdareciId = x.Idareci.Id,
-                    KopekKuvveNumarasi = x.Kopek.KuvveNumarasi,
-                    KopekCipNumarasi = x.Kopek.CipNumarasi
-                }).ToListAsync(cancellationToken);
-
-                return await Result<List<KopekIdareciResponse>>.SuccessAsync(result);
+                return await Result<List<KopekIdareciResponse>>.SuccessAsync(query);
 
             }
         }
@@ -61,7 +49,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("idarecikopek", async ([FromQuery] bool? aktifmi, ISender sender) =>
+            app.MapGet("idarecikopek", async ([FromQuery] bool aktifmi, ISender sender) =>
             {
                 var request = new IdareciKopekListeleRequest { Aktifmi = aktifmi };
                 var response = await sender.Send(new ListKopekFromIdareci.Query(request));

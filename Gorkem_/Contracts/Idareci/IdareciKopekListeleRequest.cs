@@ -2,6 +2,7 @@
 {
     public class IdareciKopekListeleRequest
     {
-        public bool? Aktifmi { get; set; }
+        public int IdareciId { get; set; }
+        public bool Aktifmi { get; set; }
     }
 }
