@@ -35,6 +35,8 @@ namespace Gorkem_.Features.Idareci
                                    select new KopekIdareciResponse
                                    {
                                        IdareciId=idareciKopek.IdareciId,
+                                       AdSoyad = idareci.AdSoyad,
+                                       KopekAdi = kopek.KopekAdi,
                                        KopekCipNumarasi=kopek.CipNumarasi,
                                        KopekKuvveNumarasi=kopek.KuvveNumarasi
                                    }).ToListAsync(cancellationToken);
@@ -49,9 +51,9 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("idarecikopek", async ([FromQuery] bool aktifmi, ISender sender) =>
+            app.MapGet("idarecikopek", async ([FromQuery]int idareciId, [FromQuery] bool aktifmi, ISender sender) =>
             {
-                var request = new IdareciKopekListeleRequest { Aktifmi = aktifmi };
+                var request = new IdareciKopekListeleRequest {IdareciId=idareciId, Aktifmi = aktifmi };
                 var response = await sender.Send(new ListKopekFromIdareci.Query(request));
                 if (response.Succeeded)
                     return Results.Ok(response.Data);

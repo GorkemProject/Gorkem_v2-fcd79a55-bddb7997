@@ -5,7 +5,7 @@ namespace Gorkem_.Context.Entities
 {
     public class UT_Kopek : UTBaseEntity
     {
-
+        public string KopekAdi { get; set; }
         public int IrkId { get; set; }
         public virtual KT_Irk? Irk { get; set; }
 
