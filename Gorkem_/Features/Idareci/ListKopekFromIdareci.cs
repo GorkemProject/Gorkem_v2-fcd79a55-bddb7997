@@ -12,9 +12,9 @@ namespace Gorkem_.Features.Idareci
 {
     public static class ListKopekFromIdareci
     {
-        public record Query (IdareciKopekListeleRequest Request) : IRequest<Result<List<IdareciKopekListeleResponse>>> { }
+        public record Query (IdareciKopekListeleRequest Request) : IRequest<Result<List<KopekIdareciResponse>>> { }
 
-        internal sealed class Handler : IRequestHandler<Query, Result<List<IdareciKopekListeleResponse>>>
+        internal sealed class Handler : IRequestHandler<Query, Result<List<KopekIdareciResponse>>>
         {
             private readonly GorkemDbContext _context;
             public Handler(GorkemDbContext context)
@@ -23,21 +23,32 @@ namespace Gorkem_.Features.Idareci
             }
 
 
-            public async Task<Result<List<IdareciKopekListeleResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<KopekIdareciResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.UT_IdareciKopekleri.AsQueryable();
-                if (request.Request.Aktifmi.HasValue)
-                {
-                    query = query.Where(x => x.Aktifmi == request.Request.Aktifmi.Value);
-                }
-                var result = await query.Select(x=> new IdareciKopekListeleResponse
-                {
-                    KopekId = x.KopekId,
-                    IdareciId = x.IdareciId,
-                    Aktifmi = x.Aktifmi,
-                    
-                }).ToListAsync(cancellationToken);
-                return await Result<List<IdareciKopekListeleResponse>>.SuccessAsync(result);
+                //var query = _context.UT_IdareciKopekleri.AsQueryable();
+                //if (request.Request.Aktifmi.HasValue)
+                //{
+                //    query = query.Where(x => x.Aktifmi == request.Request.Aktifmi.Value);
+                //}
+                //var result = await query.Select(x=> new IdareciKopekListeleResponse
+                //{
+                //    KopekId = x.KopekId,
+                //    IdareciId = x.IdareciId,
+                //    Aktifmi = x.Aktifmi,
+
+                //}).ToListAsync(cancellationToken);
+                //return await Result<List<IdareciKopekListeleResponse>>.SuccessAsync(result);
+                var query = from kopek in _context.UT_Kopek_Kopeks
+                            join idareciKopek in _context.UT_IdareciKopekleri on kopek.Id equals idareciKopek.KopekId //Kopek - idareci ilişkisi
+                            join idareci in _context.UT_Idarecis on idareciKopek.IdareciId equals idareci.Id
+                            select new KopekIdareciResponse
+                            {
+                                IdareciId = idareci.Id,
+                                KopekKuvveNumarasi = kopek.KuvveNumarasi,
+                                KopekCipNumarasi = kopek.CipNumarasi
+                            };
+                var result = await query.ToListAsync(cancellationToken);
+                return await Result<List<KopekIdareciResponse>>.SuccessAsync(result);
             }
         }
     }
