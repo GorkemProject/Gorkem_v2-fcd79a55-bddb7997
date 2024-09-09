@@ -25,30 +25,35 @@ namespace Gorkem_.Features.Idareci
 
             public async Task<Result<List<KopekIdareciResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                //var query = _context.UT_IdareciKopekleri.AsQueryable();
-                //if (request.Request.Aktifmi.HasValue)
-                //{
-                //    query = query.Where(x => x.Aktifmi == request.Request.Aktifmi.Value);
-                //}
-                //var result = await query.Select(x=> new IdareciKopekListeleResponse
-                //{
-                //    KopekId = x.KopekId,
-                //    IdareciId = x.IdareciId,
-                //    Aktifmi = x.Aktifmi,
 
-                //}).ToListAsync(cancellationToken);
-                //return await Result<List<IdareciKopekListeleResponse>>.SuccessAsync(result);
+                
                 var query = from kopek in _context.UT_Kopek_Kopeks
-                            join idareciKopek in _context.UT_IdareciKopekleri on kopek.Id equals idareciKopek.KopekId //Kopek - idareci ilişkisi
+                            join idareciKopek in _context.UT_IdareciKopekleri on kopek.Id equals idareciKopek.KopekId 
                             join idareci in _context.UT_Idarecis on idareciKopek.IdareciId equals idareci.Id
-                            select new KopekIdareciResponse
+                            select new
                             {
-                                IdareciId = idareci.Id,
-                                KopekKuvveNumarasi = kopek.KuvveNumarasi,
-                                KopekCipNumarasi = kopek.CipNumarasi
+                                IdareciKopek = idareciKopek,
+                                Kopek = kopek,
+                                Idareci = idareci
                             };
-                var result = await query.ToListAsync(cancellationToken);
+
+               
+                if (request.Request.Aktifmi.HasValue)
+                {
+                    // bu kısımı böyle bıraktım çünkü sildiğimde false olan sonuçları göstermiyor
+                    query = query.Where(x => x.IdareciKopek.Aktifmi == request.Request.Aktifmi.Value);
+                }
+
+                
+                var result = await query.Select(x => new KopekIdareciResponse
+                {
+                    IdareciId = x.Idareci.Id,
+                    KopekKuvveNumarasi = x.Kopek.KuvveNumarasi,
+                    KopekCipNumarasi = x.Kopek.CipNumarasi
+                }).ToListAsync(cancellationToken);
+
                 return await Result<List<KopekIdareciResponse>>.SuccessAsync(result);
+
             }
         }
     }
