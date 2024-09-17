@@ -40,19 +40,19 @@ namespace Gorkem_.Features.Kopek
              // integer degerler de greaterthen(0) uygulayalım
              // tarih alanlarında valid bir datetime check yapalım
                 
-                RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.BransId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.KuvveNumarasi).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.CipNumarasi).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.DogumTarihi).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.YapilanIslem).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.NihaiKanaat).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.KopekTuruId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.Karar).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.DurumId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.TeminSekli).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
-                RuleFor(r => r.CinsId).NotEmpty().NotNull().WithMessage("İsim Değeri Boş Olamaz");
+                RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("Irk Değeri Boş Olamaz");
+                RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("Birim Değeri Boş Olamaz");
+                RuleFor(r => r.BransId).NotEmpty().NotNull().WithMessage("Branş Değeri Boş Olamaz");
+                RuleFor(r => r.KuvveNumarasi).NotEmpty().NotNull().WithMessage("Kuvve Numarası Değeri Boş Olamaz");
+                RuleFor(r => r.CipNumarasi).NotEmpty().NotNull().WithMessage("Çip Numarası Değeri Boş Olamaz");
+                RuleFor(r => r.DogumTarihi).NotEmpty().NotNull().WithMessage("Doğum Tarihi Değeri Boş Olamaz");
+                RuleFor(r => r.YapilanIslem).NotEmpty().NotNull().WithMessage("Yapılan işlem Değeri Boş Olamaz");
+                RuleFor(r => r.NihaiKanaat).NotEmpty().NotNull().WithMessage("Nihai Kanat Değeri Boş Olamaz");
+                RuleFor(r => r.KopekTuruId).NotEmpty().NotNull().WithMessage("Kopek Turu  Değeri Boş Olamaz");
+                RuleFor(r => r.Karar).NotEmpty().NotNull().WithMessage("Karar Değeri Boş Olamaz");
+                RuleFor(r => r.DurumId).NotEmpty().NotNull().WithMessage("Durum Değeri Boş Olamaz");
+                RuleFor(r => r.TeminSekli).NotEmpty().NotNull().WithMessage("Temin Şekli Değeri Boş Olamaz");
+                RuleFor(r => r.CinsId).NotEmpty().NotNull().WithMessage("Cins Değeri Boş Olamaz");
                 
             }
         }

@@ -38,7 +38,7 @@ namespace Gorkem_.Features.Idareci
                     return await Result<bool>.FailAsync("Belirtilen köpek ya da idareci bulunamadı");
                 idareciKopek.Aktifmi = false;
                 idareciKopek.T_Pasif = DateTime.Now;
-
+               
                 _context.UT_IdareciKopekleri.Update(idareciKopek);
                 var isDataRemoved = await _context.SaveChangesAsync()>0;
 
