@@ -22,6 +22,16 @@ builder.Host.UseSerilog((context, configuration) =>
 #endregion
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("GorkemCORS", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCarter();
@@ -42,6 +52,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("GorkemCORS");
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection(); 
 app.UseExceptionHandler();
