@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gorkem_.Migrations
 {
     /// <inheritdoc />
-    public partial class IdareciKopekleriAddedss : Migration
+    public partial class KopekDurum : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -265,6 +265,7 @@ namespace Gorkem_.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    KopekAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IrkId = table.Column<int>(type: "int", nullable: false),
                     BirimId = table.Column<int>(type: "int", nullable: false),
                     BransId = table.Column<int>(type: "int", nullable: false),
@@ -276,7 +277,8 @@ namespace Gorkem_.Migrations
                     NihaiKanaat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     KopekTuruId = table.Column<int>(type: "int", nullable: false),
                     Karar = table.Column<bool>(type: "bit", nullable: false),
-                    DurumId = table.Column<int>(type: "int", nullable: false),
+                    KopekDurumId = table.Column<int>(type: "int", nullable: false),
+                    DurumId = table.Column<int>(type: "int", nullable: true),
                     TeminSekli = table.Column<int>(type: "int", nullable: false),
                     HibeId = table.Column<int>(type: "int", nullable: true),
                     SatinAlmaId = table.Column<int>(type: "int", nullable: true),
@@ -316,8 +318,7 @@ namespace Gorkem_.Migrations
                         name: "FK_UT_Kopek_Kopeks_KT_KopekDurumus_DurumId",
                         column: x => x.DurumId,
                         principalTable: "KT_KopekDurumus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_UT_Kopek_Kopeks_KT_KopekTurus_KopekTuruId",
                         column: x => x.KopekTuruId,

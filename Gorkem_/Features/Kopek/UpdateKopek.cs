@@ -15,7 +15,7 @@ namespace Gorkem_.Features.Kopek
         public class Command : IRequest<Result<bool>> 
         {
             public int Id { get; set; }
-            public string Name { get; set; }
+            public string KopekAdi { get; set; }
             public int IrkId { get; set; }
             public int BirimId { get; set; }
             public int BransId { get; set; }
@@ -33,7 +33,7 @@ namespace Gorkem_.Features.Kopek
         {
             public UpdateKopekValidation()
             {
-                RuleFor(r => r.Name).NotEmpty().NotNull().WithMessage("İsim Alanı Boş Bırakılamaz.");
+                RuleFor(r => r.KopekAdi).NotEmpty().NotNull().WithMessage("İsim Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("Irk Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("Birim Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.KopekTuruId).NotEmpty().NotNull().WithMessage("Köpek Türü Alanı Boş Bırakılamaz.");
@@ -56,12 +56,12 @@ namespace Gorkem_.Features.Kopek
                     return await Result<bool>.FailAsync("Köpek Bulunamadı..");
                 }
                     
-            
+                kopek.KopekAdi = request.KopekAdi;
                 kopek.IrkId = request.IrkId;
                 kopek.BirimId = request.BirimId;
                 kopek.BransId = request.BransId;
                 kopek.KopekTuruId = request.KopekTuruId;
-                kopek.DurumId = request.DurumId;
+                kopek.KopekDurumId = request.DurumId;
                 kopek.KuvveNumarasi = request.KuvveNumarasi;
                 kopek.CipNumarasi = request.CipNumarasi;
                 kopek.DogumTarihi = request.DogumTarihi;
@@ -72,7 +72,7 @@ namespace Gorkem_.Features.Kopek
                 var isSaved = await Context.SaveChangesAsync(cancellationToken)>0;
                 if (isSaved)
                 {
-                    Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.Name, "DemoAccount", DateTime.Now);
+                    Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.KopekAdi, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
                 }
                 return await Result<bool>.FailAsync("Köpek Güncelleme Başarısız");

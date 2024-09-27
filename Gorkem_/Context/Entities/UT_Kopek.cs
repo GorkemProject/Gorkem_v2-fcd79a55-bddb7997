@@ -19,11 +19,11 @@ namespace Gorkem_.Context.Entities
         public virtual KT_Cins? Cins { get; set; }
         public DateTime DogumTarihi { get; set; }
         public string? YapilanIslem { get; set; }
-        public string? NihaiKanaat { get; set; }
+        public string? NihaiKanaat { get; set; } 
         public int KopekTuruId { get; set; }
         public virtual KT_KopekTuru? KopekTuru { get; set; }
         public bool Karar { get; set; }
-        public int DurumId { get; set; }
+        public int KopekDurumId { get; set; }
         public virtual KT_KopekDurumu? Durum { get; set; }
         public int TeminSekli { get; set; }
 

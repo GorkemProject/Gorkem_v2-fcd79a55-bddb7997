@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    [Migration("20240905124953_IdareciKopekleriAddedss")]
-    partial class IdareciKopekleriAddedss
+    [Migration("20240927104748_KopekDurum")]
+    partial class KopekDurum
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -440,7 +440,7 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime>("DogumTarihi")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DurumId")
+                    b.Property<int?>("DurumId")
                         .HasColumnType("int");
 
                     b.Property<int?>("HibeId")
@@ -451,6 +451,13 @@ namespace Gorkem_.Migrations
 
                     b.Property<bool>("Karar")
                         .HasColumnType("bit");
+
+                    b.Property<string>("KopekAdi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("KopekDurumId")
+                        .HasColumnType("int");
 
                     b.Property<int>("KopekTuruId")
                         .HasColumnType("int");
@@ -681,9 +688,7 @@ namespace Gorkem_.Migrations
 
                     b.HasOne("Gorkem_.Context.Entities.KT_KopekDurumu", "Durum")
                         .WithMany()
-                        .HasForeignKey("DurumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DurumId");
 
                     b.HasOne("Gorkem_.Context.Entities.UT_Kopek_Hibe", "Hibe")
                         .WithMany("UT_Kopek_Kopek")

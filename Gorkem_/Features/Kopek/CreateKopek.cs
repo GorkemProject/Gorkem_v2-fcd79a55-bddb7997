@@ -16,7 +16,7 @@ namespace Gorkem_.Features.Kopek
         public class Command : IRequest<Result<bool>>
         {
             //Parametrelerimizi buraya yazıyoruz.
-            
+            public string KopekAdi { get; set; }
             public int IrkId { get; set; }
             public int CinsId { get; set; }
 
@@ -29,7 +29,7 @@ namespace Gorkem_.Features.Kopek
             public string? NihaiKanaat { get; set; }
             public int KopekTuruId { get; set; }
             public bool Karar { get; set; }
-            public int DurumId { get; set; }
+            public int KopekDurumId { get; set; }
             public int TeminSekli { get; set; }
 
         }
@@ -39,7 +39,7 @@ namespace Gorkem_.Features.Kopek
             {// string degerler null check yapalım
              // integer degerler de greaterthen(0) uygulayalım
              // tarih alanlarında valid bir datetime check yapalım
-                
+                RuleFor(r  => r.KopekAdi).NotEmpty().NotNull().WithMessage("Köpek ismi boş olamaz");
                 RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("Irk Değeri Boş Olamaz");
                 RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("Birim Değeri Boş Olamaz");
                 RuleFor(r => r.BransId).NotEmpty().NotNull().WithMessage("Branş Değeri Boş Olamaz");
@@ -50,7 +50,7 @@ namespace Gorkem_.Features.Kopek
                 RuleFor(r => r.NihaiKanaat).NotEmpty().NotNull().WithMessage("Nihai Kanat Değeri Boş Olamaz");
                 RuleFor(r => r.KopekTuruId).NotEmpty().NotNull().WithMessage("Kopek Turu  Değeri Boş Olamaz");
                 RuleFor(r => r.Karar).NotEmpty().NotNull().WithMessage("Karar Değeri Boş Olamaz");
-                RuleFor(r => r.DurumId).NotEmpty().NotNull().WithMessage("Durum Değeri Boş Olamaz");
+                RuleFor(r => r.KopekDurumId).NotEmpty().NotNull().WithMessage("Durum Değeri Boş Olamaz");
                 RuleFor(r => r.TeminSekli).NotEmpty().NotNull().WithMessage("Temin Şekli Değeri Boş Olamaz");
                 RuleFor(r => r.CinsId).NotEmpty().NotNull().WithMessage("Cins Değeri Boş Olamaz");
                 
@@ -60,7 +60,7 @@ namespace Gorkem_.Features.Kopek
         {
             return new UT_Kopek
             {
-              
+                KopekAdi = command.KopekAdi,
                 IrkId = command.IrkId,
                 BirimId = command.BirimId,
                 BransId = command.BransId,
@@ -72,7 +72,7 @@ namespace Gorkem_.Features.Kopek
                 NihaiKanaat = command.NihaiKanaat,
                 KopekTuruId = command.KopekTuruId,
                 Karar = command.Karar,
-                DurumId = command.DurumId,
+                KopekDurumId = command.KopekDurumId,
                 TeminSekli = command.TeminSekli,
                 T_Aktif = DateTime.Now,
                 Aktifmi = true
@@ -109,7 +109,7 @@ namespace Gorkem_.Features.Kopek
             {
                 var request = new CreateKopek.Command() 
                 {
-
+                    KopekAdi = model.KopekAdi,
                     IrkId = model.IrkId,
                     BirimId = model.BirimId,
                     BransId = model.BransId,
@@ -121,7 +121,7 @@ namespace Gorkem_.Features.Kopek
                     NihaiKanaat = model.NihaiKanaat,
                     KopekTuruId = model.KopekTuruId,
                     Karar = model.Karar,
-                    DurumId = model.DurumId,
+                    KopekDurumId = model.KopekDurumId,
                     TeminSekli = model.TeminSekli,
                 };
                 var response = await sender.Send(request);

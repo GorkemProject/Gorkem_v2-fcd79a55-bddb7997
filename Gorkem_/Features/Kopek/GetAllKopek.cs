@@ -31,12 +31,14 @@ namespace Gorkem_.Features.Kopek
                     .Where(a => a.Aktifmi)
                     .Select(a => new KopekGetirResponse
                     {
+
                         Id = a.Id,
+                        KopekAdi = a.KopekAdi,
                         IrkId = a.IrkId,
                         BirimId = a.BirimId,
                         BransId = a.BransId,
                         KopekTuruId = a.KopekTuruId,
-                        DurumId = a.DurumId,
+                        DurumId = a.KopekDurumId,
                         KuvveNumarasi = a.KuvveNumarasi,
                         CipNumarasi = a.CipNumarasi,
                         Karar = a.Karar,
