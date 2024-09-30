@@ -12,7 +12,7 @@ namespace Gorkem_.Features.KodTablo
 {
     public static class GetAllAskerlik
     {
-        public class Query : IRequest<List<AskerlikGetirResponse>>
+        public class Query : IRequest<Result<List<AskerlikGetirResponse>>>
         {
 
         }
@@ -23,11 +23,11 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi yapıldığı için validasyona gerek yok.
             }    
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<AskerlikGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<AskerlikGetirResponse>>>
         {
  
 
-            public async Task<List<AskerlikGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<AskerlikGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifAskerlikDurumları = await Context.KT_Askerliks
                     .Where(b => b.Aktifmi)
@@ -36,7 +36,9 @@ namespace Gorkem_.Features.KodTablo
                         Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
-                return aktifAskerlikDurumları;
+
+
+                return Result<List<AskerlikGetirResponse>>.Success(aktifAskerlikDurumları);
 
             }
         }
@@ -50,9 +52,13 @@ namespace Gorkem_.Features.KodTablo
             {
                 var request = new GetAllAskerlik.Query();
                 var response = await sender.Send(request);
-                return Results.Ok(response);
+                if (response.Succeeded)
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }
 }
+
+

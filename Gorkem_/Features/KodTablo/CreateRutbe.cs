@@ -58,8 +58,8 @@ namespace Gorkem_.Features.KodTablo
                 var request = new CreateRutbe.Command() { Name = model.RutbeAdi };
                 var response = await sender.Send(request);
                 if (response.Succeeded)
-                    return Results.Ok();
-                return Results.BadRequest(response.Message);
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }

@@ -126,7 +126,7 @@ namespace Gorkem_.Features.Kopek
                 };
                 var response = await sender.Send(request);
                 if (response.Succeeded)
-                    return Results.Ok();
+                    return Results.Ok(response);
                 return Results.BadRequest(response.Message);
 
 

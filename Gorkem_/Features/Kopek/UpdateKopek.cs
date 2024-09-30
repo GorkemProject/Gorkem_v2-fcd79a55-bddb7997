@@ -90,9 +90,9 @@ namespace Gorkem_.Features.Kopek
                 var result = await sender.Send(model);
                 if (result.Succeeded)
                 {
-                    return Results.Ok();
+                    return Results.Ok(result);
                 }
-                return Results.BadRequest(result.Message);
+                return Results.BadRequest(result);
             }).WithTags(EndpointConstants.KOPEK);
 
         }

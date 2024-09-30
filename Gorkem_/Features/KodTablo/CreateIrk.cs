@@ -59,8 +59,8 @@ namespace Gorkem_.Features.KodTablo
                 var request = new CreateIrk.Command() { Name = model.IrkAdi };
                 var response = await sender.Send(request);
                 if (response.Succeeded)
-                    return Results.Ok();
-                return Results.BadRequest(response.Message);
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }

@@ -65,7 +65,7 @@ namespace Gorkem_.Features.Idareci
                 var response = await sender.Send(new CreateIdareciCommand(request));
 
                 if (response.Succeeded)
-                    return Results.Ok();
+                    return Results.Ok(response);
 
                 return Results.BadRequest(response.Message);
 

@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AspNetCoreHero.Results;
+using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KodTablo;
@@ -12,7 +13,7 @@ namespace Gorkem_.Features.KodTablo
 {
     public static class GetAllBrans
     {
-        public class Query : IRequest<List<BransGetirResponse>> { }
+        public class Query : IRequest<Result<List<BransGetirResponse>>> { }
         public class BransGetirValidation : AbstractValidator<Query>
         {
             public BransGetirValidation()
@@ -20,10 +21,10 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi olduğu için herhangi bir validasyon yapmıyorum.
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<BransGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<BransGetirResponse>>>
         {
  
-            public async Task<List<BransGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<BransGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifBranslar = await Context.KT_Branss
                     .Where(b => b.Aktifmi)
@@ -32,7 +33,7 @@ namespace Gorkem_.Features.KodTablo
                         Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
-                return aktifBranslar;
+                return Result<List<BransGetirResponse>>.Success(aktifBranslar);
             }
         }
     }
@@ -44,7 +45,9 @@ namespace Gorkem_.Features.KodTablo
             {
                 var request = new GetAllBrans.Query();
                 var response = await sender.Send(request);
-                return Results.Ok(response);
+                if (response.Succeeded)
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }

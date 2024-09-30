@@ -14,7 +14,7 @@ namespace Gorkem_.Features.KodTablo
 {
     public static class GetAllBirim
     {
-        public class Query : IRequest<List<BirimGetirResponse>>
+        public class Query : IRequest<Result<List<BirimGetirResponse>>>
         {
         }
 
@@ -25,11 +25,11 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi yaptığımız için herhangi bir validasyon yapmadım. 
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<BirimGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<BirimGetirResponse>>>
         {
  
 
-            public async Task<List<BirimGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<BirimGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifBirimler = await Context.KT_Birims
                     .Where(b => b.Aktifmi)
@@ -38,7 +38,7 @@ namespace Gorkem_.Features.KodTablo
                         Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
-                return aktifBirimler;
+                return Result<List<BirimGetirResponse>>.Success(aktifBirimler);
             }
         }
     }
@@ -51,7 +51,9 @@ namespace Gorkem_.Features.KodTablo
                 var request = new GetAllBirim.Query();
                 var response = await sender.Send(request);
 
-                return Results.Ok(response);
+                if (response.Succeeded)
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KODTABLO);
         }

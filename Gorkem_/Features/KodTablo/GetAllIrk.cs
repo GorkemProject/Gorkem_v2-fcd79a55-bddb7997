@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AspNetCoreHero.Results;
+using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KodTablo;
@@ -10,7 +11,7 @@ namespace Gorkem_.Features.KodTablo
 {
     public class GetAllIrk
     {
-        public class Query : IRequest<List<IrkGetirResponse>> { }
+        public class Query : IRequest<Result<List<IrkGetirResponse>>> { }
 
         public class IrkGetirValidation : AbstractValidator<Query>
         {
@@ -19,11 +20,11 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi yapıldığı için herhangi bir validasyon işlemi yapmadım.
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<IrkGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<IrkGetirResponse>>>
         {
  
 
-            public async Task<List<IrkGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<IrkGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifIrklar = await Context.KT_Irks
                     .Where(b => b.Aktifmi)
@@ -32,7 +33,7 @@ namespace Gorkem_.Features.KodTablo
                         Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
-                return aktifIrklar;
+                return Result<List<IrkGetirResponse>>.Success(aktifIrklar);
             }
         }
     }
@@ -44,7 +45,9 @@ namespace Gorkem_.Features.KodTablo
             {
                 var request = new GetAllIrk.Query();
                 var response = await sender.Send(request);
-                return Results.Ok(response);
+                if (response.Succeeded)
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }

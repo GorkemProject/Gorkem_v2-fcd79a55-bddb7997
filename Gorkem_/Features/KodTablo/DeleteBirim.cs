@@ -59,7 +59,7 @@ namespace Gorkem_.Features.KodTablo
 
                 if (response.Succeeded)
                     return Results.Ok($"With the {model.Id} id data has been deleted");
-                return Results.BadRequest(response.Message);
+                return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }

@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AspNetCoreHero.Results;
+using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KodTablo;
@@ -10,7 +11,7 @@ namespace Gorkem_.Features.KodTablo
 {
     public static class GetAllIdareciDurum
     {
-        public class Query : IRequest<List<IdareciDurumGetirResponse>>
+        public class Query : IRequest<Result<List<IdareciDurumGetirResponse>>>
         {
         }
         public class DurumGetirValidation : AbstractValidator<Query>
@@ -20,11 +21,11 @@ namespace Gorkem_.Features.KodTablo
                 //Listeleme işlemi yapılacağı için bir validasyon koymadım.
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<IdareciDurumGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<IdareciDurumGetirResponse>>>
         {
  
 
-            public async Task<List<IdareciDurumGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<IdareciDurumGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifDurumlar = await Context.KT_IdareciDurum
                     .Where(b => b.Aktifmi)
@@ -33,7 +34,7 @@ namespace Gorkem_.Features.KodTablo
                         Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
-                return aktifDurumlar;
+                return Result<List<IdareciDurumGetirResponse>>.Success(aktifDurumlar);
             }
         }
     }
@@ -45,7 +46,9 @@ namespace Gorkem_.Features.KodTablo
             {
                 var request = new GetAllIdareciDurum.Query();
                 var response = await sender.Send(request);
-                return Results.Ok(response);
+                if (response.Succeeded)
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }

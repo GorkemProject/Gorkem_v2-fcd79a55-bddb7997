@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AspNetCoreHero.Results;
+using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KodTablo;
@@ -11,7 +12,7 @@ namespace Gorkem_.Features.KodTablo
 {
     public static class GetAllRutbe
     {
-        public class Query : IRequest<List<RutbeGetirResponse>>
+        public class Query : IRequest<Result<List<RutbeGetirResponse>>>
         {
         }
         public class RutbeGetirValidation : AbstractValidator<Query>
@@ -21,11 +22,11 @@ namespace Gorkem_.Features.KodTablo
                 //listeleme işlemi yaptığım için validasyon yapmıyoruz.
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<RutbeGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<RutbeGetirResponse>>>
         {
  
 
-            public async Task<List<RutbeGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<RutbeGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifRutbeler = await Context.KT_Rutbes
                     .Where(b => b.Aktifmi)
@@ -34,7 +35,7 @@ namespace Gorkem_.Features.KodTablo
                         Id = b.Id,
                         Name = b.Name,
                     }).ToListAsync(cancellationToken);
-                return aktifRutbeler;
+                return Result<List<RutbeGetirResponse>>.Success(aktifRutbeler);
             }
         }
     }
@@ -47,7 +48,9 @@ namespace Gorkem_.Features.KodTablo
                 var request = new GetAllRutbe.Query();
                 var response = await sender.Send(request);
 
-                return Results.Ok(response);
+                if (response.Succeeded)
+                    return Results.Ok(response);
+                return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
         }
     }
