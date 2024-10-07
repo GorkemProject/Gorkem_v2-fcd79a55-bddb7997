@@ -18,7 +18,6 @@ namespace Gorkem_.Features.Kopek
             //Parametrelerimizi buraya yazıyoruz.
             public string KopekAdi { get; set; }
             public int IrkId { get; set; }
-            public int CinsId { get; set; }
 
             public int BirimId { get; set; }
             public int BransId { get; set; }
@@ -29,8 +28,6 @@ namespace Gorkem_.Features.Kopek
             public string? NihaiKanaat { get; set; }
             public int KopekTuruId { get; set; }
             public bool Karar { get; set; }
-            public int KopekDurumId { get; set; }
-            public int TeminSekli { get; set; }
 
         }
         public class CreateKopekValidation : AbstractValidator<Command>
@@ -50,9 +47,7 @@ namespace Gorkem_.Features.Kopek
                 RuleFor(r => r.NihaiKanaat).NotEmpty().NotNull().WithMessage("Nihai Kanat Değeri Boş Olamaz");
                 RuleFor(r => r.KopekTuruId).NotEmpty().NotNull().WithMessage("Kopek Turu  Değeri Boş Olamaz");
                 RuleFor(r => r.Karar).NotEmpty().NotNull().WithMessage("Karar Değeri Boş Olamaz");
-                RuleFor(r => r.KopekDurumId).NotEmpty().NotNull().WithMessage("Durum Değeri Boş Olamaz");
-                RuleFor(r => r.TeminSekli).NotEmpty().NotNull().WithMessage("Temin Şekli Değeri Boş Olamaz");
-                RuleFor(r => r.CinsId).NotEmpty().NotNull().WithMessage("Cins Değeri Boş Olamaz");
+
                 
             }
         }
@@ -65,15 +60,12 @@ namespace Gorkem_.Features.Kopek
                 BirimId = command.BirimId,
                 BransId = command.BransId,
                 KuvveNumarasi = command.KuvveNumarasi,
-                CinsId = command.CinsId,
                 CipNumarasi = command.CipNumarasi,
                 DogumTarihi = command.DogumTarihi,
                 YapilanIslem = command.YapilanIslem,
                 NihaiKanaat = command.NihaiKanaat,
                 KopekTuruId = command.KopekTuruId,
                 Karar = command.Karar,
-                KopekDurumId = command.KopekDurumId,
-                TeminSekli = command.TeminSekli,
                 T_Aktif = DateTime.Now,
                 Aktifmi = true
 
@@ -113,7 +105,6 @@ namespace Gorkem_.Features.Kopek
                     IrkId = model.IrkId,
                     BirimId = model.BirimId,
                     BransId = model.BransId,
-                    CinsId = model.CinsId,
                     KuvveNumarasi = model.KuvveNumarasi,
                     CipNumarasi = model.CipNumarasi,
                     DogumTarihi = model.DogumTarihi,
@@ -121,8 +112,6 @@ namespace Gorkem_.Features.Kopek
                     NihaiKanaat = model.NihaiKanaat,
                     KopekTuruId = model.KopekTuruId,
                     Karar = model.Karar,
-                    KopekDurumId = model.KopekDurumId,
-                    TeminSekli = model.TeminSekli,
                 };
                 var response = await sender.Send(request);
                 if (response.Succeeded)

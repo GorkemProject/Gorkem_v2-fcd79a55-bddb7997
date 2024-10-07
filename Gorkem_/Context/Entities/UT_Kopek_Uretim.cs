@@ -11,7 +11,5 @@ namespace Gorkem_.Context.Entities
         public string? AnneKopekRef { get; set; }
         public string? BabaKopekRef { get; set; }
 
-        public int KopekKopekId { get; set; }
-        public ICollection<UT_Kopek>? UT_Kopek_Kopek { get; set; }
     }
 }

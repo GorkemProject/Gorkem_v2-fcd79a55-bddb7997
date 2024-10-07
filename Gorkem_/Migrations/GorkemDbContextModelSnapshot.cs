@@ -428,20 +428,11 @@ namespace Gorkem_.Migrations
                     b.Property<int>("BransId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CinsId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CipNumarasi")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DogumTarihi")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("DurumId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HibeId")
-                        .HasColumnType("int");
 
                     b.Property<int>("IrkId")
                         .HasColumnType("int");
@@ -453,9 +444,6 @@ namespace Gorkem_.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("KopekDurumId")
-                        .HasColumnType("int");
-
                     b.Property<int>("KopekTuruId")
                         .HasColumnType("int");
 
@@ -465,20 +453,11 @@ namespace Gorkem_.Migrations
                     b.Property<string>("NihaiKanaat")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SatinAlmaId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("T_Aktif")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("T_Pasif")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("TeminSekli")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("URETİMId")
-                        .HasColumnType("int");
 
                     b.Property<string>("YapilanIslem")
                         .HasColumnType("nvarchar(max)");
@@ -489,19 +468,9 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("BransId");
 
-                    b.HasIndex("CinsId");
-
-                    b.HasIndex("DurumId");
-
-                    b.HasIndex("HibeId");
-
                     b.HasIndex("IrkId");
 
                     b.HasIndex("KopekTuruId");
-
-                    b.HasIndex("SatinAlmaId");
-
-                    b.HasIndex("URETİMId");
 
                     b.ToTable("UT_Kopek_Kopeks");
                 });
@@ -522,9 +491,6 @@ namespace Gorkem_.Migrations
 
                     b.Property<DateTime>("HibeEdilmeTarihi")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("KopekKopekId")
-                        .HasColumnType("int");
 
                     b.Property<int>("TelefonNumarasi")
                         .HasColumnType("int");
@@ -547,9 +513,6 @@ namespace Gorkem_.Migrations
 
                     b.Property<string>("Adresi")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("KopekKopekId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("SatinAlmaTarihi")
                         .HasColumnType("datetime2");
@@ -575,9 +538,6 @@ namespace Gorkem_.Migrations
 
                     b.Property<string>("BabaKopekRef")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("KopekKopekId")
-                        .HasColumnType("int");
 
                     b.Property<string>("KopekRef")
                         .HasColumnType("nvarchar(max)");
@@ -677,20 +637,6 @@ namespace Gorkem_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gorkem_.Context.Entities.KT_Cins", "Cins")
-                        .WithMany()
-                        .HasForeignKey("CinsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.KT_KopekDurumu", "Durum")
-                        .WithMany()
-                        .HasForeignKey("DurumId");
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kopek_Hibe", "Hibe")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("HibeId");
-
                     b.HasOne("Gorkem_.Context.Entities.KT_Irk", "Irk")
                         .WithMany()
                         .HasForeignKey("IrkId")
@@ -703,31 +649,13 @@ namespace Gorkem_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kopek_SatinAlma", "SatinAlma")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("SatinAlmaId");
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kopek_Uretim", "URETİM")
-                        .WithMany("UT_Kopek_Kopek")
-                        .HasForeignKey("URETİMId");
-
                     b.Navigation("Birim");
 
                     b.Navigation("Brans");
 
-                    b.Navigation("Cins");
-
-                    b.Navigation("Durum");
-
-                    b.Navigation("Hibe");
-
                     b.Navigation("Irk");
 
                     b.Navigation("KopekTuru");
-
-                    b.Navigation("SatinAlma");
-
-                    b.Navigation("URETİM");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
@@ -742,21 +670,6 @@ namespace Gorkem_.Migrations
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.Navigation("Idareci");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Hibe", b =>
-                {
-                    b.Navigation("UT_Kopek_Kopek");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_SatinAlma", b =>
-                {
-                    b.Navigation("UT_Kopek_Kopek");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek_Uretim", b =>
-                {
-                    b.Navigation("UT_Kopek_Kopek");
                 });
 #pragma warning restore 612, 618
         }

@@ -35,7 +35,6 @@ namespace Gorkem_.Features.Kopek;
             .Include(x=>x.Irk)
             .Include(x=>x.Birim)
             .Include(x=>x.Brans)
-            .Include(x=>x.Cins)
             .Include(x=>x.KopekTuru)
             .AsQueryable();
 
@@ -44,7 +43,6 @@ namespace Gorkem_.Features.Kopek;
             .Map(dest=>dest.Irk, src => src.Irk.Name)
             .Map(dest=>dest.Birim, src => src.Birim.Name)
             .Map(dest=>dest.Brans, src => src.Brans.Name)
-            .Map(dest=>dest.Cins, src => src.Cins.Name)
             .Map(dest=>dest.KopekTuru, src => src.KopekTuru.Name);
             
             if(request.Request.Filters.Count > 0){

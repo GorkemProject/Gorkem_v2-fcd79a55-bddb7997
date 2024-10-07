@@ -37,15 +37,12 @@ namespace Gorkem_.Features.Kopek
                         IrkId = a.IrkId,
                         BirimId = a.BirimId,
                         BransId = a.BransId,
-                        KopekTuruId = a.KopekTuruId,
-                        DurumId = a.KopekDurumId,
                         KuvveNumarasi = a.KuvveNumarasi,
                         CipNumarasi = a.CipNumarasi,
                         Karar = a.Karar,
                         DogumTarihi = a.DogumTarihi,
                         YapilanIslem = a.YapilanIslem,
                         NihaiKanaat = a.NihaiKanaat,
-                        TeminSekli = a.TeminSekli,
                         T_Aktif = a.T_Aktif,
                         T_Pasif = a.T_Pasif
                     }).ToListAsync(cancellationToken);

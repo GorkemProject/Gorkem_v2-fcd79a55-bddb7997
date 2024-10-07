@@ -12,7 +12,6 @@ namespace Gorkem_.Context.Entities
         public int TelefonNumarasi { get; set; }
         public DateTime SatinAlmaTarihi { get; set; }
 
-        public int KopekKopekId { get; set; }
-        public ICollection<UT_Kopek>? UT_Kopek_Kopek { get; set; }
+
     }
 }
