@@ -21,8 +21,7 @@ namespace Gorkem_.Features.Kopek
 
             public int BirimId { get; set; }
             public int BransId { get; set; }
-            public int KuvveNumarasi { get; set; }
-            public int CipNumarasi { get; set; }
+            public string CipNumarasi { get; set; }
             public DateTime DogumTarihi { get; set; }
             public string? YapilanIslem { get; set; }
             public string? NihaiKanaat { get; set; }
@@ -40,7 +39,6 @@ namespace Gorkem_.Features.Kopek
                 RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("Irk Değeri Boş Olamaz");
                 RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("Birim Değeri Boş Olamaz");
                 RuleFor(r => r.BransId).NotEmpty().NotNull().WithMessage("Branş Değeri Boş Olamaz");
-                RuleFor(r => r.KuvveNumarasi).NotEmpty().NotNull().WithMessage("Kuvve Numarası Değeri Boş Olamaz");
                 RuleFor(r => r.CipNumarasi).NotEmpty().NotNull().WithMessage("Çip Numarası Değeri Boş Olamaz");
                 RuleFor(r => r.DogumTarihi).NotEmpty().NotNull().WithMessage("Doğum Tarihi Değeri Boş Olamaz");
                 RuleFor(r => r.YapilanIslem).NotEmpty().NotNull().WithMessage("Yapılan işlem Değeri Boş Olamaz");
@@ -59,7 +57,6 @@ namespace Gorkem_.Features.Kopek
                 IrkId = command.IrkId,
                 BirimId = command.BirimId,
                 BransId = command.BransId,
-                KuvveNumarasi = command.KuvveNumarasi,
                 CipNumarasi = command.CipNumarasi,
                 DogumTarihi = command.DogumTarihi,
                 YapilanIslem = command.YapilanIslem,
@@ -85,7 +82,7 @@ namespace Gorkem_.Features.Kopek
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
-                    Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.KuvveNumarasi, "DemoAccount", DateTime.Now);
+                    Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.CipNumarasi, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
                 }
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");
@@ -105,7 +102,6 @@ namespace Gorkem_.Features.Kopek
                     IrkId = model.IrkId,
                     BirimId = model.BirimId,
                     BransId = model.BransId,
-                    KuvveNumarasi = model.KuvveNumarasi,
                     CipNumarasi = model.CipNumarasi,
                     DogumTarihi = model.DogumTarihi,
                     YapilanIslem = model.YapilanIslem,

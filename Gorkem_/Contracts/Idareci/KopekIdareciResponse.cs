@@ -7,7 +7,7 @@ namespace Gorkem_.Contracts.Idareci
         public int IdareciId { get; set; }
         public string AdSoyad { get; set; }
         public string KopekAdi { get; set; }
-        public int KopekKuvveNumarasi { get; set; } 
-        public int KopekCipNumarasi { get; set; }   
+        public string? KopekKuvveNumarasi { get; set; } 
+        public string? KopekCipNumarasi { get; set; }   
     }
 }

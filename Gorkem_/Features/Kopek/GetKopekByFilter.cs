@@ -58,7 +58,7 @@ namespace Gorkem_.Features.Kopek;
                 query = query.Provider.CreateQuery<UT_Kopek>(exp);
             }
 
-            var paged = PagedResult<UT_Kopek>.ToPagedResponse(query,request.Request.PageNumber,2);
+            var paged = PagedResult<UT_Kopek>.ToPagedResponse(query,request.Request.PageNumber,10);
 
             var mappedItems = paged.Items.Adapt<List<KopekGetirFilterResponse>>();
 

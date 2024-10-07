@@ -10,8 +10,8 @@ namespace Gorkem_.Context.Entities
         public virtual KT_Irk? Irk { get; set; }
         public int BransId { get; set; }
         public virtual KT_Brans? Brans { get; set; }
-        public int KuvveNumarasi { get; set; }
-        public int CipNumarasi { get; set; }
+        public string? KuvveNumarasi { get; set; }
+        public string? CipNumarasi { get; set; }
         public int BirimId { get; set; }
         public virtual KT_Birim? Birim { get; set; }
         public DateTime DogumTarihi { get; set; }

@@ -7,8 +7,8 @@
         public int IrkId { get; set; }
         public int BirimId { get; set; }
         public int BransId { get; set; }
-        public int KuvveNumarasi { get; set; }
-        public int CipNumarasi { get; set; }
+        public string? KuvveNumarasi { get; set; }
+        public string? CipNumarasi { get; set; }
         public bool Karar { get; set; }
         public DateTime T_Aktif { get; set; }
         public DateTime? T_Pasif { get; set; }

@@ -19,8 +19,8 @@ namespace Gorkem_.Features.Kopek
             public int IrkId { get; set; }
             public int BirimId { get; set; }
             public int BransId { get; set; }
-            public int KuvveNumarasi { get; set; }
-            public int CipNumarasi { get; set; }
+            public string? KuvveNumarasi { get; set; }
+            public string? CipNumarasi { get; set; }
             public DateTime DogumTarihi { get; set; }
             public string YapilanIslem { get; set; }
             public string NihaiKanaat { get; set; }
@@ -32,7 +32,6 @@ namespace Gorkem_.Features.Kopek
                 RuleFor(r => r.KopekAdi).NotEmpty().NotNull().WithMessage("İsim Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("Irk Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.BirimId).NotEmpty().NotNull().WithMessage("Birim Alanı Boş Bırakılamaz.");
-;
                 RuleFor(r => r.KuvveNumarasi).NotEmpty().NotNull().WithMessage("Kuvve Numarası Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.CipNumarasi).NotEmpty().NotNull().WithMessage("Çip Numarası Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.YapilanIslem).NotEmpty().NotNull().WithMessage("Yapılan işlem Alanı Boş Bırakılamaz.");
