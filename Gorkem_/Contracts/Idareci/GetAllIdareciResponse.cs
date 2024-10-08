@@ -1,6 +1,4 @@
-﻿using Gorkem_.Context.Entities;
-
-namespace Gorkem_.Contracts.Idareci
+﻿namespace Gorkem_.Contracts.Idareci
 {
     public class GetAllIdareciResponse
     {
@@ -10,11 +8,9 @@ namespace Gorkem_.Contracts.Idareci
         public DateTime DogumTarihi { get; set; }
         public int IdareciDurumId { get; set; }
         public int BirimId { get; set; }
-
         public int BransId { get; set; }
 
         public int RutbeId { get; set; }
-
         public int AskerlikId { get; set; }
 
 
