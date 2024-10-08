@@ -11,7 +11,7 @@ namespace Gorkem_.Features.Idareci
 {
     public class GetAllIdareci
     {
-        public class Query : IRequest<List<GetAllIdareciResponse>>
+        public class Query : IRequest<List<IdareciGetirResponse>>
         {
 
         }
@@ -23,14 +23,14 @@ namespace Gorkem_.Features.Idareci
 
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<GetAllIdareciResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<IdareciGetirResponse>>
         {
 
-            public async Task<List<GetAllIdareciResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<IdareciGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifIdareciler = await Context.UT_Idarecis
                     .Where(a => a.Aktifmi)
-                    .Select(a => new GetAllIdareciResponse
+                    .Select(a => new IdareciGetirResponse
                     {
                         Sicil = a.Sicil,
                         AdSoyad = a.AdSoyad,

@@ -1,6 +1,6 @@
 ﻿namespace Gorkem_.Contracts.Idareci
 {
-    public class GetAllIdareciResponse
+    public class IdareciGetirResponse
     {
         public int Sicil { get; set; }
         public string AdSoyad { get; set; } = string.Empty;
