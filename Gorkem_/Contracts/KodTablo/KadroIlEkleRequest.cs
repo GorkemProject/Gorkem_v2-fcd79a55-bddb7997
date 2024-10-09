@@ -2,6 +2,6 @@
 {
     public class KadroIlEkleRequest
     {
-        public string BirimAdi { get; set; }
+        public string KadroIlAdi { get; set; }
     }
 }

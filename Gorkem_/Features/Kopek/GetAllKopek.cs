@@ -43,6 +43,7 @@ namespace Gorkem_.Features.Kopek
                         DogumTarihi = a.DogumTarihi,
                         YapilanIslem = a.YapilanIslem,
                         NihaiKanaat = a.NihaiKanaat,
+                        EdinimSekli=a.EdinimSekli,
                         T_Aktif = a.T_Aktif,
                         T_Pasif = a.T_Pasif
                     }).ToListAsync(cancellationToken);

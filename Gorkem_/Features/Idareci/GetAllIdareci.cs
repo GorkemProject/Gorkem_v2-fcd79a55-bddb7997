@@ -41,6 +41,7 @@ namespace Gorkem_.Features.Idareci
                         BransId = a.BransId,
                         RutbeId = a.RutbeId,
                         AskerlikId = a.AskerlikId
+                        
                     }).ToListAsync(cancellationToken);
                 return aktifIdareciler;
             }

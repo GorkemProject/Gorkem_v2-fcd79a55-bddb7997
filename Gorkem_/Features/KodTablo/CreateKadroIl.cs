@@ -63,7 +63,7 @@ namespace Gorkem_.Features.KodTablo
         {
             app.MapPost("kodtablo/kadroil", async ([FromBody] KadroIlEkleRequest model, ISender sender) =>
             {
-                var request = new CreateKadroIl.Command() { Name = model.BirimAdi };
+                var request = new CreateKadroIl.Command() { Name = model.KadroIlAdi };
 
                 var response = await sender.Send(request);
 
