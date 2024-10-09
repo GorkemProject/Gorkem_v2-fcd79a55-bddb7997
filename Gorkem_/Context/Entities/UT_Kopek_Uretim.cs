@@ -10,6 +10,5 @@ namespace Gorkem_.Context.Entities
         public string? KopekRef { get; set; }
         public string? AnneKopekRef { get; set; }
         public string? BabaKopekRef { get; set; }
-
     }
 }

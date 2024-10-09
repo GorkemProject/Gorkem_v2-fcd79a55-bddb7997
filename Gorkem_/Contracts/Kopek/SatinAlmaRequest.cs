@@ -1,16 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Gorkem_.Context.Entities
+﻿namespace Gorkem_.Contracts.Kopek
 {
-    public class UT_Kopek_SatinAlma
+    public class SatinAlmaRequest
     {
-        [ForeignKey("Id")]
-
-        public int Id { get; set; }
         public string? AdiSoyadi { get; set; }
         public string? Adresi { get; set; }
         public int TelefonNumarasi { get; set; }
         public DateTime SatinAlmaTarihi { get; set; }
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace Gorkem_.Context.Entities
 {
-    public class KT_Birim : KTBaseEntity
+    public class KT_Karar : KTBaseEntity
     {
-       
     }
 }

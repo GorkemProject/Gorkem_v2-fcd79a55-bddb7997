@@ -12,8 +12,8 @@ namespace Gorkem_.Context.Entities
         public int IdareciDurumId { get; set; }
         public KT_IdareciDurum IdareciDurum { get; set; } = new();
 
-        public int BirimId { get; set; }
-        public KT_Birim Birim { get; set; } = new();
+        public int KadroIlId { get; set; }
+        public KT_KadroIl KadroIl { get; set; } = new();
 
         public int BransId { get; set; }
         public KT_Brans Brans { get; set; } = new();

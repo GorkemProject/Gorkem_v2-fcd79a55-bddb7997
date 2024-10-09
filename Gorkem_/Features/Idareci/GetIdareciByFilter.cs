@@ -25,7 +25,7 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
     public async Task<Result<IdareciFilterResponse>> Handle(GetIdareciByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = context.UT_Idarecis
-            .Include(x => x.Birim)
+            .Include(x => x.KadroIl)
             .Include(x => x.Askerlik)
             .Include(x => x.Brans)
             .Include(x => x.Rutbe)
@@ -33,7 +33,7 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
 
         TypeAdapterConfig<UT_Idareci, IdareciGetirFilterResponse>
             .NewConfig()
-            .Map(dest => dest.Birim, src => src.Birim.Name)
+            .Map(dest => dest.Birim, src => src.KadroIl.Name)
             .Map(dest => dest.Askerlik, src => src.Askerlik.Name)
             .Map(dest => dest.Brans, src => src.Brans.Name)
             .Map(dest => dest.Rutbe, src => src.Rutbe.Name);

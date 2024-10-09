@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gorkem_.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class VeriTabaniDuzenlendi : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,22 +25,6 @@ namespace Gorkem_.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KT_Askerliks", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "KT_Birims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
-                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_KT_Birims", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,6 +92,38 @@ namespace Gorkem_.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KT_KadroIls",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KT_KadroIls", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KT_Karars",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
+                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KT_Karars", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KT_KopekDurumus",
                 columns: table => new
                 {
@@ -121,22 +137,6 @@ namespace Gorkem_.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KT_KopekDurumus", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "KT_KopekTurus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Aktifmi = table.Column<bool>(type: "bit", nullable: false),
-                    T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_KT_KopekTurus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,14 +211,13 @@ namespace Gorkem_.Migrations
                     KopekAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IrkId = table.Column<int>(type: "int", nullable: false),
                     BransId = table.Column<int>(type: "int", nullable: false),
-                    KuvveNumarasi = table.Column<int>(type: "int", nullable: false),
-                    CipNumarasi = table.Column<int>(type: "int", nullable: false),
-                    BirimId = table.Column<int>(type: "int", nullable: false),
+                    KuvveNumarasi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CipNumarasi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KadroIlId = table.Column<int>(type: "int", nullable: false),
                     DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     YapilanIslem = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NihaiKanaat = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    KopekTuruId = table.Column<int>(type: "int", nullable: false),
-                    Karar = table.Column<bool>(type: "bit", nullable: false),
+                    KararId = table.Column<int>(type: "int", nullable: false),
                     Aktifmi = table.Column<bool>(type: "bit", nullable: false),
                     T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
                     T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -226,12 +225,6 @@ namespace Gorkem_.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UT_Kopek_Kopeks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_Birims_BirimId",
-                        column: x => x.BirimId,
-                        principalTable: "KT_Birims",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UT_Kopek_Kopeks_KT_Branss_BransId",
                         column: x => x.BransId,
@@ -245,9 +238,15 @@ namespace Gorkem_.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UT_Kopek_Kopeks_KT_KopekTurus_KopekTuruId",
-                        column: x => x.KopekTuruId,
-                        principalTable: "KT_KopekTurus",
+                        name: "FK_UT_Kopek_Kopeks_KT_KadroIls_KadroIlId",
+                        column: x => x.KadroIlId,
+                        principalTable: "KT_KadroIls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Kopek_Kopeks_KT_Karars_KararId",
+                        column: x => x.KararId,
+                        principalTable: "KT_Karars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -263,7 +262,7 @@ namespace Gorkem_.Migrations
                     CepTelefonu = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdareciDurumId = table.Column<int>(type: "int", nullable: false),
-                    BirimId = table.Column<int>(type: "int", nullable: false),
+                    KadroIlId = table.Column<int>(type: "int", nullable: false),
                     BransId = table.Column<int>(type: "int", nullable: false),
                     RutbeId = table.Column<int>(type: "int", nullable: false),
                     AskerlikId = table.Column<int>(type: "int", nullable: false),
@@ -281,12 +280,6 @@ namespace Gorkem_.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UT_Idarecis_KT_Birims_BirimId",
-                        column: x => x.BirimId,
-                        principalTable: "KT_Birims",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_UT_Idarecis_KT_Branss_BransId",
                         column: x => x.BransId,
                         principalTable: "KT_Branss",
@@ -296,6 +289,12 @@ namespace Gorkem_.Migrations
                         name: "FK_UT_Idarecis_KT_IdareciDurum_IdareciDurumId",
                         column: x => x.IdareciDurumId,
                         principalTable: "KT_IdareciDurum",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Idarecis_KT_KadroIls_KadroIlId",
+                        column: x => x.KadroIlId,
+                        principalTable: "KT_KadroIls",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -405,11 +404,6 @@ namespace Gorkem_.Migrations
                 column: "AskerlikId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UT_Idarecis_BirimId",
-                table: "UT_Idarecis",
-                column: "BirimId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UT_Idarecis_BransId",
                 table: "UT_Idarecis",
                 column: "BransId");
@@ -420,14 +414,14 @@ namespace Gorkem_.Migrations
                 column: "IdareciDurumId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UT_Idarecis_KadroIlId",
+                table: "UT_Idarecis",
+                column: "KadroIlId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UT_Idarecis_RutbeId",
                 table: "UT_Idarecis",
                 column: "RutbeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_BirimId",
-                table: "UT_Kopek_Kopeks",
-                column: "BirimId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UT_Kopek_Kopeks_BransId",
@@ -440,9 +434,14 @@ namespace Gorkem_.Migrations
                 column: "IrkId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UT_Kopek_Kopeks_KopekTuruId",
+                name: "IX_UT_Kopek_Kopeks_KadroIlId",
                 table: "UT_Kopek_Kopeks",
-                column: "KopekTuruId");
+                column: "KadroIlId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Kopek_Kopeks_KararId",
+                table: "UT_Kopek_Kopeks",
+                column: "KararId");
         }
 
         /// <inheritdoc />
@@ -488,16 +487,16 @@ namespace Gorkem_.Migrations
                 name: "KT_Rutbes");
 
             migrationBuilder.DropTable(
-                name: "KT_Birims");
-
-            migrationBuilder.DropTable(
                 name: "KT_Branss");
 
             migrationBuilder.DropTable(
                 name: "KT_Irks");
 
             migrationBuilder.DropTable(
-                name: "KT_KopekTurus");
+                name: "KT_KadroIls");
+
+            migrationBuilder.DropTable(
+                name: "KT_Karars");
         }
     }
 }

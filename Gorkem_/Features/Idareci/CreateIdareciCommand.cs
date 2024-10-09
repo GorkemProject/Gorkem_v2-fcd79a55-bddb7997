@@ -36,7 +36,7 @@ namespace Gorkem_.Features.Idareci
                 AskerlikId = request.Idareci.AskerlikId,
                 Aktifmi = true,
                
-                BirimId = request.Idareci.BirimId, 
+                KadroIlId = request.Idareci.KadroIlId, 
                 BransId = request.Idareci.BransId,
                 CepTelefonu = request.Idareci.CepTelefonu,
                 DogumTarihi = request.Idareci.DogumTarihi, 
@@ -92,7 +92,7 @@ namespace Gorkem_.Features.Idareci
               .GreaterThan(0)
                 .WithMessage("Rütbe değeri boş olamaz");
 
-            RuleFor(r => r.Idareci.BirimId)
+            RuleFor(r => r.Idareci.KadroIlId)
                 .GreaterThan(0)
                 .WithMessage("Birim değeri boş olamaz");
 

@@ -12,17 +12,20 @@ namespace Gorkem_.Context.Entities
         public virtual KT_Brans? Brans { get; set; }
         public string? KuvveNumarasi { get; set; }
         public string? CipNumarasi { get; set; }
-        public int BirimId { get; set; }
-        public virtual KT_Birim? Birim { get; set; }
+        public int KadroIlId { get; set; }
+        public virtual KT_KadroIl? KadroIl { get; set; }
         public DateTime DogumTarihi { get; set; }
         public string? YapilanIslem { get; set; }
         public string? NihaiKanaat { get; set; }
-        public int KopekTuruId { get; set; }
-        public virtual KT_KopekTuru? KopekTuru { get; set; }
-        public bool Karar { get; set; }
+        
+        public int KararId { get; set; }
+        public virtual KT_Karar Karar { get; set; }
         public virtual ICollection<UT_IdareciKopekleri>? Idareci { get; set; }
 
-        
+        public int EdinimSekli { get; set; } //Uretim=1,Satinalma=2,Hibe=3
+
+        public int EdinimTabloId { get; set; }
+
 
         //ilk kayıtta kullanılmayacak alanlar
 
