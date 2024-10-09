@@ -20,8 +20,5 @@ namespace Gorkem_.Contracts.Kopek
         public HibeRequest HibeRequest { get; set; }
         public Enum_TeminSekli EdinimSekli { get; set; }        
 
-
-
-
     }
 }

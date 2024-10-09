@@ -35,15 +35,17 @@ namespace Gorkem_.Features.Kopek;
             .Include(x=>x.Irk)
             .Include(x=>x.KadroIl)
             .Include(x=>x.Brans)
+            .Include(x=>x.Karar)
             .AsQueryable();
 
         TypeAdapterConfig<UT_Kopek, KopekGetirFilterResponse>
         .NewConfig()
         .Map(dest => dest.Irk, src => src.Irk.Name)
         .Map(dest => dest.KadroIl, src => src.KadroIl.Name)
-        .Map(dest => dest.Brans, src => src.Brans.Name);
-            
-            if(request.Request.Filters.Count > 0){
+        .Map(dest => dest.Brans, src => src.Brans.Name)
+        .Map(dest => dest.Karar, src => src.Karar.Name);
+
+        if (request.Request.Filters.Count > 0){
                 query = FilterData.Filter(query, request.Request.Filters);
             }
 

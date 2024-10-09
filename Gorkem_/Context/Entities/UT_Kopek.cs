@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Gorkem_.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gorkem_.Context.Entities
@@ -17,14 +18,19 @@ namespace Gorkem_.Context.Entities
         public DateTime DogumTarihi { get; set; }
         public string? YapilanIslem { get; set; }
         public string? NihaiKanaat { get; set; }
-        
+
         public int KararId { get; set; }
-        public virtual KT_Karar Karar { get; set; }
+        public virtual KT_Karar? Karar { get; set; }
         public virtual ICollection<UT_IdareciKopekleri>? Idareci { get; set; }
 
-        public int EdinimSekli { get; set; } //Uretim=1,Satinalma=2,Hibe=3
 
-        public int EdinimTabloId { get; set; }
+        public  Enum_TeminSekli EdinimSekli { get; set; }
+
+
+
+        //public int EdinimSekli { get; set; } //Uretim=1,Satinalma=2,Hibe=3
+
+        //public int EdinimTabloId { get; set; }
 
 
         //ilk kayıtta kullanılmayacak alanlar

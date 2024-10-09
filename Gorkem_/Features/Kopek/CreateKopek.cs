@@ -64,7 +64,7 @@ namespace Gorkem_.Features.Kopek
                 KararId = command.Request.KararId,
                 T_Aktif = DateTime.Now,
                 Aktifmi = true,
-                EdinimTabloId=edinimSekliId
+                EdinimSekli=command.Request.EdinimSekli,
             };
 
         }
