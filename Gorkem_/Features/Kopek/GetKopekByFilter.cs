@@ -40,7 +40,7 @@ namespace Gorkem_.Features.Kopek;
         TypeAdapterConfig<UT_Kopek, KopekGetirFilterResponse>
         .NewConfig()
         .Map(dest => dest.Irk, src => src.Irk.Name)
-        .Map(dest => dest.Birim, src => src.KadroIl.Name)
+        .Map(dest => dest.KadroIl, src => src.KadroIl.Name)
         .Map(dest => dest.Brans, src => src.Brans.Name);
             
             if(request.Request.Filters.Count > 0){

@@ -33,7 +33,7 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
 
         TypeAdapterConfig<UT_Idareci, IdareciGetirFilterResponse>
             .NewConfig()
-            .Map(dest => dest.Birim, src => src.KadroIl.Name)
+            .Map(dest => dest.KadroIl, src => src.KadroIl.Name)
             .Map(dest => dest.Askerlik, src => src.Askerlik.Name)
             .Map(dest => dest.Brans, src => src.Brans.Name)
             .Map(dest => dest.Rutbe, src => src.Rutbe.Name);
