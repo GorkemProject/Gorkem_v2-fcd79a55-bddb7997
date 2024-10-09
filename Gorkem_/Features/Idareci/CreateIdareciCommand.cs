@@ -45,10 +45,9 @@ namespace Gorkem_.Features.Idareci
                 Sicil = request.Idareci.Sicil, 
                 T_Aktif = DateTime.Now,
             };
-
-            await context.AddAsync(idareci);
+            await context.UT_Idarecis.AddAsync(idareci);
             int result = await context.SaveChangesAsync();
-
+            
             if (result > 0)
                 return await Result<bool>.SuccessAsync();
 

@@ -10,22 +10,22 @@ namespace Gorkem_.Context.Entities
         public DateTime DogumTarihi { get; set; }
 
         public int IdareciDurumId { get; set; }
-        public KT_IdareciDurum IdareciDurum { get; set; } = new();
+        public KT_IdareciDurum? IdareciDurum { get; set; }
 
         public int KadroIlId { get; set; }
-        public KT_KadroIl KadroIl { get; set; } = new();
+        public KT_KadroIl? KadroIl { get; set; } 
 
         public int BransId { get; set; }
-        public KT_Brans Brans { get; set; } = new();
+        public KT_Brans? Brans { get; set; }
 
         public int RutbeId { get; set; }
-        public KT_Rutbe Rutbe { get; set; } = new();
+        public KT_Rutbe? Rutbe { get; set; }
 
         public int AskerlikId { get; set; }
-        public KT_Askerlik Askerlik { get; set; } = new();
+        public KT_Askerlik? Askerlik { get; set; }
 
-        public List<KT_OgrenimDurumu> OgrenimDurumu { get; set; } = new();
-        public List<KT_YabanciDil> YabanciDil { get; set; } = new();
+        public List<KT_OgrenimDurumu>? OgrenimDurumu { get; set; } = new();
+        public List<KT_YabanciDil>? YabanciDil { get; set; } = new();
   
         public virtual ICollection<UT_IdareciKopekleri>? Kopek { get; set; }  
     }
