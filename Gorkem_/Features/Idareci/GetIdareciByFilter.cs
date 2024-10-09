@@ -22,6 +22,12 @@ public record GetIdareciByFilterQuery(IdareciGetirFilterRequest Request): IReque
 public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilterQuery, Result<IdareciFilterResponse>>
 {
     private readonly GorkemDbContext context;
+
+    public GetIdareciByFilterQueryHandler(GorkemDbContext context)
+    {
+        this.context = context;
+    }
+
     public async Task<Result<IdareciFilterResponse>> Handle(GetIdareciByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = context.UT_Idarecis
