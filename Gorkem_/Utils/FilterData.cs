@@ -5,6 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Gorkem_.Context;
+using Gorkem_.Context.Entities;
 
 namespace Application.Common.FilterExtensions
 {
@@ -97,6 +99,15 @@ namespace Application.Common.FilterExtensions
                         var filterData = GetFilterType<T>(filter, filterColumn, filterNameValue);
                         expressions.Add(filterData);
                     }
+                    else {
+                        var genericParamater = Expression.Parameter(filterColumn.Type, "y");
+                        var genericColumn = filterColumn.Type.GetProperty("Name");                      
+                        var filterGenericColumn = Expression.Property(filterColumn, genericColumn);
+                        var nameValue = Expression.Constant(filter.Value);
+                        var nameEquality = Expression.Equal(filterGenericColumn, nameValue);
+                        expressions.Add(nameEquality);                        
+                                               
+                    }
                 }
 
                 if (expression is null)
@@ -108,6 +119,7 @@ namespace Application.Common.FilterExtensions
                     expression = Expression.And(expression, expressions.Select(filter => filter).Aggregate(Expression.Or));
                 }
             }
+
             return data.Where(Expression.Lambda<Func<T, bool>>(expression, parameter));
         }
 
