@@ -15,10 +15,14 @@ namespace Gorkem_.Contracts.Kopek
         public string? YapilanIslem { get; set; }
         public string? NihaiKanaat { get; set; }
         public int KararId { get; set; }
-        public UretimRequest? UretimRequest { get; set; }
-        public SatinAlmaRequest SatinAlmaRequest { get; set; }
-        public HibeRequest HibeRequest { get; set; }
-        public Enum_TeminSekli EdinimSekli { get; set; }        
+        public Enum_Cinsiyet Cinsiyet { get; set; }
+        public Enum_TeminSekli EdinimSekli { get; set; }
+        public int? AnneKopekId { get; set; }
+        public int? BabaKopekId { get; set; }
+        public string? EdinilenKisi { get; set; }
+        public string? EdinilenKisiAdres { get; set; }
+        public string? EdinilenKisiTelefon { get; set; }
+        public DateTime EdinilmeTarihi { get; set; }
 
     }
 }

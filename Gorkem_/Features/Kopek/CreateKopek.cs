@@ -48,7 +48,7 @@ namespace Gorkem_.Features.Kopek
 
             }
         }
-        public static UT_Kopek ToKopek(this Command command,int edinimSekliId)
+        public static UT_Kopek ToKopek(this Command command)
         {
             return new UT_Kopek
             {
@@ -64,7 +64,16 @@ namespace Gorkem_.Features.Kopek
                 KararId = command.Request.KararId,
                 T_Aktif = DateTime.Now,
                 Aktifmi = true,
+                Cinsiyet=command.Request.Cinsiyet,
                 EdinimSekli=command.Request.EdinimSekli,
+                AnneKopekId=command.Request.AnneKopekId,
+                BabaKopekId=command.Request.BabaKopekId,
+                EdinilenKisi=command.Request.EdinilenKisi,
+                EdinilenKisiAdres=command.Request.EdinilenKisiAdres,
+                EdinilenKisiTelefon=command.Request.EdinilenKisiTelefon,
+                EdinilmeTarihi=command.Request.EdinilmeTarihi
+                
+                
             };
 
         }
@@ -74,59 +83,14 @@ namespace Gorkem_.Features.Kopek
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                int edinimSekliRef = 0;
-
-                switch (request.Request.EdinimSekli)
-                {
-                    case Enums.Enum_TeminSekli.Uretim:
-
-                        var uretim = new UT_Kopek_Uretim
-                        {
-                            AnneKopekRef = request.Request.UretimRequest.AnneKopekRef,
-                            BabaKopekRef = request.Request.UretimRequest.BabaKopekRef,
-                            KopekRef = request.Request.UretimRequest.KopekRef
-                        };
-                        Context.UT_Kopek_Uretims.Add(uretim);
-                        Context.SaveChanges();
-                        edinimSekliRef = uretim.Id;
-
-                        break;
-                    case Enums.Enum_TeminSekli.Satinalma:
-                        var satinAlma = new UT_Kopek_SatinAlma
-                        {
-                            AdiSoyadi = request.Request.SatinAlmaRequest.AdiSoyadi,
-                            Adresi = request.Request.SatinAlmaRequest.Adresi,
-                            SatinAlmaTarihi = request.Request.SatinAlmaRequest.SatinAlmaTarihi,
-                            TelefonNumarasi = request.Request.SatinAlmaRequest.TelefonNumarasi
-                        };
-                        Context.UT_Kopek_SatinAlmas.Add(satinAlma);
-                        Context.SaveChanges();
-                        edinimSekliRef = satinAlma.Id;  
-
-                        break;
-                    case Enums.Enum_TeminSekli.Hibe:
-                        var hibe = new UT_Kopek_Hibe
-                        {
-                            AdiSoyadi = request.Request.HibeRequest.AdiSoyadi,
-                            HibeEdilmeTarihi = request.Request.HibeRequest.HibeEdilmeTarihi,
-                            Adresi = request.Request.HibeRequest.Adresi,
-                            TelefonNumarasi = request.Request.HibeRequest.TelefonNumarasi
-                        };
-                        Context.UT_Kopek_Hibes.Add(hibe);
-                        Context.SaveChanges();
-                        edinimSekliRef= hibe.Id;    
-                        break;
-                    default:
-                        break;
-                }
-
+               
 
 
 
                 var isExist = Context.UT_Kopek_Kopeks.Any(r => r.CipNumarasi == request.Request.CipNumarasi);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.CipNumarasi} is already exist");
 
-                Context.UT_Kopek_Kopeks.Add(request.ToKopek(edinimSekliRef));
+                Context.UT_Kopek_Kopeks.Add(request.ToKopek());
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {

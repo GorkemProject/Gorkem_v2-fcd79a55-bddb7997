@@ -1,6 +1,7 @@
 ﻿using Gorkem_.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace Gorkem_.Context.Entities
 {
@@ -22,9 +23,25 @@ namespace Gorkem_.Context.Entities
         public int KararId { get; set; }
         public virtual KT_Karar? Karar { get; set; }
         public virtual ICollection<UT_IdareciKopekleri>? Idareci { get; set; }
-
-
+        public Enum_Cinsiyet Cinsiyet { get; set; }
         public  Enum_TeminSekli EdinimSekli { get; set; }
+       
+
+        public int? BabaKopekId { get; set; }
+        
+        [ForeignKey("BabaKopekId")]
+        public virtual UT_Kopek? BabaKopek { get; set; }
+        public int? AnneKopekId { get; set; }
+        
+        
+        [ForeignKey("AnneKopekId")]
+        public virtual UT_Kopek? AnneKopek { get; set; }
+
+        public string? EdinilenKisi { get; set; }
+        public string? EdinilenKisiAdres { get; set; }
+        public string? EdinilenKisiTelefon { get; set; }
+        public DateTime? EdinilmeTarihi { get; set; }
+
 
 
 

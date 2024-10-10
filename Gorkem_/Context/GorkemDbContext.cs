@@ -14,10 +14,7 @@ namespace Gorkem_.Context
         public DbSet<KT_IdareciDurum> KT_IdareciDurum { get; set; }
         public DbSet<KT_Irk> KT_Irks { get; set; }
         public DbSet<KT_Cins> KT_Cinss { get; set; }
-        public DbSet<UT_Kopek_Hibe> UT_Kopek_Hibes { get; set; }
         public DbSet<UT_Kopek> UT_Kopek_Kopeks { get; set; }
-        public DbSet<UT_Kopek_SatinAlma> UT_Kopek_SatinAlmas { get; set; }
-        public DbSet<UT_Kopek_Uretim> UT_Kopek_Uretims { get; set; }
         public DbSet<UT_Idareci> UT_Idarecis { get; set; }
         public DbSet<UT_IdareciKopekleri> UT_IdareciKopekleri { get; set; }
         public DbSet<KT_Askerlik> KT_Askerliks { get; set; }

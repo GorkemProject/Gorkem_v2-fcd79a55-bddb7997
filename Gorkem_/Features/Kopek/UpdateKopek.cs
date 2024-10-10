@@ -4,6 +4,7 @@ using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
+using Gorkem_.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,15 @@ namespace Gorkem_.Features.Kopek
             public DateTime DogumTarihi { get; set; }
             public string YapilanIslem { get; set; }
             public string NihaiKanaat { get; set; }
+            public int KararId { get; set; }
+            public Enum_Cinsiyet Cinsiyet { get; set; }
+            public Enum_TeminSekli EdinimSekli { get; set; }
+            public int? AnneKopekId { get; set; }
+            public int? BabaKopekId { get; set; }
+            public string? EdinilenKisi { get; set; }
+            public string? EdinilenKisiAdres { get; set; }
+            public string? EdinilenKisiTelefon { get; set; }
+            public DateTime EdinilmeTarihi { get; set; }
         }
         public class UpdateKopekValidation : AbstractValidator<Command>
         {
@@ -59,6 +69,16 @@ namespace Gorkem_.Features.Kopek
                 kopek.DogumTarihi = request.DogumTarihi;
                 kopek.YapilanIslem = request.YapilanIslem;
                 kopek.NihaiKanaat = request.NihaiKanaat;
+                kopek.KararId = request.KararId;
+                kopek.Cinsiyet=request.Cinsiyet;
+                kopek.EdinimSekli = request.EdinimSekli;
+                kopek.AnneKopekId=request.AnneKopekId;
+                kopek.BabaKopekId=request.BabaKopekId;
+                kopek.EdinilenKisi = request.EdinilenKisi;
+                kopek.EdinilenKisiAdres = request.EdinilenKisiAdres;
+                kopek.EdinilenKisiTelefon=request.EdinilenKisiTelefon;
+                kopek.EdinilmeTarihi = request.EdinilmeTarihi;
+                
                 
                 var isSaved = await Context.SaveChangesAsync(cancellationToken)>0;
                 if (isSaved)

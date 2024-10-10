@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gorkem_.Migrations
 {
     /// <inheritdoc />
-    public partial class VeriTabaniDuzenlendi : Migration
+    public partial class KopekTablosuDuzenlendi : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -156,53 +156,6 @@ namespace Gorkem_.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UT_Kopek_Hibes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AdiSoyadi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Adresi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TelefonNumarasi = table.Column<int>(type: "int", nullable: false),
-                    HibeEdilmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UT_Kopek_Hibes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UT_Kopek_SatinAlmas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AdiSoyadi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Adresi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TelefonNumarasi = table.Column<int>(type: "int", nullable: false),
-                    SatinAlmaTarihi = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UT_Kopek_SatinAlmas", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UT_Kopek_Uretims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    KopekRef = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AnneKopekRef = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BabaKopekRef = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UT_Kopek_Uretims", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UT_Kopek_Kopeks",
                 columns: table => new
                 {
@@ -218,6 +171,14 @@ namespace Gorkem_.Migrations
                     YapilanIslem = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NihaiKanaat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     KararId = table.Column<int>(type: "int", nullable: false),
+                    Cinsiyet = table.Column<int>(type: "int", nullable: false),
+                    EdinimSekli = table.Column<int>(type: "int", nullable: false),
+                    BabaKopekId = table.Column<int>(type: "int", nullable: true),
+                    AnneKopekId = table.Column<int>(type: "int", nullable: true),
+                    EdinilenKisi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EdinilenKisiAdres = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EdinilenKisiTelefon = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EdinilmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Aktifmi = table.Column<bool>(type: "bit", nullable: false),
                     T_Aktif = table.Column<DateTime>(type: "datetime2", nullable: false),
                     T_Pasif = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -249,6 +210,16 @@ namespace Gorkem_.Migrations
                         principalTable: "KT_Karars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UT_Kopek_Kopeks_UT_Kopek_Kopeks_AnneKopekId",
+                        column: x => x.AnneKopekId,
+                        principalTable: "UT_Kopek_Kopeks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UT_Kopek_Kopeks_UT_Kopek_Kopeks_BabaKopekId",
+                        column: x => x.BabaKopekId,
+                        principalTable: "UT_Kopek_Kopeks",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -424,6 +395,16 @@ namespace Gorkem_.Migrations
                 column: "RutbeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UT_Kopek_Kopeks_AnneKopekId",
+                table: "UT_Kopek_Kopeks",
+                column: "AnneKopekId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UT_Kopek_Kopeks_BabaKopekId",
+                table: "UT_Kopek_Kopeks",
+                column: "BabaKopekId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UT_Kopek_Kopeks_BransId",
                 table: "UT_Kopek_Kopeks",
                 column: "BransId");
@@ -461,15 +442,6 @@ namespace Gorkem_.Migrations
 
             migrationBuilder.DropTable(
                 name: "UT_IdareciKopekleri");
-
-            migrationBuilder.DropTable(
-                name: "UT_Kopek_Hibes");
-
-            migrationBuilder.DropTable(
-                name: "UT_Kopek_SatinAlmas");
-
-            migrationBuilder.DropTable(
-                name: "UT_Kopek_Uretims");
 
             migrationBuilder.DropTable(
                 name: "UT_Idarecis");
