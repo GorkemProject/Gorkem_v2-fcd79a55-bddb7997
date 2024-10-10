@@ -83,13 +83,9 @@ namespace Gorkem_.Features.Kopek
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-               
-
-
-
                 var isExist = Context.UT_Kopek_Kopeks.Any(r => r.CipNumarasi == request.Request.CipNumarasi);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.CipNumarasi} is already exist");
-
+                var ss = request.ToKopek();
                 Context.UT_Kopek_Kopeks.Add(request.ToKopek());
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
