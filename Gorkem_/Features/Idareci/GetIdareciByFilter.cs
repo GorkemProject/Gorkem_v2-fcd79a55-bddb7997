@@ -60,8 +60,11 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
 
         var paged = PagedResult<UT_Idareci>.ToPagedResponse(query, request.Request.PageNumber, 10);
         var mappedItems = paged.Items.Adapt<List<IdareciGetirFilterResponse>>();
-        var columnValues = GorkemReturning.GetUniqueValues(query, "Birim");
+
+        var columnValues = GorkemReturning.GetUniqueValues(query, "Brans","Rutbe");
+
         var response = new IdareciFilterResponse(mappedItems, columnValues, query.Count());
+
         return await Result<IdareciFilterResponse>.SuccessAsync(response);
         
     }
