@@ -86,9 +86,6 @@ namespace Gorkem_.Features.Kopek
             {
                 var isExist = Context.UT_Kopek_Kopeks.Any(r => r.CipNumarasi == request.Request.CipNumarasi);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.CipNumarasi} is already exist");
-<<<<<<< HEAD
-                var ss = request.ToKopek();
-=======
 
                 
                 if (request.Request.AnneKopekId.HasValue)
@@ -119,7 +116,6 @@ namespace Gorkem_.Features.Kopek
                     
                 }
 
->>>>>>> f24f27031e42a0c87034d104975a905f039ec124
                 Context.UT_Kopek_Kopeks.Add(request.ToKopek());
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
