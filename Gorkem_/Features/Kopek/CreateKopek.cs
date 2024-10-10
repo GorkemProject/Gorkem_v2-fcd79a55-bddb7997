@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
+using Gorkem_.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -85,7 +86,40 @@ namespace Gorkem_.Features.Kopek
             {
                 var isExist = Context.UT_Kopek_Kopeks.Any(r => r.CipNumarasi == request.Request.CipNumarasi);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.CipNumarasi} is already exist");
+<<<<<<< HEAD
                 var ss = request.ToKopek();
+=======
+
+                
+                if (request.Request.AnneKopekId.HasValue)
+                {
+                    var anneKopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.AnneKopekId.Value);
+                    if (anneKopek==null)                    
+                        return await Result<bool>.FailAsync("anne köpek bulunamadı");
+                    
+                    if (anneKopek.Cinsiyet == Enum_Cinsiyet.Erkek)                    
+                        return await Result<bool>.FailAsync("anne köpek sadece dişi olabilir.");
+
+                    if (anneKopek.DogumTarihi > request.Request.DogumTarihi)
+                        return await Result<bool>.FailAsync("Anne köpek eklenen köpekten küçük olamaz");
+                    
+                }
+
+                if (request.Request.BabaKopekId.HasValue)
+                {
+                    var babaKopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.BabaKopekId.Value);
+                    if (babaKopek == null)
+                        return await Result<bool>.FailAsync("anne köpek bulunamadı");
+
+                    if (babaKopek.Cinsiyet == Enum_Cinsiyet.Disi)
+                        return await Result<bool>.FailAsync("baba köpek sadece erkek olabilir.");
+
+                    if (babaKopek.DogumTarihi > request.Request.DogumTarihi)
+                        return await Result<bool>.FailAsync("Baba köpek eklenen köpekten küçük olamaz");
+                    
+                }
+
+>>>>>>> f24f27031e42a0c87034d104975a905f039ec124
                 Context.UT_Kopek_Kopeks.Add(request.ToKopek());
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)

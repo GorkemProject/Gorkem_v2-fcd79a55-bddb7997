@@ -39,13 +39,22 @@ namespace Gorkem_.Features.Kopek
                         BransId = a.BransId,
                         KuvveNumarasi = a.KuvveNumarasi,
                         CipNumarasi = a.CipNumarasi,
-                        Karar = a.KararId,
+                        KararId = a.KararId,
                         DogumTarihi = a.DogumTarihi,
                         YapilanIslem = a.YapilanIslem,
                         NihaiKanaat = a.NihaiKanaat,
                         EdinimSekli=a.EdinimSekli,
                         T_Aktif = a.T_Aktif,
-                        T_Pasif = a.T_Pasif
+                        T_Pasif = a.T_Pasif,
+                        Cinsiyet = a.Cinsiyet,
+                        AnneKopekId = a.AnneKopekId,
+                        BabaKopekId= a.BabaKopekId,
+                        EdinilenKisi = a.EdinilenKisi,
+                        EdinilmeTarihi=a.EdinilmeTarihi,
+                        EdinilenKisiTelefon=a.EdinilenKisiTelefon,
+                        EdinilenKisiAdres=a.EdinilenKisiAdres,
+
+                        
                     }).ToListAsync(cancellationToken);
                 return aktifKopekler;
             }
