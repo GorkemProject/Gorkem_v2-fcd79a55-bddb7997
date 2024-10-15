@@ -1,8 +1,10 @@
 ﻿using Carter;
 using FluentValidation;
 using Gorkem_.Context;
+using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
+using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +29,9 @@ namespace Gorkem_.Features.Kopek
 
             public async Task<List<KopekGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
+                TypeAdapterConfig<UT_Kopek, KopekGetirResponse>
+                    .NewConfig()
+                    .Map(dest => dest.IrkId, src => src.Irk.Name);
                 var aktifKopekler = await Context.UT_Kopek_Kopeks
                     .Where(a => a.Aktifmi)
                     .Select(a => new KopekGetirResponse
@@ -34,6 +39,7 @@ namespace Gorkem_.Features.Kopek
 
                         Id = a.Id,
                         KopekAdi = a.KopekAdi,
+       
                         IrkId = a.IrkId,
                         KadroIlId = a.KadroIlId,
                         BransId = a.BransId,

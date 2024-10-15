@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241015081555_KomisyonHavuzEklendi")]
+    partial class KomisyonHavuzEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -437,12 +440,7 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime?>("T_Pasif")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UT_KomisyonHavuzId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UT_KomisyonHavuzId");
 
                     b.ToTable("UT_Komisyons");
                 });
@@ -507,7 +505,12 @@ namespace Gorkem_.Migrations
                     b.Property<string>("TcKimlikNo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UT_KomisyonHavuzId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UT_KomisyonHavuzId");
 
                     b.ToTable("UT_KomisyonUyeleris");
                 });
@@ -692,10 +695,10 @@ namespace Gorkem_.Migrations
                     b.Navigation("Kopek");
                 });
 
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Komisyon", b =>
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KomisyonUyeleri", b =>
                 {
                     b.HasOne("Gorkem_.Context.Entities.UT_KomisyonHavuz", null)
-                        .WithMany("Komisyonlar")
+                        .WithMany("Uyeler")
                         .HasForeignKey("UT_KomisyonHavuzId");
                 });
 
@@ -772,7 +775,7 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KomisyonHavuz", b =>
                 {
-                    b.Navigation("Komisyonlar");
+                    b.Navigation("Uyeler");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>

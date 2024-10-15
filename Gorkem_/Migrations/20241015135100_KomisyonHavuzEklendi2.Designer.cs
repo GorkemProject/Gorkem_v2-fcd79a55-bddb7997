@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241015135100_KomisyonHavuzEklendi2")]
+    partial class KomisyonHavuzEklendi2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -428,6 +431,9 @@ namespace Gorkem_.Migrations
                     b.Property<string>("KomisyonAdi")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("KomisyonUyeleriId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("OlusturulmaTarihi")
                         .HasColumnType("datetime2");
 
@@ -494,6 +500,9 @@ namespace Gorkem_.Migrations
 
                     b.Property<string>("GorevYeri")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("KomisyonId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Sicil")
                         .HasColumnType("int");

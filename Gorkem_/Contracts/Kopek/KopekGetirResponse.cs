@@ -7,6 +7,7 @@ namespace Gorkem_.Contracts.Kopek
         public int Id { get; set; }
         public string? KopekAdi { get; set; }
         public int IrkId { get; set; }
+
         public int KadroIlId { get; set; }
         public int BransId { get; set; }
         public string? KuvveNumarasi { get; set; }

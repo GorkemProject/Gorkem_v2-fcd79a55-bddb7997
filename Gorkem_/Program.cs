@@ -31,6 +31,10 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.CustomSchemaIds(type => type.FullName);
+//});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

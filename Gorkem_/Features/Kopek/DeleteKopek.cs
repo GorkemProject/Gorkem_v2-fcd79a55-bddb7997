@@ -32,11 +32,11 @@ namespace Gorkem_.Features.Kopek
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentBirim = await Context.UT_Kopek_Kopeks.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
-                if (currentBirim is null) return await Result<bool>.FailAsync($"with the {request.Id}  Id data could not found!");
+                var currentKopek = await Context.UT_Kopek_Kopeks.FirstOrDefaultAsync(r => r.Id == request.Id && r.Aktifmi);
+                if (currentKopek is null) return await Result<bool>.FailAsync($"with the {request.Id}  Id data could not found!");
 
-                currentBirim.Aktifmi = false;
-                currentBirim.T_Pasif = DateTime.Now;
+                currentKopek.Aktifmi = false;
+                currentKopek.T_Pasif = DateTime.Now;
                 var isDeleted = await Context.SaveChangesAsync()>0;
 
                 if (isDeleted)
