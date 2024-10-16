@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AspNetCoreHero.Results;
+using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Komisyon;
@@ -10,7 +11,7 @@ namespace Gorkem_.Features.Komisyon
 {
     public static class GetAllKomisyon
     {
-        public class Query : IRequest<List<KomisyonGetirResponse>>
+        public class Query : IRequest<Result<List<KomisyonGetirResponse>>>
         {
 
         }
@@ -21,9 +22,9 @@ namespace Gorkem_.Features.Komisyon
                 //Listeleme işlemi yapıldığı için herhangi bir validasyon yok..
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<KomisyonGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<KomisyonGetirResponse>>>
         {
-            public async Task<List<KomisyonGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<KomisyonGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var komisyonList = await Context.UT_Komisyons
                     .Where(a=>a.Aktifmi)
@@ -35,7 +36,7 @@ namespace Gorkem_.Features.Komisyon
                         OlusturulmaTarihi=a.OlusturulmaTarihi,
                     
                     }).ToListAsync(cancellationToken);
-                return komisyonList;
+                return Result<List<KomisyonGetirResponse>>.Success(komisyonList);
             }
         }
     }
@@ -47,7 +48,9 @@ namespace Gorkem_.Features.Komisyon
             {
                 var request = new GetAllKomisyon.Query();
                 var response = await sender.Send(request);
-                return Results.Ok(response);
+                if (response.Succeeded)
+                    return Results.Ok(response);
+                return Results.BadRequest(response.Message);
             }).WithTags(EndpointConstants.KOMISYON);
         }
     }

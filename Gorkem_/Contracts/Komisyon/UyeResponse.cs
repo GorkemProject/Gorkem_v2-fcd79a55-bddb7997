@@ -1,0 +1,11 @@
+﻿namespace Gorkem_.Contracts.Komisyon
+{
+    public class UyeResponse
+    {
+        public string? AdSoyad { get; set; }
+        public int? Sicil { get; set; }
+        public string? GorevUnvani { get; set; }
+        public string? GorevYeri { get; set; }
+        public string? CepTelefonu { get; set; }
+    }
+}
