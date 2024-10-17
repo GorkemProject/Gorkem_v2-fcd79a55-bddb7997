@@ -36,7 +36,7 @@ namespace Gorkem_.Features.Komisyon
                     Komisyonlar = komisyonlar.Select(k => new KomisyonVeUyeleriResponse
                     {
                         KomisyonAdi = k.KomisyonAdi,
-                        Uyeler = k.KomisyonUyeleri.Select(u => new UyeResponse
+                        Uyeler = k.KomisyonUyeleri.Select(u => new KomisyonUyeResponse
                         {
                             AdSoyad = u.AdSoyad,
                             CepTelefonu = u.CepTelefonu,

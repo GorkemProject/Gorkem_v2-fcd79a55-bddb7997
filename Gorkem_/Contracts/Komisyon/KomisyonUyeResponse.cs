@@ -1,6 +1,6 @@
 ﻿namespace Gorkem_.Contracts.Komisyon
 {
-    public class UyeResponse
+    public class KomisyonUyeResponse
     {
         public string? AdSoyad { get; set; }
         public int? Sicil { get; set; }
