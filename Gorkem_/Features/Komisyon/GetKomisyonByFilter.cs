@@ -31,12 +31,9 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
     public async Task<Result<KomisyonFilterResponse>> Handle(GetKomisyonByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.UT_Komisyons
-<<<<<<< HEAD
             .Where(x=>x.Aktifmi)
-=======
             .Include(x=>x.GorevYeri)
             .Include(x=>x.OlusturulmaTarihi)
->>>>>>> a984c4792abb341879183b1b8b99e7ebaa0f88b7
             .AsQueryable();
 
         TypeAdapterConfig<UT_Komisyon, KomisyonGetirFilterResponse>
