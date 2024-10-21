@@ -31,7 +31,7 @@ namespace Gorkem_.Features.Komisyon
                     .Select(a=> new KomisyonGetirResponse
                     {
                         Id=a.Id,
-                        GorevYeri = a.GorevYeri,
+                        GorevYeriId = a.GorevYeriId,
                         KomisyonAdi = a.KomisyonAdi,
                         OlusturulmaTarihi=a.OlusturulmaTarihi,
                     

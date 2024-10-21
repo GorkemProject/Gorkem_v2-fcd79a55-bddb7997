@@ -40,11 +40,12 @@ namespace Gorkem_.Features.Komisyon
                     .Select(k => new UyeninKomisyonlariniGetirResponse
                     {
                         KomisyonAdi = k.KomisyonAdi,
-                        GorevYeri = k.GorevYeri,
+                        GorevYeriId = k.GorevYeriId,
                         OlusturulmaTarihi = k.OlusturulmaTarihi
 
                     }).ToListAsync(cancellationToken);
 
+                
                 
                 if (komisyonlar == null || !komisyonlar.Any())
                 {

@@ -55,7 +55,11 @@ namespace Gorkem_.Features.Komisyon
                 var response = await sender.Send(request);
                 if (response.Succeeded)
                     return Results.Ok(response);
+<<<<<<< HEAD
                 return Results.BadRequest(response.Message);
+=======
+                return Results.BadRequest(response);
+>>>>>>> fa4418b12edbcf1f89bbe2ecc9bf2586869d3692
 
             }).WithTags(EndpointConstants.KOMISYON);
         }

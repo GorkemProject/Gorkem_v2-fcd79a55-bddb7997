@@ -43,6 +43,7 @@ namespace Gorkem_.Features.Komisyon
                 findKomisyon.Aktifmi = true;
                 findKomisyon.T_Aktif=DateTime.Now;
                 findKomisyon.T_Pasif = null;
+                
 
                 context.UT_Komisyons.Update(findKomisyon);
 
