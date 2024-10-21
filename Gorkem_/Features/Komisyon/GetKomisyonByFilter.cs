@@ -15,7 +15,7 @@ using System.Linq.Expressions;
 
 namespace Gorkem_.Features.Komisyon;
 
-public record KomisyonFilterResponse(List<KomisyonGetirFilterResponse> Komisyon, Dictionary<string, List<object>> ColumnValues, int TotalAccount);
+public record KomisyonFilterResponse(List<KomisyonGetirFilterResponse> Komisyon, Dictionary<string, List<object>> ColumnValues, int TotalCount);
 public record GetKomisyonByFilterQuery(KomisyonGetirFilterRequest Request) : IRequest<Result<KomisyonFilterResponse>>;
 
 public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilterQuery, Result<KomisyonFilterResponse>>
@@ -30,6 +30,7 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
     public async Task<Result<KomisyonFilterResponse>> Handle(GetKomisyonByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.UT_Komisyons
+            .Where(x=>x.Aktifmi)
             .AsQueryable();
 
         TypeAdapterConfig<UT_Komisyon, KomisyonGetirFilterResponse>

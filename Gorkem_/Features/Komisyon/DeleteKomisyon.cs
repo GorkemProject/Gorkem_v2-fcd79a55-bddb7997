@@ -54,7 +54,7 @@ namespace Gorkem_.Features.Komisyon
                 var request = new DeleteKomisyon.Command() {Id=model.Id };
                 var response = await sender.Send(request);
                 if (response.Succeeded)
-                    return Results.Ok($"With the {model.Id} id data has been deleted");
+                    return Results.Ok(response);
                 return Results.BadRequest(response.Message);
 
             }).WithTags(EndpointConstants.KOMISYON);
