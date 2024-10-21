@@ -24,7 +24,7 @@ namespace Gorkem_.Features.Komisyon
             {
                 RuleFor(r=>r.Request.KomisyonAdi).NotEmpty().NotNull().WithMessage("Komisyon Adı boş bırakılamaz..");
                 RuleFor(r => r.Request.OlusturulmaTarihi).NotEmpty().NotNull().WithMessage("Komisyon Oluşturulma Tarihi boş bırakılamaz..");
-                RuleFor(r => r.Request.GorevYeri).NotEmpty().NotNull().WithMessage("Komisyon Görev Yeri boş bırakılamaz");
+                RuleFor(r => r.Request.GorevYeriId).NotEmpty().NotNull().WithMessage("Komisyon Görev Yeri boş bırakılamaz");
 
             }
         }
@@ -34,7 +34,7 @@ namespace Gorkem_.Features.Komisyon
             {
                 KomisyonAdi = command.Request.KomisyonAdi,
                 OlusturulmaTarihi = command.Request.OlusturulmaTarihi,
-                GorevYeri = command.Request.GorevYeri,
+                GorevYeriId = command.Request.GorevYeriId,
                 T_Aktif = DateTime.Now,
                 Aktifmi =true,
                 
@@ -50,6 +50,8 @@ namespace Gorkem_.Features.Komisyon
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.Id} is already exist");
 
                 Context.UT_Komisyons.Add(request.ToKomisyon());
+
+
                 var isSaved = await Context.SaveChangesAsync()>0;
                 if (isSaved)
                 {

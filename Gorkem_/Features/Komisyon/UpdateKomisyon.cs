@@ -15,7 +15,7 @@ namespace Gorkem_.Features.Komisyon
             public int Id { get; set; }
             public string? KomisyonAdi { get; set; }
             public DateTime OlusturulmaTarihi { get; set; }
-            public string? GorevYeri { get; set; }
+            public int GorevYeriId { get; set; }
         }
         public class KomisyonValidation : AbstractValidator<KomisyonCommand>
         {
@@ -23,7 +23,7 @@ namespace Gorkem_.Features.Komisyon
             {
                 RuleFor(r => r.KomisyonAdi).NotNull().NotEmpty().WithMessage("Komisyon adını boş bırakamazsınız..");
                 RuleFor(r => r.OlusturulmaTarihi).NotNull().NotEmpty().WithMessage("Komisyon oluşturulma tarihini boş bırakamazsınız..");
-                RuleFor(r => r.GorevYeri).NotNull().NotEmpty().WithMessage("Komisyon görev yerini adını boş bırakamazsınız..");
+                RuleFor(r => r.GorevYeriId).NotNull().NotEmpty().WithMessage("Komisyon görev yerini adını boş bırakamazsınız..");
             }
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<KomisyonCommand, Result<bool>>
@@ -37,7 +37,7 @@ namespace Gorkem_.Features.Komisyon
                 };
                 komisyon.KomisyonAdi=request.KomisyonAdi;
                 komisyon.OlusturulmaTarihi=request.OlusturulmaTarihi;
-                komisyon.GorevYeri=request.GorevYeri;
+                komisyon.GorevYeriId=request.GorevYeriId;
 
                 var isSaved = await Context.SaveChangesAsync(cancellationToken) > 0;
                 if (isSaved)
