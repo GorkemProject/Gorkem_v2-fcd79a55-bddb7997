@@ -45,7 +45,7 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
         }
         if (request.Request.SortedColumn !="")
         {
-            var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending";
+            var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending"; //
             var param = Expression.Parameter(typeof(UT_Komisyon), "x");
             var property = Expression.Property(param, request.Request.SortedColumn);
             var lambda = Expression.Lambda(property, param);
