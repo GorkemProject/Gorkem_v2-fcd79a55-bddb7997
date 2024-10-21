@@ -34,7 +34,6 @@ namespace Gorkem_.Features.Komisyon
                         GorevYeriId = a.GorevYeriId,
                         KomisyonAdi = a.KomisyonAdi,
                         OlusturulmaTarihi=a.OlusturulmaTarihi,
-                    
                     }).ToListAsync(cancellationToken);
                 return Result<List<KomisyonGetirResponse>>.Success(komisyonList);
             }

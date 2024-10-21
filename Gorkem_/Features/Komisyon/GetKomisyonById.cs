@@ -36,6 +36,7 @@ namespace Gorkem_.Features.Komisyon
                         GorevYeriId = a.GorevYeriId,
                         OlusturulmaTarihi = a.OlusturulmaTarihi,
                         
+                        
                     }).FirstOrDefaultAsync(cancellationToken);
                 if (komisyon == null)
                 {

@@ -31,14 +31,13 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
     public async Task<Result<KomisyonFilterResponse>> Handle(GetKomisyonByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.UT_Komisyons
-            .Include(x=>x.GorevYeri)
-            .Include(x=>x.OlusturulmaTarihi)
+            .Include(c=>c.GorevYeri)
             .AsQueryable();
 
         TypeAdapterConfig<UT_Komisyon, KomisyonGetirFilterResponse>
             .NewConfig()
-            .Map(dest => dest.GorevYeri, src => src.GorevYeri)
-            .Map(dest => dest.OlusturulmaTarihi, src => src.OlusturulmaTarihi);
+            .Map(dest=> dest.GorevYeriId, src =>src.GorevYeri.Id)
+            .Map(dest => dest.GorevYeri, src => src.GorevYeri.Name);
 
         if (request.Request.Filters.Count>0)
         {
@@ -55,9 +54,9 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
         var paged = PagedResult<UT_Komisyon>.ToPagedResponse(query, request.Request.PageNumber, 10);
         var mappedItems = paged.Items.Adapt<List<KomisyonGetirFilterResponse>>();
 
-        var columnValuest = GorkemReturning.GetUniqueValues(query, "GorevYeri", "OlusturulmaTarihi");
+        var columnValues = GorkemReturning.GetUniqueValues(query, "GorevYeri");
     
-        var response = new KomisyonFilterResponse(mappedItems, columnValuest, query.Count());
+        var response = new KomisyonFilterResponse(mappedItems, columnValues, query.Count());
 
         return await Result<KomisyonFilterResponse>.SuccessAsync(response);
     }
