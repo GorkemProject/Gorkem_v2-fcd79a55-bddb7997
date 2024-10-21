@@ -10,6 +10,7 @@ using GorkemPagingAndFiltering.Extension;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Validations;
 using System.Linq.Expressions;
 
@@ -30,6 +31,8 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
     public async Task<Result<KomisyonFilterResponse>> Handle(GetKomisyonByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.UT_Komisyons
+            .Include(x=>x.GorevYeri)
+            .Include(x=>x.OlusturulmaTarihi)
             .AsQueryable();
 
         TypeAdapterConfig<UT_Komisyon, KomisyonGetirFilterResponse>
