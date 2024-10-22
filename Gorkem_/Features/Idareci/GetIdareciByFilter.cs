@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Linq.Expressions;
 
 namespace Gorkem_.Features.Idareci;
-public record IdareciFilterResponse(List<IdareciGetirFilterResponse> Idareci, Dictionary<string,List<object>> ColumnValues, int TotalAccount);
+public record IdareciFilterResponse(List<IdareciGetirFilterResponse> Idareci, Dictionary<string,List<object>> ColumnValues, int TotalCount);
 public record GetIdareciByFilterQuery(IdareciGetirFilterRequest Request): IRequest<Result<IdareciFilterResponse>>;
 
 public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilterQuery, Result<IdareciFilterResponse>>
