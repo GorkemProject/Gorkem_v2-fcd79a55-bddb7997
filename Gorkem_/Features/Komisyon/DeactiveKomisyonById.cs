@@ -56,7 +56,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("deactivekomisyon", async ([FromBody] KomisyonuPasifeAlRequest model, ISender sender ) =>
+            app.MapPost("komisyon/deactiveKomisyon", async ([FromBody] KomisyonuPasifeAlRequest model, ISender sender ) =>
             {
                 var request = new DeactiveKomisyonById.Command() { Id = model.Id };
                 var response = await sender.Send(request);

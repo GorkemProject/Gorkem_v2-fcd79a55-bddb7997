@@ -28,22 +28,26 @@ namespace Gorkem_.Features.Komisyon
             public async Task<Result<KomisyonGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var komisyon = await Context.UT_Komisyons
-                    .Where(a=>a.Aktifmi && a.Id == request.Id)
-                    .Select(a=> new KomisyonGetirResponse
-                    {
-                        Id = a.Id,
-                        KomisyonAdi = a.KomisyonAdi,
-                        GorevYeriId = a.GorevYeriId,
-                        OlusturulmaTarihi = a.OlusturulmaTarihi,
-                        
-                        
-                    }).FirstOrDefaultAsync(cancellationToken);
+                    .Include(x => x.GorevYeri).FirstOrDefaultAsync(x => x.Id == request.Id);
+
                 if (komisyon == null)
                 {
                     return Result<KomisyonGetirResponse>.Fail("Komisyon bulunamadı");
 
                 }
-                return Result<KomisyonGetirResponse>.Success(komisyon);
+
+                var komisyonResponse = new KomisyonGetirResponse
+                {
+                    Id = komisyon.Id,
+                    GorevYeri = komisyon.GorevYeri.Name,
+                    GorevYeriId = komisyon.GorevYeri.Id,
+                    KomisyonAdi = komisyon.KomisyonAdi,
+                    OlusturulmaTarihi = komisyon.OlusturulmaTarihi
+                };
+
+
+               
+                return Result<KomisyonGetirResponse>.Success(komisyonResponse);
             }
         }
     }
@@ -52,7 +56,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("komisyon/{id}", async (int id, ISender sender) =>
+            app.MapGet("komisyon/getKomisyonBy/{id}", async (int id, ISender sender) =>
             {
                 var request = new GetKomisyonById.Query { Id = id };
                 var response = await sender.Send(request);

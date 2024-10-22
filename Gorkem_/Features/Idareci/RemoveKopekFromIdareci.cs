@@ -51,7 +51,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("idareciköpek", async ([FromBody] IdarecidenKopekCikartRequest request, ISender sender) =>
+            app.MapDelete("idareci/removeKopekToIdareci", async ([FromBody] IdarecidenKopekCikartRequest request, ISender sender) =>
             {
                 var response = await sender.Send(new RemoveKopekFromIdareci.Command(request));
 

@@ -71,7 +71,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("komisyonkomisyonuye", async ([FromBody] KomisyonaUyeEkleRequest request, ISender sender) =>
+            app.MapPost("komisyon/komisyonUyeAddOne", async ([FromBody] KomisyonaUyeEkleRequest request, ISender sender) =>
             {
                 var response = await sender.Send(new AddUyeToKomisyon.Command(request));
                 if (response.Succeeded)

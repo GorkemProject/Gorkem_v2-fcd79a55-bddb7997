@@ -94,7 +94,7 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("kopek/{id}", async (int id, [FromBody] UpdateKopek.Command model, ISender sender) =>
+            app.MapPut("kopek/{id}/UpdateKopek", async (int id, [FromBody] UpdateKopek.Command model, ISender sender) =>
             {
                
                 model.Id = id;

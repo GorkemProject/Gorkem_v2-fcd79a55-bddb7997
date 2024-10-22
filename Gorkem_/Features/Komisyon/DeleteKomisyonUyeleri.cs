@@ -49,7 +49,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("komisyonuyeleri", async ([FromBody] KomisyonUyesiSilRequest model, ISender sender ) =>
+            app.MapDelete("komisyonUyeleri/deleteKomisyonUyeleri", async ([FromBody] KomisyonUyesiSilRequest model, ISender sender ) =>
             {
                 var request = new DeleteKomisyonUyeleri.Command() { Id = model.Id };
                 var response = await sender.Send(request);

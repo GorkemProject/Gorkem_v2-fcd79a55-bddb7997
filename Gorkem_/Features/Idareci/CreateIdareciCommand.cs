@@ -59,7 +59,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("idareci", async ([FromBody] IdareciEkleRequest request, ISender sender) =>
+            app.MapPost("idareci/createIdareci", async ([FromBody] IdareciEkleRequest request, ISender sender) =>
             {
                 var response = await sender.Send(new CreateIdareciCommand(request));
 

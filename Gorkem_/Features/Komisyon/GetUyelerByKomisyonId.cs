@@ -67,7 +67,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("komisyon/{komisyonId}/uyeler", async (int komisyonId, ISender sender) =>
+            app.MapGet("komisyon/{komisyonId}/getKomisyonUyeleri", async (int komisyonId, ISender sender) =>
             {
                 var query = new GetUyelerByKomisyonId.Query(komisyonId);
                 var response = await sender.Send(query);

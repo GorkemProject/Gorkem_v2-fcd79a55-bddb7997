@@ -51,7 +51,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("idarecikopek", async ([FromQuery]int idareciId, [FromQuery] bool aktifmi, ISender sender) =>
+            app.MapGet("idareci/getIdarecisKopek", async ([FromQuery]int idareciId, [FromQuery] bool aktifmi, ISender sender) =>
             {
                 var request = new IdareciKopekListeleRequest {IdareciId=idareciId, Aktifmi = aktifmi };
                 var response = await sender.Send(new ListKopekFromIdareci.Query(request));
