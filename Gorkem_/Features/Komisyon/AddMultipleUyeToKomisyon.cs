@@ -35,6 +35,10 @@ namespace Gorkem_.Features.Komisyon
                     return await Result<bool>.FailAsync("Seçilen komisyon bulunamadı");
                 }
 
+                existingKomisyon.KomisyonUyeleri?.Clear();
+
+
+
                 foreach (var uyeId in request.Request.KomisyonUyeleriIds)
                 {
                     var uye = await _context.UT_KomisyonUyeleris
@@ -44,8 +48,9 @@ namespace Gorkem_.Features.Komisyon
                     {
                         return await Result<bool>.FailAsync($"Seçilen üye bulunamadı: {uyeId}");
                     }
-
-                    existingKomisyon.KomisyonUyeleri?.Add(uye);
+                   
+                        existingKomisyon.KomisyonUyeleri?.Add(uye);
+                    
                 }
                 var isSaved = await _context.SaveChangesAsync()>0;
                 

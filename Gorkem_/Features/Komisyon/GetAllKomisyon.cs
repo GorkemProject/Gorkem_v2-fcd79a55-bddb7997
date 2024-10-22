@@ -13,7 +13,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public class Query : IRequest<Result<List<KomisyonGetirResponse>>>
         {
-
+            
         }
         public class KomisyonGetirValidation : AbstractValidator<Query>
         {

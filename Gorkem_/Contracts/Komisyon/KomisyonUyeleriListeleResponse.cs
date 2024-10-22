@@ -2,6 +2,7 @@
 {
     public class KomisyonUyeleriListeleResponse
     {
+        public int Id { get; set; }
         public string? TcKimlikNo { get; set; }
         public string? AdSoyad { get; set; }
         public int? Sicil { get; set; }
