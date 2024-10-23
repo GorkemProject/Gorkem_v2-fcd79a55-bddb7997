@@ -41,7 +41,7 @@ namespace Gorkem_.Features.Komisyon
                             AdSoyad = u.AdSoyad,
                             CepTelefonu = u.CepTelefonu,
                             GorevUnvani = u.GorevUnvani,
-                            GorevYeri = u.GorevYeri,
+                            GorevYeriId = u.GorevYeriId,
                             Sicil = u.Sicil
                         }).ToList()
                     }).ToList()

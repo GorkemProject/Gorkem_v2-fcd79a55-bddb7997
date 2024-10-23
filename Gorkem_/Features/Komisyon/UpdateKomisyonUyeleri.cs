@@ -18,6 +18,8 @@ namespace Gorkem_.Features.Komisyon
             public int? Sicil { get; set; }
             public string? GorevUnvani { get; set; }
             public string? GorevYeri { get; set; }
+            public int GorevYeriId { get; set; }
+
             public string? Eposta { get; set; }
             public string? CepTelefonu { get; set; }
         }
@@ -49,7 +51,7 @@ namespace Gorkem_.Features.Komisyon
                 komisyonUye.AdSoyad = request.AdSoyad;
                 komisyonUye.Sicil = request.Sicil;
                 komisyonUye.GorevUnvani = request.GorevUnvani;
-                komisyonUye.GorevYeri = request.GorevYeri;
+                komisyonUye.GorevYeriId = request.GorevYeriId;
                 komisyonUye.Eposta = request.Eposta;
                 komisyonUye.CepTelefonu = request.CepTelefonu;
 

@@ -35,7 +35,7 @@ namespace Gorkem_.Features.Komisyon
                         AdSoyad=a.AdSoyad,
                         Sicil=a.Sicil,
                         GorevUnvani=a.GorevUnvani,
-                        GorevYeri=a.GorevYeri,
+                        GorevYeriId=a.GorevYeriId,
                         Eposta=a.Eposta,
                         CepTelefonu=a.CepTelefonu
                     }).ToListAsync(cancellationToken);

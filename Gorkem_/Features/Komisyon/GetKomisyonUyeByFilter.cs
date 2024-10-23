@@ -18,7 +18,7 @@ using System.Linq.Expressions;
 
 namespace Gorkem_.Features.Komisyon;
 
-public record KomisyonUyeFilterResponse(List<KomisyonUyeGetirFilterResponse> KomsiyonUye, Dictionary<string, List<Object>> ColumnValues, int TotalAccount);
+public record KomisyonUyeFilterResponse(List<KomisyonUyeGetirFilterResponse> KomsiyonUye, Dictionary<string, List<Object>> ColumnValues, int TotalCount);
 public record GetKomisyonUyeleriByFilterQuery(KomisyonUyeGetirFilterRequest Request): IRequest<Result<KomisyonUyeFilterResponse>>;
 
 public class GetKomisyonUyeleriByFilterQueryHandler : IRequestHandler<GetKomisyonUyeleriByFilterQuery, Result<KomisyonUyeFilterResponse>>
@@ -33,12 +33,15 @@ public class GetKomisyonUyeleriByFilterQueryHandler : IRequestHandler<GetKomisyo
     public async Task<Result<KomisyonUyeFilterResponse>> Handle(GetKomisyonUyeleriByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.UT_KomisyonUyeleris
+            .Where(x=>x.Aktifmi)
+            .Include(x=>x.GorevYeri)
             .AsQueryable();
 
         TypeAdapterConfig<UT_KomisyonUyeleri, KomisyonUyeleriGetirResponse>
             .NewConfig()
-            .Map(dest => dest.GorevYeri, src => src.GorevYeri)
-            .Map(dest => dest.GorevUnvani, src => src.GorevUnvani);
+            .Map(dest => dest.GorevYeriId, src => src.GorevYeri.Id)
+            .Map(dest => dest.GorevYeriName, src => src.GorevYeri.Name)
+            .Map(dest => dest.Id, src=>src.Id);
 
         if (request.Request.Filters.Count>0)
         {
@@ -55,7 +58,9 @@ public class GetKomisyonUyeleriByFilterQueryHandler : IRequestHandler<GetKomisyo
         var paged = PagedResult<UT_KomisyonUyeleri>.ToPagedResponse(query, request.Request.PageNumber, 10);
         var mappedItems = paged.Items.Adapt<List<KomisyonUyeGetirFilterResponse>>();
 
-        var columnValues = GorkemReturning.GetUniqueValues(query, "GorevYeri", "GorevUnvani");
+ 
+
+        var columnValues = GorkemReturning.GetUniqueValues(query, "GorevYeri");
 
         var response = new KomisyonUyeFilterResponse(mappedItems, columnValues, query.Count());
 

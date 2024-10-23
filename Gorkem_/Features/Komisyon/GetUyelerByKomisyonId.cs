@@ -55,7 +55,7 @@ namespace Gorkem_.Features.Komisyon
                     CepTelefonu = u.CepTelefonu,
                     Eposta = u.Eposta,
                     GorevUnvani = u.GorevUnvani,
-                    GorevYeri = u.GorevYeri,
+                    GorevYeriId = u.GorevYeriId,
                     Sicil = u.Sicil
                 }).ToList();
 

@@ -25,7 +25,7 @@ namespace Gorkem_.Features.Komisyon
                 RuleFor(r => r.Request.TcKimlikNo).NotEmpty().NotNull().WithMessage("Komisyon üyesinin TC Kimlik numarası boş bırakılamaz.");
                 RuleFor(r => r.Request.AdSoyad).NotEmpty().NotNull().WithMessage("Komisyon üyesinin Ad ve Soyadı boş bırakılamaz.");
                 RuleFor(r => r.Request.GorevUnvani).NotEmpty().NotNull().WithMessage("Komisyon üyesinin Görev Ünvanı boş bırakılamaz.");
-                RuleFor(r => r.Request.GorevYeri).NotEmpty().NotNull().WithMessage("Komisyon üyesinin Görev Yeri boş bırakılamaz.");
+                RuleFor(r => r.Request.GorevYeriId).NotEmpty().NotNull().WithMessage("Komisyon üyesinin Görev Yeri boş bırakılamaz.");
                 RuleFor(r => r.Request.Eposta).NotEmpty().NotNull().WithMessage("Komisyon üyesinin Eposta Adresi boş bırakılamaz.");
                 RuleFor(r => r.Request.CepTelefonu).NotEmpty().NotNull().WithMessage("Komisyon üyesinin Telefon Numarası boş bırakılamaz.");
             }
@@ -38,7 +38,7 @@ namespace Gorkem_.Features.Komisyon
                 AdSoyad = command.Request.AdSoyad,
                 Sicil = command.Request.Sicil,
                 GorevUnvani = command.Request.GorevUnvani,
-                GorevYeri = command.Request.GorevYeri,
+                GorevYeriId = command.Request.GorevYeriId,
                 Eposta = command.Request.Eposta,
                 CepTelefonu = command.Request.CepTelefonu,
                 T_Aktif = DateTime.Now,
