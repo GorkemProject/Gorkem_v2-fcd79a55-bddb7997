@@ -33,6 +33,7 @@ namespace Gorkem_.Features.Idareci
                     .Where(a => a.Aktifmi)
                     .Select(a => new IdareciGetirResponse
                     {
+                        Id = a.Id,
                         Sicil = a.Sicil,
                         AdSoyad = a.AdSoyad,
                         CepTelefonu = a.CepTelefonu,

@@ -2,6 +2,7 @@
 {
     public class IdareciGetirResponse
     {
+        public int Id { get; set; }
         public int Sicil { get; set; }
         public string AdSoyad { get; set; } = string.Empty;
         public string CepTelefonu { get; set; } = string.Empty;

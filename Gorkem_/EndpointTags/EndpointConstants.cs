@@ -6,5 +6,6 @@
         public const string KOPEK = "Kopek";
         public const string IDARECI = "İdareci";
         public const string KOMISYON = "Komisyon";
+        public const string SECİMTEST = "SecimTest";
     }
 }
