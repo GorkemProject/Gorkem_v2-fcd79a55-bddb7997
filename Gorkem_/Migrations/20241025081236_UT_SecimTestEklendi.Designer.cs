@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241025081236_UT_SecimTestEklendi")]
+    partial class UT_SecimTestEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -729,41 +732,6 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_SecimTests");
                 });
 
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_SecimTestiCevap", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Aktifmi")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Puan")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SoruId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("T_Aktif")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("T_Pasif")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UtSecimTestId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SoruId");
-
-                    b.HasIndex("UtSecimTestId");
-
-                    b.ToTable("UT_SecimTestiCevaplar");
-                });
-
             modelBuilder.Entity("UT_KomisyonUT_KomisyonUyeleri", b =>
                 {
                     b.Property<int>("KomisyonId")
@@ -968,25 +936,6 @@ namespace Gorkem_.Migrations
                     b.Navigation("SecimTest");
 
                     b.Navigation("SinavYeri");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_SecimTestiCevap", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.KT_Soru", "Soru")
-                        .WithMany()
-                        .HasForeignKey("SoruId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_SecimTest", "UtSecimTest")
-                        .WithMany()
-                        .HasForeignKey("UtSecimTestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Soru");
-
-                    b.Navigation("UtSecimTest");
                 });
 
             modelBuilder.Entity("UT_KomisyonUT_KomisyonUyeleri", b =>

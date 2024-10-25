@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AspNetCoreHero.Results;
+using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Idareci;
@@ -11,7 +12,7 @@ namespace Gorkem_.Features.Idareci
 {
     public class GetAllIdareci
     {
-        public class Query : IRequest<List<IdareciGetirResponse>>
+        public class Query : IRequest<Result<List<IdareciGetirResponse>>>
         {
 
         }
@@ -23,10 +24,10 @@ namespace Gorkem_.Features.Idareci
 
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<IdareciGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<IdareciGetirResponse>>>
         {
 
-            public async Task<List<IdareciGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<IdareciGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifIdareciler = await Context.UT_Idarecis
                     .Where(a => a.Aktifmi)
@@ -43,7 +44,7 @@ namespace Gorkem_.Features.Idareci
                         AskerlikId = a.AskerlikId
                         
                     }).ToListAsync(cancellationToken);
-                return aktifIdareciler;
+                return Result<List<IdareciGetirResponse>>.Success(aktifIdareciler);
             }
         }
     }

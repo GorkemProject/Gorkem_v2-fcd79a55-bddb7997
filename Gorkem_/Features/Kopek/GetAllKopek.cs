@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using AspNetCoreHero.Results;
+using Carter;
 using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Context.Entities;
@@ -12,7 +13,7 @@ namespace Gorkem_.Features.Kopek
 {
     public static class GetAllKopek
     {
-        public class Query : IRequest<List<KopekGetirResponse>>
+        public class Query : IRequest<Result<List<KopekGetirResponse>>>
         {
 
         }
@@ -23,11 +24,11 @@ namespace Gorkem_.Features.Kopek
                 //listeleme işlemi yaptığımız için herhangi bir validasiyon işlemi olmayacak.
             }
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, List<KopekGetirResponse>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<KopekGetirResponse>>>
         {
  
 
-            public async Task<List<KopekGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<KopekGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 TypeAdapterConfig<UT_Kopek, KopekGetirResponse>
                     .NewConfig()
@@ -62,7 +63,7 @@ namespace Gorkem_.Features.Kopek
 
                         
                     }).ToListAsync(cancellationToken);
-                return aktifKopekler;
+                return Result<List<KopekGetirResponse>>.Success(aktifKopekler);
             }
         }
     }
