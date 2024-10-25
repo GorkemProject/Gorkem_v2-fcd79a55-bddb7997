@@ -44,20 +44,47 @@ namespace Gorkem_.Features.SecimTest
         {
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = await Context.UT_SecimTestiCevaplar
-                    .AnyAsync(r => r.UtSecimTestId == request.Request.UtSecimTestId && r.SoruId == request.Request.SoruId, cancellationToken);
-                if (isExist)
-                    return await Result<bool>.FailAsync("Bu cevap zaten mevcut");
+                var secimTest = await Context.UT_SecimTests
+                     .Where(t => t.Id == request.Request.UtSecimTestId)
+                     .Select(t => t.SecimTestId)
+                     .FirstOrDefaultAsync(cancellationToken);
 
-                Context.UT_SecimTestiCevaplar.Add(request.ToSecimTestiCevap());
+                if (secimTest == 0)
+                    return await Result<bool>.FailAsync("Seçilen Seçim Testi Bulunamadı");
 
+                var soru = await Context.KT_Sorus
+                    .Where(s=>s.Id == request.Request.SoruId && s.SecimTestId == secimTest)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                if (soru == null)
+                {
+                    return await Result<bool>.FailAsync("Seçilen soru ilgili seçime ait değil");
+                }
+
+                if (request.Request.Puan > soru.Puan)
+                {
+                    return await Result<bool>.FailAsync($" Girilen puan, maksimum {soru.Puan} puanından yüksek olamaz.");
+                }
+
+                var secimTestiCevap = new UT_SecimTestiCevap
+                {
+                    T_Aktif = DateTime.Now,
+                    Aktifmi=true,
+                    UtSecimTestId = request.Request.UtSecimTestId,
+                    SoruId = request.Request.SoruId,
+                    Puan = request.Request.Puan,
+                };
+
+                Context.UT_SecimTestiCevaplar.Add(secimTestiCevap);
                 var isSaved = await Context.SaveChangesAsync() > 0;
+
                 if (isSaved)
                 {
-                    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi", request.Request.Puan, "DemoAccount", DateTime.Now);
+                    Logger.Information("Secim Testi Cevabı eklendi: SecimTestId={0}, SoruId={1}, Puan={2}", request.Request.UtSecimTestId, request.Request.SoruId, request.Request.Puan);
                     return await Result<bool>.SuccessAsync(true);
                 }
-                return await Result<bool>.FailAsync("Kayıt Başarılı değil");
+                return await Result<bool>.FailAsync("Cevap kaydı başarısız.");
+
             }
         }
     }
