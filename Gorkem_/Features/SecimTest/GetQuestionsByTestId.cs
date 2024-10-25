@@ -56,7 +56,7 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("secimTest/{testId}/getTestSorular", async (int testId, ISender sender) =>
+            app.MapGet("secimTesti/{testId}/getTestSorular", async (int testId, ISender sender) =>
             {
                 var request = new GetQuestionsByTestId.Query(testId);
                 var response = await sender.Send(request);

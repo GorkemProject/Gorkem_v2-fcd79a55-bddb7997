@@ -34,7 +34,7 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("secimTest/getAllSecimTest", async (ISender sender) =>
+            app.MapGet("secimTesti/getAllSecimTest", async (ISender sender) =>
             {
                 var request =new GetAllSecimTest.Query();
                 var response = await sender.Send(request);
