@@ -31,6 +31,7 @@ namespace Gorkem_.Features.SecimTest
         {
             return new UT_SecimTestiCevap
             {
+                
                 Aktifmi = true,
                 T_Aktif = DateTime.Now,
                 UtSecimTestId = command.Request.UtSecimTestId,
@@ -49,7 +50,7 @@ namespace Gorkem_.Features.SecimTest
                      .Select(t => t.SecimTestId)
                      .FirstOrDefaultAsync(cancellationToken);
 
-                if (secimTest == 0)
+                if (secimTest == null)
                     return await Result<bool>.FailAsync("Seçilen Seçim Testi Bulunamadı");
 
                 var soru = await Context.KT_Sorus
