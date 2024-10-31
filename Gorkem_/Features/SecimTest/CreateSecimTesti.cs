@@ -21,7 +21,6 @@ namespace Gorkem_.Features.SecimTest
             public CreateSecimTestiValidation()
             {
                 RuleFor(r => r.Request.KopekId).NotEmpty().NotNull().WithMessage("Kopek Id boş bırakılamaz");
-                RuleFor(r => r.Request.IdareciId).NotEmpty().NotNull().WithMessage("Idareci Id boş bırakılamaz");
                 RuleFor(r => r.Request.SecimTestId).NotEmpty().NotNull().WithMessage("Seçim Testi Id boş bırakılamaz");
                 RuleFor(r => r.Request.ToplamPuan).GreaterThanOrEqualTo(0).LessThanOrEqualTo(100).WithMessage("Toplam puan 0 ile 100 arasında olmalıdır..");
 
@@ -36,7 +35,6 @@ namespace Gorkem_.Features.SecimTest
                 T_Aktif=DateTime.Now,
                 Aktifmi = true,
                 KopekId = command.Request.KopekId,
-                IdareciId = command.Request.IdareciId,
                 SecimTestId = command.Request.SecimTestId,
                 SinavYeriId = command.Request.SinavYeriId,
                 Tarih = command.Request.Tarih,

@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241031113815_SecimTesttenIdareciCikti")]
+    partial class SecimTesttenIdareciCikti
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -682,6 +685,9 @@ namespace Gorkem_.Migrations
                     b.Property<bool>("Havlama")
                         .HasColumnType("bit");
 
+                    b.Property<int>("IdareciId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("KomisyonId")
                         .HasColumnType("int");
 
@@ -713,6 +719,8 @@ namespace Gorkem_.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdareciId");
 
                     b.HasIndex("KomisyonId");
 
@@ -933,6 +941,12 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_SecimTest", b =>
                 {
+                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", "Idareci")
+                        .WithMany()
+                        .HasForeignKey("IdareciId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Gorkem_.Context.Entities.UT_Komisyon", "Komisyon")
                         .WithMany()
                         .HasForeignKey("KomisyonId");
@@ -954,6 +968,8 @@ namespace Gorkem_.Migrations
                         .HasForeignKey("SinavYeriId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Idareci");
 
                     b.Navigation("Komisyon");
 

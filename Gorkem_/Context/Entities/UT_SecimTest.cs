@@ -7,9 +7,6 @@ namespace Gorkem_.Context.Entities
         public virtual UT_Kopek Kopek { get; set; }
         public int KopekId { get; set; }
 
-        public virtual UT_Idareci Idareci { get; set; }
-        public int IdareciId { get; set; }
-
         public int SecimTestId { get; set; }
         public virtual KT_SecimTest SecimTest { get; set; }
 

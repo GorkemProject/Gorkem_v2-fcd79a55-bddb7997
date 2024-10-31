@@ -40,7 +40,6 @@ public class GetSecimTestiByFilterQueryHandler : IRequestHandler<GetSecimTestiBy
         TypeAdapterConfig<UT_SecimTest, SecimTestiGetirFilterResponse>
             .NewConfig()
             .Map(dest => dest.KopekId, src => src.KopekId)
-            .Map(dest => dest.IdareciId, src => src.IdareciId)
             .Map(dest => dest.SecimTestId, src => src.SecimTestId)
             .Map(dest => dest.SinavYeriId, src => src.SinavYeri.Id) 
             .Map(dest => dest.Tarih, src => src.Tarih)

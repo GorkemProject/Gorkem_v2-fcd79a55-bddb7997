@@ -7,7 +7,6 @@ namespace Gorkem_.Contracts.SecimTest
     {
         public int Id { get; set; }
         public int KopekId { get; set; }
-        public int IdareciId { get; set; }
         public int SecimTestId { get; set; }
         public int SinavYeriId { get; set; }
         public DateTime Tarih { get; set; }
