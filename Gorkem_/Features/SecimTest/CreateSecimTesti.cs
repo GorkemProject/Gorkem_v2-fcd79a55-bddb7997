@@ -44,7 +44,7 @@ namespace Gorkem_.Features.SecimTest
                 Havlama = command.Request.Havlama,
                 SecimTestBrans = command.Request.SecimTestBrans,
                 Degerlendirme = command.Request.Degerlendirme,
-                TestKomisyonu = command.Request.TestKomisyonu,
+                KomisyonId = command.Request.KomisyonId,
                 ToplamPuan = command.Request.ToplamPuan
             };
         }

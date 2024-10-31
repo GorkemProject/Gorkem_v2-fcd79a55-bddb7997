@@ -15,7 +15,7 @@ namespace Gorkem_.Contracts.SecimTest
         public bool Havlama { get; set; }
         public Enum_SecimTestBrans SecimTestBrans { get; set; }
         public string Degerlendirme { get; set; }
-        public string TestKomisyonu { get; set; }
+        public int KomisyonId { get; set; }
         public int ToplamPuan { get; set; }
 
     }

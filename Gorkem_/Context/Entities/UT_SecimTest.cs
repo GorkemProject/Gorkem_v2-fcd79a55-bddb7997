@@ -23,7 +23,8 @@ namespace Gorkem_.Context.Entities
         public Enum_SecimTestBrans SecimTestBrans { get; set; }
         public string Degerlendirme { get; set; }
 
-        public string TestKomisyonu { get; set; }
+        public virtual UT_Komisyon? Komisyon { get; set; }
+        public int?  KomisyonId { get; set; }
         public int  ToplamPuan { get; set; }
     }
 }
