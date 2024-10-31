@@ -7,15 +7,16 @@ using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 using System.Drawing.Text;
 
 namespace Gorkem_.Features.SecimTest
 {
     public static class ListSecimTest
     {
-        public record Query(SecimTestiListeleRequest Request) : IRequest<Result<List<UT_SecimTest>>>;
+        public record Query(SecimTestiListeleRequest Request) : IRequest<Result<List<SecimTestResponse>>>;
 
-        internal sealed class Handler : IRequestHandler<Query, Result<List<UT_SecimTest>>>
+        internal sealed class Handler : IRequestHandler<Query, Result<List<SecimTestResponse>>>
         {
             private readonly GorkemDbContext _context;
 
@@ -24,20 +25,22 @@ namespace Gorkem_.Features.SecimTest
                 _context = context;
             }
 
-            public async Task<Result<List<UT_SecimTest>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<SecimTestResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = _context.UT_SecimTests
                     .Include(x=>x.Kopek)
+                    .Include(x=>x.Komisyon)
+                    .Include(x=>x.SecimTest)
                     .AsQueryable();
 
                 //Köpeğe göre filtreleme
-                if (request.Request.KopekId.HasValue)
+                if (request.Request.KopekId != 0)
                 {
                     query = query.Where(x => x.KopekId == request.Request.KopekId);
                 }
 
                 //KomisyonId Göre Filtreleme
-                if (request.Request.KomisyonId.HasValue)
+                if (request.Request.KomisyonId != 0)
                 {
                     query = query.Where(x => x.KomisyonId == request.Request.KomisyonId);
                 }
@@ -49,14 +52,14 @@ namespace Gorkem_.Features.SecimTest
                 }
 
                 //Sınav Yerine Göre Filtreleme
-                if (request.Request.SinavYeriId.HasValue)
+                if (request.Request.SinavYeriId != 0)
                 {
                     query = query.Where(x => x.SinavYeriId == request.Request.SinavYeriId);
 
                 }
 
                 //Yapılan Teste Göre Filtreleme
-                if (request.Request.SecimTestId.HasValue)
+                if (request.Request.SecimTestId != 0)
                 {
                     query = query.Where(x => x.SecimTestId == request.Request.SecimTestId);
                 }
@@ -68,20 +71,39 @@ namespace Gorkem_.Features.SecimTest
                 }
 
                 //Köpek Irkına Göre Filtreleme
-                if (request.Request.IrkId.HasValue)
+                if (request.Request.IrkId != 0)
                 {
                     query = query.Where(x => x.Kopek.IrkId == request.Request.IrkId.Value);
                 }
 
                 //Köpek Cinsiyetine Göre Filtreleme
-                if (request.Request.Cinsiyet.HasValue)
+                if (request.Request.Cinsiyet != 0)
                 {
                     query = query.Where(x => x.Kopek.Cinsiyet == request.Request.Cinsiyet.Value);
                 }
 
 
-                var secimTestleri = await query.ToListAsync(cancellationToken);
-                return Result<List<UT_SecimTest>>.Success(secimTestleri);
+                var secimTestleri = await query.Select(x => new SecimTestResponse
+                {
+                    Degerlendirme = x.Degerlendirme,
+                    Havlama = x.Havlama,
+                    Id = x.Id,
+                    KomisyonId = x.KomisyonId,
+                    KomisyonName = x.Komisyon.KomisyonAdi,
+                    KopekCinsiyet = x.Kopek.Cinsiyet,
+                    KopekId = x.Kopek.Id,
+                    KopekName = x.Kopek.KopekAdi,
+                    SecimTestBrans = x.SecimTestBrans,
+                    SecimTestId = x.SecimTestId,
+                    SecimTestName = x.SecimTest.Name,
+                    SinavYeriId = x.SinavYeriId,
+                    SinavYeriName = x.SinavYeri.Name,
+                    Tarih = x.Tarih,
+                    TepkiSekli = x.TepkiSekli,
+                    ToplamPuan = x.ToplamPuan
+                }).ToListAsync(cancellationToken);
+
+                return Result<List<SecimTestResponse>>.Success(secimTestleri);
             }
         }
     }
