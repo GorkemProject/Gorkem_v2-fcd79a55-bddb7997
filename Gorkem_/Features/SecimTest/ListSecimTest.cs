@@ -26,7 +26,9 @@ namespace Gorkem_.Features.SecimTest
 
             public async Task<Result<List<UT_SecimTest>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.UT_SecimTests.AsQueryable();
+                var query = _context.UT_SecimTests
+                    .Include(x=>x.Kopek)
+                    .AsQueryable();
 
                 //Köpeğe göre filtreleme
                 if (request.Request.KopekId.HasValue)
@@ -45,6 +47,38 @@ namespace Gorkem_.Features.SecimTest
                 {
                     query = query.Where(x => x.T_Aktif >= request.Request.BaslangicTarih && x.Tarih <= request.Request.BitisTarihi);
                 }
+
+                //Sınav Yerine Göre Filtreleme
+                if (request.Request.SinavYeriId.HasValue)
+                {
+                    query = query.Where(x => x.SinavYeriId == request.Request.SinavYeriId);
+
+                }
+
+                //Yapılan Teste Göre Filtreleme
+                if (request.Request.SecimTestId.HasValue)
+                {
+                    query = query.Where(x => x.SecimTestId == request.Request.SecimTestId);
+                }
+
+                //Köpeğin Aldığı Puana Göre Filtreleme
+                if (request.Request.PuanAltSinir.HasValue && request.Request.PuanUstSinir.HasValue)
+                {
+                    query = query.Where(x => x.ToplamPuan >= request.Request.PuanAltSinir && x.ToplamPuan <= request.Request.PuanUstSinir);
+                }
+
+                //Köpek Irkına Göre Filtreleme
+                if (request.Request.IrkId.HasValue)
+                {
+                    query = query.Where(x => x.Kopek.IrkId == request.Request.IrkId.Value);
+                }
+
+                //Köpek Cinsiyetine Göre Filtreleme
+                if (request.Request.Cinsiyet.HasValue)
+                {
+                    query = query.Where(x => x.Kopek.Cinsiyet == request.Request.Cinsiyet.Value);
+                }
+
 
                 var secimTestleri = await query.ToListAsync(cancellationToken);
                 return Result<List<UT_SecimTest>>.Success(secimTestleri);
