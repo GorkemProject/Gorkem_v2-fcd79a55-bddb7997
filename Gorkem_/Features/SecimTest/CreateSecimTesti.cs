@@ -12,7 +12,7 @@ namespace Gorkem_.Features.SecimTest
 {
     public static class CreateSecimTesti
     {
-        public record Command (SecimTestiEkleRequest Request) : IRequest<Result<bool>>
+        public record Command (SecimTestiEkleRequest Request) : IRequest<Result<int>>
         {
 
         }
@@ -33,7 +33,6 @@ namespace Gorkem_.Features.SecimTest
         {
             return new UT_SecimTest
             {
-                Id=command.Request.Id,
                 T_Aktif=DateTime.Now,
                 Aktifmi = true,
                 KopekId = command.Request.KopekId,
@@ -50,23 +49,23 @@ namespace Gorkem_.Features.SecimTest
             };
         }
 
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<int>>
         {
-            public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var isExist = Context.UT_SecimTests.Any(r => r.Id == request.Request.Id);
-                if (isExist) return await Result<bool>.FailAsync($"{request.Request.Id} numaralı test zaten var..");
+                if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı test zaten var..");
 
-
-                Context.UT_SecimTests.Add(request.ToSecimTesti());
+                var secimTesti = request.ToSecimTesti();
+                Context.UT_SecimTests.Add(secimTesti);
 
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
-                    return await Result<bool>.SuccessAsync(true);
+                    return await Result<int>.SuccessAsync(secimTesti.Id);
                 }
-                return await Result<bool>.FailAsync("Kayıt başarılı değil");
+                return await Result<int>.FailAsync("Kayıt başarılı değil");
 
             }
         }
