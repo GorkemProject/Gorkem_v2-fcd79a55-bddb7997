@@ -23,7 +23,7 @@ namespace Gorkem_.Features.SecimTest
             {
                 RuleFor(r => r.Request.UtSecimTestId).NotEmpty().WithMessage("Seçim Testi ID boş bırakılamaz.");
                 RuleFor(r => r.Request.SoruId).NotEmpty().WithMessage("Soru ID boş bırakılamaz.");
-                RuleFor(r => r.Request.Puan).NotEmpty().WithMessage("Puan boş bırakılamaz.");
+                RuleFor(r => r.Request.ToplamPuan).GreaterThanOrEqualTo(0).LessThanOrEqualTo(100).WithMessage("Toplam puan 0 ile 100 arasında olmalıdır..");
             }
         }
 
