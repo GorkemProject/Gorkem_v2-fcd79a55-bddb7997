@@ -3,8 +3,10 @@ using Gorkem_.Context;
 using Gorkem_.Pipeline;
 using Gorkem_.ServiceCollection;
 using Gorkem_.Utils;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,13 +34,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCarter();
 builder.Services.RegisterApiServiceCollection(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();   
+builder.Services.AddProblemDetails();
+
+
+
 
 var app = builder.Build();
 

@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.SecimTest;
 using Gorkem_.EndpointTags;
+using Gorkem_.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,12 +55,38 @@ namespace Gorkem_.Features.SecimTest
                 var isExist = Context.UT_SecimTests.Any(r => r.Id == request.Request.Id);
                 if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı test zaten var..");
 
+                var kopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.KopekId);
+                if (kopek==null)
+                {
+                    return await Result<int>.FailAsync("Kopek bulunamadı");
+                }
+                if (kopek.KopekDurum == Enum_KopekDurum.SaglikRed)
+                {
+                    return await Result<int>.FailAsync("Köpeğin durumu sağlık red olduğu için seçilemez..");
+                }
+
+                if (request.Request.ToplamPuan < 60 )
+                {
+                    kopek.KopekDurum = Enum_KopekDurum.SecimTestiRed;
+                    await Context.SaveChangesAsync(cancellationToken);
+
+                    return await Result<int>.FailAsync("Kopek, seçim testini geçemediği için durumu secim testi red olarak düzenlendi..");
+                }
+
                 var secimTesti = request.ToSecimTesti();
                 Context.UT_SecimTests.Add(secimTesti);
 
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
+                    var kopekDurum = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.KopekId);
+                    if(kopekDurum != null)
+                    {
+                        kopekDurum.KopekDurum = Enum_KopekDurum.KursHazirlik;
+                        await Context.SaveChangesAsync(cancellationToken);
+                    }
+
+
                     Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
                     return await Result<int>.SuccessAsync(secimTesti.Id);
                 }

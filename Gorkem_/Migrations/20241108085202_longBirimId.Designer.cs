@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108085202_longBirimId")]
+    partial class longBirimId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -695,7 +698,10 @@ namespace Gorkem_.Migrations
                     b.Property<int?>("BabaKopekId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BirimId")
+                    b.Property<long?>("BirimId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("BirimId1")
                         .HasColumnType("int");
 
                     b.Property<int>("BransId")
@@ -762,7 +768,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("BabaKopekId");
 
-                    b.HasIndex("BirimId");
+                    b.HasIndex("BirimId1");
 
                     b.HasIndex("BransId");
 
@@ -786,19 +792,25 @@ namespace Gorkem_.Migrations
                     b.Property<bool>("Aktifmi")
                         .HasColumnType("bit");
 
-                    b.Property<string>("AtamaEvrakSayısı")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AtamaTuru")
+                    b.Property<int>("AtamaEvrakSayısı")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BirimId")
+                    b.Property<int>("AtamaTuru")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdareciId")
+                    b.Property<int>("FiiliBirimId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdareciId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IlkId")
                         .HasColumnType("int");
 
                     b.Property<int?>("KopekId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OncekiId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("T_Aktif")
@@ -817,8 +829,6 @@ namespace Gorkem_.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BirimId");
 
                     b.HasIndex("IdareciId");
 
@@ -1089,7 +1099,9 @@ namespace Gorkem_.Migrations
 
                     b.HasOne("Gorkem_.Context.Entities.KT_Birim", "Birim")
                         .WithMany()
-                        .HasForeignKey("BirimId");
+                        .HasForeignKey("BirimId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Gorkem_.Context.Entities.KT_Brans", "Brans")
                         .WithMany()
@@ -1132,19 +1144,15 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekCalKad", b =>
                 {
-                    b.HasOne("Gorkem_.Context.Entities.KT_Birim", "Birim")
-                        .WithMany()
-                        .HasForeignKey("BirimId");
-
                     b.HasOne("Gorkem_.Context.Entities.UT_Idareci", "Idareci")
                         .WithMany()
-                        .HasForeignKey("IdareciId");
+                        .HasForeignKey("IdareciId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Gorkem_.Context.Entities.UT_Kopek", "Kopek")
                         .WithMany()
                         .HasForeignKey("KopekId");
-
-                    b.Navigation("Birim");
 
                     b.Navigation("Idareci");
 

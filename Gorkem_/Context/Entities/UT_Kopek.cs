@@ -41,7 +41,9 @@ namespace Gorkem_.Context.Entities
         public string? EdinilenKisiAdres { get; set; }
         public string? EdinilenKisiTelefon { get; set; }
         public DateTime? EdinilmeTarihi { get; set; }
-
+        public Enum_KopekDurum KopekDurum { get; set; }
+        public virtual KT_Birim Birim { get; set; }
+        public int? BirimId { get; set; }
 
 
 

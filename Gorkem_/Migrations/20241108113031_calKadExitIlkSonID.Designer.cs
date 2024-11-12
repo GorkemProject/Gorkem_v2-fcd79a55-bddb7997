@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108113031_calKadExitIlkSonID")]
+    partial class calKadExitIlkSonID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -789,13 +792,10 @@ namespace Gorkem_.Migrations
                     b.Property<string>("AtamaEvrakSayısı")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("AtamaTuru")
+                    b.Property<int>("AtamaTuru")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BirimId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdareciId")
+                    b.Property<int>("IdareciId")
                         .HasColumnType("int");
 
                     b.Property<int?>("KopekId")
@@ -817,8 +817,6 @@ namespace Gorkem_.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BirimId");
 
                     b.HasIndex("IdareciId");
 
@@ -1132,19 +1130,15 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekCalKad", b =>
                 {
-                    b.HasOne("Gorkem_.Context.Entities.KT_Birim", "Birim")
-                        .WithMany()
-                        .HasForeignKey("BirimId");
-
                     b.HasOne("Gorkem_.Context.Entities.UT_Idareci", "Idareci")
                         .WithMany()
-                        .HasForeignKey("IdareciId");
+                        .HasForeignKey("IdareciId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Gorkem_.Context.Entities.UT_Kopek", "Kopek")
                         .WithMany()
                         .HasForeignKey("KopekId");
-
-                    b.Navigation("Birim");
 
                     b.Navigation("Idareci");
 

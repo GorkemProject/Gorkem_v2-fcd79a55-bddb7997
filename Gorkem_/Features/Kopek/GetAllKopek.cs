@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
+using Gorkem_.Enums;
 using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,7 @@ namespace Gorkem_.Features.Kopek
                     .NewConfig()
                     .Map(dest => dest.IrkId, src => src.Irk.Name);
                 var aktifKopekler = await Context.UT_Kopek_Kopeks
-                    .Where(a => a.Aktifmi)
+                    .Where(a => a.Aktifmi && a.KopekDurum != Enum_KopekDurum.SaglikRed)
                     .Select(a => new KopekGetirResponse
                     {
 

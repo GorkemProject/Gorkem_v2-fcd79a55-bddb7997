@@ -32,6 +32,7 @@ namespace Gorkem_.Features.KodTablo
                     {
                         Id = b.Id,
                         Name = b.Name,
+                        Neticesi=b.Neticesi
                     }).ToListAsync(cancellationToken);
 
                 return Result<List<KararGetirResponse>>.Success(aktifKararlar);

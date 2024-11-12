@@ -18,6 +18,7 @@ namespace Gorkem_.Features.KodTablo
         public class Command : IRequest<Result<bool>>
         {
             public string Name { get; set; }
+            public bool Neticesi { get; set; }
         }
 
         public class CreateKararValidation : AbstractValidator<Command>
@@ -35,6 +36,7 @@ namespace Gorkem_.Features.KodTablo
                 Name = command.Name,
                 Aktifmi = true,
                 T_Aktif = DateTime.Now,
+                Neticesi = command.Neticesi,
             };
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
@@ -63,7 +65,11 @@ namespace Gorkem_.Features.KodTablo
         {
             app.MapPost("kodtablo/karar", async ([FromBody] KararEkleRequest model, ISender sender) =>
             {
-                var request = new CreateKarar.Command() { Name = model.KararAdi };
+                var request = new CreateKarar.Command() 
+                {
+                    Name = model.KararAdi,
+                    Neticesi = model.Neticesi,
+                };
                 var response = await sender.Send(request);
                 if (response.Succeeded)
                      return Results.Ok(response);

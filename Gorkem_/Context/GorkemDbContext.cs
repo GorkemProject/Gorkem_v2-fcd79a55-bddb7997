@@ -29,7 +29,10 @@ namespace Gorkem_.Context
         public DbSet<KT_SecimTest> KT_SecimTests { get; set; }
         public DbSet<UT_SecimTest> UT_SecimTests { get; set; }
         public DbSet<UT_SecimTestiCevap> UT_SecimTestiCevaplar { get; set; }
-        
+        //public DbSet<KT_FiiliBirim> KT_FiiliBirims { get; set; }
+        public DbSet<UT_KopekCalKad> UT_KopekCalKads { get; set; }
+        public DbSet<KT_Birim> KT_Birims { get; set; }
+        public DbSet<UT_KopekDurumHistory> UT_KopekDurumHistory { get; set; }
         
        
 

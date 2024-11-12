@@ -49,8 +49,19 @@ namespace Gorkem_.Features.Kopek
 
             }
         }
-        public static UT_Kopek ToKopek(this Command command)
+        public static UT_Kopek ToKopek(this Command command, GorkemDbContext context)
         {
+            //KararId'ye göre kararın neticesine ulaştım.
+            var karar = context.KT_Karars.FirstOrDefault(k => k.Id == command.Request.KararId);
+
+            //kararın boş olma durumu
+            if (karar == null)
+            {
+                throw new Exception("Geçerli bir karar bulunamadı");
+            }
+            //Eğer kararın neticesi true ise köpeğin durumu sağlık değil ise sağlık red olacak..
+            Enum_KopekDurum kopekDurum = karar.Neticesi == true ? Enum_KopekDurum.Saglik : Enum_KopekDurum.SaglikRed; 
+
             return new UT_Kopek
             {
                 KopekAdi = command.Request.KopekAdi,
@@ -72,7 +83,8 @@ namespace Gorkem_.Features.Kopek
                 EdinilenKisi=command.Request.EdinilenKisi,
                 EdinilenKisiAdres=command.Request.EdinilenKisiAdres,
                 EdinilenKisiTelefon=command.Request.EdinilenKisiTelefon,
-                EdinilmeTarihi=command.Request.EdinilmeTarihi
+                EdinilmeTarihi=command.Request.EdinilmeTarihi,
+                KopekDurum=kopekDurum
                 
                 
             };
@@ -88,7 +100,7 @@ namespace Gorkem_.Features.Kopek
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.CipNumarasi} is already exist");
 
                 
-                if (request.Request.AnneKopekId.HasValue)
+                if (request.Request.AnneKopekId !=0)
                 {
                     var anneKopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.AnneKopekId.Value);
                     if (anneKopek==null)                    
@@ -102,7 +114,7 @@ namespace Gorkem_.Features.Kopek
                     
                 }
 
-                if (request.Request.BabaKopekId.HasValue)
+                if (request.Request.BabaKopekId !=0)
                 {
                     var babaKopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.BabaKopekId.Value);
                     if (babaKopek == null)
@@ -115,8 +127,14 @@ namespace Gorkem_.Features.Kopek
                         return await Result<bool>.FailAsync("Baba köpek eklenen köpekten küçük olamaz");
                     
                 }
+                request.Request.AnneKopekId = null;
+                request.Request.BabaKopekId = null;
 
-                Context.UT_Kopek_Kopeks.Add(request.ToKopek());
+
+                var kopek = request.ToKopek(Context);
+
+                Context.UT_Kopek_Kopeks.Add(kopek);
+
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {

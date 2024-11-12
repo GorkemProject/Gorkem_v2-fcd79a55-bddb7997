@@ -12,11 +12,12 @@ namespace Gorkem_.ServiceCollection
         {
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            
             services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehaviour<,>));
             services.AddDbContext<GorkemDbContext>(options =>
                                         options.UseSqlServer(configuration.GetConnectionString("GorkemAppConnection")));
-
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), includeInternalTypes: true);
         }
     }
