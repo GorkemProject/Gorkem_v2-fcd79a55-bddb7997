@@ -7,62 +7,68 @@ using Gorkem_.Contracts.KodTablo;
 using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Gorkem_.Features.KodTablo
 {
-    public static class CreateAskerlik
+    public static class CreateKursMufredat
     {
         public class Command : IRequest<Result<bool>>
         {
             public string Name { get; set; }
-
+            public int KursEgitimListesiId { get; set; }
         }
-        public class CreateAskerlikValidation : AbstractValidator<Command>
+
+        public class CreateKursMufredatValidation : AbstractValidator<Command>
         {
-            public CreateAskerlikValidation()
+            public CreateKursMufredatValidation()
             {
-                RuleFor(r => r.Name).NotEmpty().NotNull().Configure(r => r.MessageBuilder = _ => "Askerlik durum adı boş olamaz.");
+                RuleFor(r => r.Name).NotEmpty().NotNull().Configure(r => r.MessageBuilder = _ => "Müfredat ismi boş olamaz");
+                RuleFor(r => r.KursEgitimListesiId).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder = _ => "Id Boş Olamaz.");
+
             }
         }
-        public static KT_Askerlik ToAskerlik(this Command command)
+
+        public static KT_KursMufredat ToKursMufredat(this Command command)
         {
-            return new KT_Askerlik
+            return new KT_KursMufredat
             {
                 Name = command.Name,
+                KursEgitimListesiId = command.KursEgitimListesiId,
                 Aktifmi = true,
-                T_Aktif = DateTime.Now,
+                T_Aktif = DateTime.Now
             };
+
         }
+
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
-        { 
+        {
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.KT_Askerliks.Any(r => r.Name == request.Name);
-                if (isExist) return await Result<bool>.FailAsync($"{request.Name} is already exists");
+                var isExist = Context.KT_KursMufredats.Any(r=>r.Name ==request.Name);
+                if (isExist) return await Result<bool>.FailAsync($"{request.Name} is already exist");
 
-                Context.KT_Askerliks.Add(request.ToAskerlik());
-                var isSaved = await Context.SaveChangesAsync() > 0;
+                Context.KT_KursMufredats.Add(request.ToKursMufredat());
+                var isSaved = await Context.SaveChangesAsync()>0;
 
                 if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.Name, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
                 }
-
-
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");
 
             }
         }
     }
-    public class CreateAskerlikEndpoint : ICarterModule
+
+    public class CreateKursMufredatEndpoint : ICarterModule
     {
-        public async void AddRoutes(IEndpointRouteBuilder app)
+        public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kodtablo/askerlik", async ([FromBody] AskerlikEkleRequest model, ISender sender) =>
+            app.MapPost("kodtablo/CreateKursMufredat", async ([FromBody] KursMufredatEkleRequest model, ISender sender) =>
             {
-                var request = new CreateAskerlik.Command() { Name = model.AskerlikDurumAdi };
+                var request = new CreateKursMufredat.Command() { Name=model.Name, KursEgitimListesiId=model.KursEgitimListesiId};
+
                 var response = await sender.Send(request);
 
                 if (response.Succeeded)
