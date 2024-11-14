@@ -14,5 +14,15 @@ namespace Gorkem_.Contracts.SecimTest
         public int? PuanUstSinir { get; set; }
         public int? IrkId { get; set; }
         public Enum_Cinsiyet? Cinsiyet { get; set; }
+
+        //Sayfalama için gereken parametreler
+
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+
+        //Sıralama için gereken parametreler
+
+        public string SortBy { get; set; }
+        public bool IsAscending { get; set; } = true;
     }
 }
