@@ -39,7 +39,8 @@ namespace Gorkem_.Features.KopekKurs
                 KursEgitimListesiId = command.Request.KursEgitimListesiId,
                 Aktifmi = true,
                 KursYeriId = command.Request.KursYeriId,
-                T_Aktif = DateTime.Now
+                T_Aktif = DateTime.Now,
+                
                 
             };
         }
@@ -57,7 +58,7 @@ namespace Gorkem_.Features.KopekKurs
 
                 if (isSaved)
                 {
-                    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi", request.Request.KursEgitimListesiId, "DemoAccount", DateTime.Now);
+                    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi", request.Request.Id, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
                 }
                 return await Result<bool>.FailAsync("Kayıt başarılı değil");

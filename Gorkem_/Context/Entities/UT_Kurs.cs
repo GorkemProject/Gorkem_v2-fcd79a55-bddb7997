@@ -11,5 +11,10 @@ namespace Gorkem_.Context.Entities
         public int? KursEgitimListesiId  { get; set; }
         public virtual KT_KursEgitimListesi? KursEgitimListesi { get; set; }
         public int Donem { get; set; }
+
+        public virtual ICollection<UT_KursEgitmenler>? KursEgitmenler { get; set; }
+        public virtual ICollection<UT_Kursiyer>? Kursiyerler { get; set; }
     }
 }
+
+

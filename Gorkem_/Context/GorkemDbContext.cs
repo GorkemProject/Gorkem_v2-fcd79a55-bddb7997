@@ -36,6 +36,10 @@ namespace Gorkem_.Context
         public DbSet<KT_KursEgitimListesi> KT_KursEgitimListesis{ get; set; }
         public DbSet<KT_KursMufredat> KT_KursMufredats{ get; set; }
         public DbSet<UT_Kurs> UT_Kurs   { get; set; }
+        public DbSet<UT_KursEgitmenler> UT_KursEgitmenler  { get; set; }
+        public DbSet<UT_Kursiyer> UT_Kursiyer  { get; set; }
+        public DbSet<UT_KGRMufredat> UT_KGRMufredats  { get; set; }
+        public DbSet<UT_KursGunlukRapor> UT_KursGunlukRapors  { get; set; }
 
 
 

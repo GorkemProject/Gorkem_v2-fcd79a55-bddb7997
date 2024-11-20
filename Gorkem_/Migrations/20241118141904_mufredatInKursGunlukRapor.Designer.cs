@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241118141904_mufredatInKursGunlukRapor")]
+    partial class mufredatInKursGunlukRapor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -668,9 +671,6 @@ namespace Gorkem_.Migrations
                     b.Property<bool>("Aktifmi")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("KursGunlukRaporId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MufredatId")
                         .HasColumnType("int");
 
@@ -681,8 +681,6 @@ namespace Gorkem_.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("KursGunlukRaporId");
 
                     b.HasIndex("MufredatId");
 
@@ -1182,6 +1180,21 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_SecimTestiCevaplar");
                 });
 
+            modelBuilder.Entity("UT_KGRMufredatUT_KursGunlukRapor", b =>
+                {
+                    b.Property<int>("KGRMufredatlarId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KursGunlukRaporId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KGRMufredatlarId", "KursGunlukRaporId");
+
+                    b.HasIndex("KursGunlukRaporId");
+
+                    b.ToTable("UT_KGRMufredatUT_KursGunlukRapor");
+                });
+
             modelBuilder.Entity("UT_KomisyonUT_KomisyonUyeleri", b =>
                 {
                     b.Property<int>("KomisyonId")
@@ -1327,17 +1340,11 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KGRMufredat", b =>
                 {
-                    b.HasOne("Gorkem_.Context.Entities.UT_KursGunlukRapor", "KursGunlukRapor")
-                        .WithMany("KGRMufredatlar")
-                        .HasForeignKey("KursGunlukRaporId");
-
                     b.HasOne("Gorkem_.Context.Entities.KT_KursMufredat", "Mufredat")
                         .WithMany()
                         .HasForeignKey("MufredatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("KursGunlukRapor");
 
                     b.Navigation("Mufredat");
                 });
@@ -1553,6 +1560,21 @@ namespace Gorkem_.Migrations
                     b.Navigation("UtSecimTest");
                 });
 
+            modelBuilder.Entity("UT_KGRMufredatUT_KursGunlukRapor", b =>
+                {
+                    b.HasOne("Gorkem_.Context.Entities.UT_KGRMufredat", null)
+                        .WithMany()
+                        .HasForeignKey("KGRMufredatlarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_KursGunlukRapor", null)
+                        .WithMany()
+                        .HasForeignKey("KursGunlukRaporId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("UT_KomisyonUT_KomisyonUyeleri", b =>
                 {
                     b.HasOne("Gorkem_.Context.Entities.UT_Komisyon", null)
@@ -1610,11 +1632,6 @@ namespace Gorkem_.Migrations
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.Navigation("Idareci");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursGunlukRapor", b =>
-                {
-                    b.Navigation("KGRMufredatlar");
                 });
 #pragma warning restore 612, 618
         }

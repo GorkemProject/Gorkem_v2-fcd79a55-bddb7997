@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115103351_addKursiyer1")]
+    partial class addKursiyer1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -657,38 +660,6 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_IdareciKopekleri");
                 });
 
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KGRMufredat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Aktifmi")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("KursGunlukRaporId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MufredatId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("T_Aktif")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("T_Pasif")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KursGunlukRaporId");
-
-                    b.HasIndex("MufredatId");
-
-                    b.ToTable("UT_KGRMufredats");
-                });
-
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Komisyon", b =>
                 {
                     b.Property<int>("Id")
@@ -1004,6 +975,9 @@ namespace Gorkem_.Migrations
                     b.Property<int?>("BirimId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("KursId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RutbeId")
                         .HasColumnType("int");
 
@@ -1020,43 +994,11 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("BirimId");
 
+                    b.HasIndex("KursId");
+
                     b.HasIndex("RutbeId");
 
                     b.ToTable("UT_KursEgitmenler");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursGunlukRapor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Aktifmi")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("KursId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SinifAdi")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("T_Aktif")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("T_DersTarihi")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("T_Pasif")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KursId");
-
-                    b.ToTable("UT_KursGunlukRapors");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kursiyer", b =>
@@ -1067,10 +1009,22 @@ namespace Gorkem_.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AdSoyad")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Aktifmi")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IdareciId")
+                    b.Property<int?>("BirimId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KursId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RutbeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Sicil")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("T_Aktif")
@@ -1081,7 +1035,11 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdareciId");
+                    b.HasIndex("BirimId");
+
+                    b.HasIndex("KursId");
+
+                    b.HasIndex("RutbeId");
 
                     b.ToTable("UT_Kursiyer");
                 });
@@ -1197,36 +1155,6 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_KomisyonUT_KomisyonUyeleri");
                 });
 
-            modelBuilder.Entity("UT_KursUT_KursEgitmenler", b =>
-                {
-                    b.Property<int>("KursEgitmenlerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KurslarId")
-                        .HasColumnType("int");
-
-                    b.HasKey("KursEgitmenlerId", "KurslarId");
-
-                    b.HasIndex("KurslarId");
-
-                    b.ToTable("UT_KursUT_KursEgitmenler");
-                });
-
-            modelBuilder.Entity("UT_KursUT_Kursiyer", b =>
-                {
-                    b.Property<int>("KursiyerlerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KurslarId")
-                        .HasColumnType("int");
-
-                    b.HasKey("KursiyerlerId", "KurslarId");
-
-                    b.HasIndex("KurslarId");
-
-                    b.ToTable("UT_KursUT_Kursiyer");
-                });
-
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KursMufredat", b =>
                 {
                     b.HasOne("Gorkem_.Context.Entities.KT_KursEgitimListesi", "KursEgitimListesi")
@@ -1323,23 +1251,6 @@ namespace Gorkem_.Migrations
                     b.Navigation("Idareci");
 
                     b.Navigation("Kopek");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KGRMufredat", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_KursGunlukRapor", "KursGunlukRapor")
-                        .WithMany("KGRMufredatlar")
-                        .HasForeignKey("KursGunlukRaporId");
-
-                    b.HasOne("Gorkem_.Context.Entities.KT_KursMufredat", "Mufredat")
-                        .WithMany()
-                        .HasForeignKey("MufredatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("KursGunlukRapor");
-
-                    b.Navigation("Mufredat");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Komisyon", b =>
@@ -1470,35 +1381,40 @@ namespace Gorkem_.Migrations
                         .WithMany()
                         .HasForeignKey("BirimId");
 
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kurs", "Kurs")
+                        .WithMany()
+                        .HasForeignKey("KursId");
+
                     b.HasOne("Gorkem_.Context.Entities.KT_Rutbe", "Rutbe")
                         .WithMany()
                         .HasForeignKey("RutbeId");
 
                     b.Navigation("Birim");
 
-                    b.Navigation("Rutbe");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursGunlukRapor", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kurs", "Kurs")
-                        .WithMany()
-                        .HasForeignKey("KursId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Kurs");
+
+                    b.Navigation("Rutbe");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kursiyer", b =>
                 {
-                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", "Idareci")
+                    b.HasOne("Gorkem_.Context.Entities.KT_Birim", "Birim")
                         .WithMany()
-                        .HasForeignKey("IdareciId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BirimId");
 
-                    b.Navigation("Idareci");
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kurs", "Kurs")
+                        .WithMany()
+                        .HasForeignKey("KursId");
+
+                    b.HasOne("Gorkem_.Context.Entities.KT_Rutbe", "Rutbe")
+                        .WithMany()
+                        .HasForeignKey("RutbeId");
+
+                    b.Navigation("Birim");
+
+                    b.Navigation("Kurs");
+
+                    b.Navigation("Rutbe");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_SecimTest", b =>
@@ -1568,36 +1484,6 @@ namespace Gorkem_.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UT_KursUT_KursEgitmenler", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_KursEgitmenler", null)
-                        .WithMany()
-                        .HasForeignKey("KursEgitmenlerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kurs", null)
-                        .WithMany()
-                        .HasForeignKey("KurslarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("UT_KursUT_Kursiyer", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kursiyer", null)
-                        .WithMany()
-                        .HasForeignKey("KursiyerlerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kurs", null)
-                        .WithMany()
-                        .HasForeignKey("KurslarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
                 {
                     b.Navigation("Kopek");
@@ -1610,11 +1496,6 @@ namespace Gorkem_.Migrations
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.Navigation("Idareci");
-                });
-
-            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursGunlukRapor", b =>
-                {
-                    b.Navigation("KGRMufredatlar");
                 });
 #pragma warning restore 612, 618
         }
