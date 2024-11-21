@@ -69,20 +69,20 @@ namespace Gorkem_.Contracts.Kopek
                 }
                 // Kuvve Numarasına göre filtreleme
 
-                if (request.Request.KuvveNumarasiAltSinir != 0 && request.Request.KuvveNumarasiUstSinir != 0)
-                {
-                    query = query.Where(x => Convert.ToInt64(x.KuvveNumarasi) >= request.Request.KuvveNumarasiAltSinir && Convert.ToInt64(x.KuvveNumarasi) <= request.Request.KuvveNumarasiUstSinir);
-                }
+                //if (request.Request.KuvveNumarasiAltSinir != 0 && request.Request.KuvveNumarasiUstSinir != 0)
+                //{
+                //    query = query.Where(x => Convert.ToInt32(x.KuvveNumarasi) >= request.Request.KuvveNumarasiAltSinir && Convert.ToInt32(x.KuvveNumarasi) <= request.Request.KuvveNumarasiUstSinir);
+                //}
                 // Çip numarasına göre filtreleme
 
                 if (request.Request.CipNumarasiAltSinir != 0 && request.Request.CipNumarasiUstSinir !=0)
                 {
-                    query = query.Where(x => Convert.ToInt64(x.CipNumarasi) >= request.Request.KuvveNumarasiAltSinir && Convert.ToInt64(x.CipNumarasi) <= request.Request.KuvveNumarasiUstSinir);
+                    query = query.Where(x => Convert.ToInt64(x.CipNumarasi) >= request.Request.CipNumarasiAltSinir && Convert.ToInt64(x.CipNumarasi) <= request.Request.CipNumarasiUstSinir);
                 }
                 // Doğum tarihine göre filtreleme
                 if (request.Request.DogumTarihiBaslangic != null && request.Request.DogumTarihiBitis != null)
                 {
-                    query = query.Where(x => x.T_Aktif >= request.Request.DogumTarihiBaslangic && x.T_Aktif <= request.Request.DogumTarihiBitis);
+                    query = query.Where(x => x.DogumTarihi >= request.Request.DogumTarihiBaslangic && x.DogumTarihi <= request.Request.DogumTarihiBitis);
                 }
 
                 // Sıralama işlemi
@@ -91,15 +91,15 @@ namespace Gorkem_.Contracts.Kopek
                     var sortBy = request.Request.SortBy.ToLower();
                     if (sortBy == "Irk")
                     {
-                        query = request.Request.IsAscending ? query.OrderBy(x => x.Irk) : query.OrderByDescending(x => x.Irk);
+                        query = request.Request.IsAscending ? query.OrderBy(x => x.Irk.Name) : query.OrderByDescending(x => x.Irk);
                     }
                     if (sortBy == "Kadro")
                     {
-                        query = request.Request.IsAscending ? query.OrderBy(x => x.KadroIl) : query.OrderByDescending(x => x.KadroIl);
+                        query = request.Request.IsAscending ? query.OrderBy(x => x.KadroIl.Name) : query.OrderByDescending(x => x.KadroIl);
                     }
                     if (sortBy == "Karar")
                     {
-                        query = request.Request.IsAscending ? query.OrderBy(x => x.Karar) : query.OrderByDescending(x => x.Karar);
+                        query = request.Request.IsAscending ? query.OrderBy(x => x.Karar.Name) : query.OrderByDescending(x => x.Karar);
                     }
                     if (sortBy == "Cinsiyet")
                     {
