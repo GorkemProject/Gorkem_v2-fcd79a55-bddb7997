@@ -35,7 +35,7 @@ namespace Gorkem_.Features.SecimTest
             {
                 var questionAndPoint = await _context.UT_SecimTestiCevaplar
                     .Include(a=>a.Soru)
-                    .Where(a=>a.Id==request.CevapId)
+                    .Where(a=>a.UtSecimTestId==request.CevapId)
                     .Select(a=> new SorularıVePuanlarınıGetirResponse
                     {
                         Soru=a.Soru.Name,
