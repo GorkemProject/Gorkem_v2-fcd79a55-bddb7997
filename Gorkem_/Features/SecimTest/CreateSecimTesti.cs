@@ -72,8 +72,8 @@ namespace Gorkem_.Features.SecimTest
                 if (request.Request.ToplamPuan < 60 )
                 {
                     kopek.KopekDurum = Enum_KopekDurum.SecimTestiRed;
-                    await Context.SaveChangesAsync(cancellationToken);
                     Context.UT_SecimTests.Add(secimTesti);
+                    await Context.SaveChangesAsync(cancellationToken);
                     return await Result<int>.SuccessAsync(secimTesti.Id);
                 }
 
