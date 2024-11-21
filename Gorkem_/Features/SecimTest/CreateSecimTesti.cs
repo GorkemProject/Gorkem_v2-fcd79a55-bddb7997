@@ -65,15 +65,19 @@ namespace Gorkem_.Features.SecimTest
                     return await Result<int>.FailAsync("Köpeğin durumu sağlık red olduğu için seçilemez..");
                 }
 
+
+                var secimTesti = request.ToSecimTesti();
+
+
                 if (request.Request.ToplamPuan < 60 )
                 {
                     kopek.KopekDurum = Enum_KopekDurum.SecimTestiRed;
                     await Context.SaveChangesAsync(cancellationToken);
-
-                    return await Result<int>.FailAsync("Kopek, seçim testini geçemediği için durumu secim testi red olarak düzenlendi..");
+                    Context.UT_SecimTests.Add(secimTesti);
+                    return await Result<int>.SuccessAsync("Kopek, seçim testini geçemedi fakat seçim testi kaydedildi..");
                 }
 
-                var secimTesti = request.ToSecimTesti();
+
                 Context.UT_SecimTests.Add(secimTesti);
 
                 var isSaved = await Context.SaveChangesAsync() > 0;
