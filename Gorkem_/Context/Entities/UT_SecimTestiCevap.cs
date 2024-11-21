@@ -8,7 +8,6 @@ namespace Gorkem_.Context.Entities
         public virtual UT_SecimTest UtSecimTest { get; set; }  
         public int SoruId { get; set; }
         public virtual KT_Soru Soru { get; set; }
-       
         public int Puan { get; set; }
 
     }

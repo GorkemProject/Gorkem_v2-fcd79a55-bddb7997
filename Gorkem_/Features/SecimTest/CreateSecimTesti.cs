@@ -74,7 +74,7 @@ namespace Gorkem_.Features.SecimTest
                     kopek.KopekDurum = Enum_KopekDurum.SecimTestiRed;
                     await Context.SaveChangesAsync(cancellationToken);
                     Context.UT_SecimTests.Add(secimTesti);
-                    return await Result<int>.SuccessAsync("Kopek, seçim testini geçemedi fakat seçim testi kaydedildi..");
+                    return await Result<int>.SuccessAsync(secimTesti.Id);
                 }
 
 
