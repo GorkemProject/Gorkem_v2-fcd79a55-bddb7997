@@ -104,7 +104,9 @@ namespace Application.Common.FilterExtensions
                         var genericColumn = filterColumn.Type.GetProperty("Name");                      
                         var filterGenericColumn = Expression.Property(filterColumn, genericColumn);
                         var nameValue = Expression.Constant(filter.Value);
-                        var nameEquality = Expression.Equal(filterGenericColumn, nameValue);
+                        var filterNameValue = Expression.Convert(nameValue, nameValue.Type);
+                        var nameEquality = GetFilterType<T>(filter, filterGenericColumn, filterNameValue);
+                        // var nameEquality = Expression.Equal(filterGenericColumn, nameValue);
                         expressions.Add(nameEquality);                        
                                                
                     }
