@@ -121,7 +121,7 @@ namespace Gorkem_.Contracts.Kopek
                 var kopekler = await query
                     .Skip((request.Request.PageNumber - 1) * request.Request.PageSize)
                     .Take(request.Request.PageSize)
-                    .Select(x => new KopekListeleResponse
+                    .Select(x => new KopekListeleResponse//
                     {
                         KopekAdi=x.KopekAdi,
                         BirimId = x.BirimId,
