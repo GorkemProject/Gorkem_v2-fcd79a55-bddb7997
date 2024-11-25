@@ -33,22 +33,17 @@ public class GetKopekKursByFilterQueryHandler : IRequestHandler<GetKopekKursByFi
     public async Task<Result<KopekKursFilterResponse>> Handle(GetKopekKursByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.UT_Kurs
-        //.Include(x => x.T_KursBaslangic)
         .Include(x => x.Kursiyerler)
-        //.ThenInclude(Kursiyer => Kursiyer.Idareci)
         .Include(x => x.KursYeri)
+        .Include((x=>x.KursEgitimListesi))
         .Include(x => x.KursEgitmenler)
-        //.ThenInclude(KursEgitmenler => KursEgitmenler.AdSoyad)
-        .Include(x => x.Donem)
         .AsQueryable();
 
         TypeAdapterConfig<UT_Kurs, KopekKursGetirFilterResponse>
             .NewConfig()
-            .Map(dest => dest.T_KursBaslangic, src => src.T_KursBaslangic.Value)
             .Map(dest => dest.KursYeri, src => src.KursYeri.Name)
-            .Map(dest => dest.Donem, src => src.Donem)
-            .Map(dest => dest.Kursiyerler, src => src.Kursiyerler)
-            .Map(dest => dest.KursEgitmenler, src => src.KursEgitmenler);
+            .Map(dest => dest.KursEgitimListesi, src => src.KursEgitimListesi.Name);
+
 
         if (request.Request.Filters.Count > 0)
         {

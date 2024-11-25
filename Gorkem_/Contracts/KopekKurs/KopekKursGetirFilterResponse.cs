@@ -12,11 +12,5 @@ namespace Gorkem_.Contracts.KopekKurs
         public int? KursEgitimListesiId { get; set; }
         public string KursEgitimListesi { get; set; }
         public int Donem { get; set; }
-
-        public string? KursEgitmenler { get; set; }
-        public int KursEgitmenlerId { get; set; }
-        public string? Kursiyerler { get; set; }
-        public int KursiyerlerId { get; set; }
-
     }
 }
