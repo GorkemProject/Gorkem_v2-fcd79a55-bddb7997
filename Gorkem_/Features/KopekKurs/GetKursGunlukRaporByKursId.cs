@@ -14,10 +14,14 @@ namespace Gorkem_.Features.KopekKurs
         public class Query : IRequest<Result<List<KursunKursGunlukRaporlariniGetirResponse>>>
         {
             public int KursId { get; set; }
+            public int PageNumber { get; set; }
+            public int PageSize { get; set; }
 
-            public Query(int kursId)
+            public Query(int kursId, int pageNumber, int pageSize)
             {
                 KursId = kursId;
+                PageNumber = pageNumber;
+                PageSize = pageSize;
             }
         }
         internal sealed class Handler : IRequestHandler<Query, Result<List<KursunKursGunlukRaporlariniGetirResponse>>>
@@ -39,6 +43,9 @@ namespace Gorkem_.Features.KopekKurs
                         .ThenInclude(a => a.Mufredat)
                     .Include(a=>a.Kurs.KursEgitmenler)
                     .Include(a=>a.Kurs.Kursiyerler)
+
+                    .Skip((request.PageNumber - 1 ) * request.PageSize)
+                    .Take(request.PageSize)
 
                     .Select(k => new KursunKursGunlukRaporlariniGetirResponse
                     {
@@ -78,10 +85,10 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/GetKursGunlukRaporByKursId", async (int kursId, ISender sender) =>
+            app.MapPost("kopekKurs/GetKursGunlukRaporByKursId", async (int kursId, int pageNumber, int pageSize, ISender sender) =>
             {
 
-                var request = new GetKursGunlukRaporByKursId.Query(kursId);
+                var request = new GetKursGunlukRaporByKursId.Query(kursId, pageNumber,pageSize);
                 var response = await sender.Send(request);
                 if (response.Succeeded)
                     return Results.Ok(response);
