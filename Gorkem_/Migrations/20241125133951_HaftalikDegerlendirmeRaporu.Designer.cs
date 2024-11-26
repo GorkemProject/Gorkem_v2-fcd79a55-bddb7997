@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125133951_HaftalikDegerlendirmeRaporu")]
+    partial class HaftalikDegerlendirmeRaporu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -587,9 +590,14 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime?>("T_Pasif")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("UT_KursHaftalıkDegerlendirmeRaporuId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("KursiyerId");
+
+                    b.HasIndex("UT_KursHaftalıkDegerlendirmeRaporuId");
 
                     b.ToTable("UT_HaftalıkDegerlendirmeRaporuGozlemlers");
                 });
@@ -1234,21 +1242,6 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_SecimTestiCevaplar");
                 });
 
-            modelBuilder.Entity("UT_HaftalıkDegerlendirmeRaporuGozlemlerUT_KursHaftalıkDegerlendirmeRaporu", b =>
-                {
-                    b.Property<int>("HaftalıkDegerlendirmeRaporuGozlemlerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KursHaftalıkDegerlendirmeRaporuId")
-                        .HasColumnType("int");
-
-                    b.HasKey("HaftalıkDegerlendirmeRaporuGozlemlerId", "KursHaftalıkDegerlendirmeRaporuId");
-
-                    b.HasIndex("KursHaftalıkDegerlendirmeRaporuId");
-
-                    b.ToTable("UT_HaftalıkDegerlendirmeRaporuGozlemlerUT_KursHaftalıkDegerlendirmeRaporu");
-                });
-
             modelBuilder.Entity("UT_KGRMufredatUT_KursGunlukRapor", b =>
                 {
                     b.Property<int>("KGRMufredatlarId")
@@ -1352,6 +1345,10 @@ namespace Gorkem_.Migrations
                         .HasForeignKey("KursiyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_KursHaftalıkDegerlendirmeRaporu", null)
+                        .WithMany("HaftalıkDegerlendirmeRaporuGozlemler")
+                        .HasForeignKey("UT_KursHaftalıkDegerlendirmeRaporuId");
 
                     b.Navigation("Kursiyer");
                 });
@@ -1651,21 +1648,6 @@ namespace Gorkem_.Migrations
                     b.Navigation("UtSecimTest");
                 });
 
-            modelBuilder.Entity("UT_HaftalıkDegerlendirmeRaporuGozlemlerUT_KursHaftalıkDegerlendirmeRaporu", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_HaftalıkDegerlendirmeRaporuGozlemler", null)
-                        .WithMany()
-                        .HasForeignKey("HaftalıkDegerlendirmeRaporuGozlemlerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_KursHaftalıkDegerlendirmeRaporu", null)
-                        .WithMany()
-                        .HasForeignKey("KursHaftalıkDegerlendirmeRaporuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("UT_KGRMufredatUT_KursGunlukRapor", b =>
                 {
                     b.HasOne("Gorkem_.Context.Entities.UT_KGRMufredat", null)
@@ -1738,6 +1720,11 @@ namespace Gorkem_.Migrations
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.Navigation("Idareci");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursHaftalıkDegerlendirmeRaporu", b =>
+                {
+                    b.Navigation("HaftalıkDegerlendirmeRaporuGozlemler");
                 });
 #pragma warning restore 612, 618
         }
