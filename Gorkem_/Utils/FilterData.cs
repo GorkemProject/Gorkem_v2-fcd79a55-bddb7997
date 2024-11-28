@@ -74,10 +74,10 @@ namespace Application.Common.FilterExtensions
                     }
                     else if (filterColumn.Type == typeof(DateTime) || filterColumn.Type == typeof(Nullable<DateTime>))
                     {
-                        var filterValueBool = DateTime.Parse(filter.Value);
-                        var filterColumnBool = Expression.Convert(Expression.Property(parameter, filter.ColumnName), typeof(DateTime));
-                        var filterValue = Expression.Constant(filterValueBool);
-                        var filterNameValue = Expression.Convert(filterValue, filterColumnBool.Type);
+                        var filterValueDate = DateTime.Parse(filter.Value);
+                        var filterColumnDate = Expression.Convert(Expression.Property(parameter, filter.ColumnName), filterColumn.Type);
+                        var filterValue = Expression.Constant(filterValueDate);
+                        var filterNameValue = Expression.Convert(filterValue, filterColumnDate.Type);
                         var filterData = GetFilterType<T>(filter, filterColumn, filterNameValue);
                         expressions.Add(filterData);
                     }
@@ -90,10 +90,10 @@ namespace Application.Common.FilterExtensions
                         var filterData = GetFilterType<T>(filter, filterColumn, filterNameValue);
                         expressions.Add(filterData);
                     }
-                    else if (filterColumn.Type == typeof(int))
+                    else if (filterColumn.Type == typeof(int) || filterColumn.Type == typeof(Nullable<int>))
                     {
                         var filterValueInt = int.Parse(filter.Value);
-                        var filterColumnInt = Expression.Convert(Expression.Property(parameter, filter.ColumnName), typeof(int));
+                        var filterColumnInt = Expression.Convert(Expression.Property(parameter, filter.ColumnName), filterColumn.Type);
                         var filterValue = Expression.Constant(filterValueInt);
                         var filterNameValue = Expression.Convert(filterValue, filterColumnInt.Type);
                         var filterData = GetFilterType<T>(filter, filterColumn, filterNameValue);
@@ -148,7 +148,7 @@ namespace Application.Common.FilterExtensions
                         return Expression.Call(memberExpression, EndsWith, unaryExpression);
                 }
             }
-            if (unaryExpression.Type == typeof(int) || unaryExpression.Type == typeof(decimal))
+            if (unaryExpression.Type == typeof(int) || unaryExpression.Type == typeof(Nullable<int>) || unaryExpression.Type == typeof(decimal))
             {
                 switch (filterValue.FilterType)
                 {
