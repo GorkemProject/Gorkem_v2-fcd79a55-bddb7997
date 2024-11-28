@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127103202_KopekVeIdareciDegerlendirmeFormu1")]
+    partial class KopekVeIdareciDegerlendirmeFormu1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1040,13 +1043,19 @@ namespace Gorkem_.Migrations
                     b.Property<bool>("Aktifmi")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("AracToplamPuan")
+                    b.Property<int>("AracToplamPuan")
                         .HasColumnType("int");
 
-                    b.Property<int?>("KapaliAlanToplamPuan")
+                    b.Property<int>("KapaliAlanToplamPuan")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KopekId")
                         .HasColumnType("int");
 
                     b.Property<int>("KursId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KursiyerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("T_Aktif")
@@ -1058,7 +1067,7 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime>("TarihSaat")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TasinabilirEsyaToplamPuan")
+                    b.Property<int>("TasinabilirEsyaToplamPuan")
                         .HasColumnType("int");
 
                     b.Property<int>("TestinYapildigiIlId")
@@ -1070,7 +1079,11 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("KopekId");
+
                     b.HasIndex("KursId");
+
+                    b.HasIndex("KursiyerId");
 
                     b.HasIndex("TestinYapildigiIlId");
 
@@ -1249,11 +1262,16 @@ namespace Gorkem_.Migrations
                     b.Property<int>("TasinabilirEsyaPuan")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UT_KopekVeIdareciDegerlendirmeFormuId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("KopekDegerlendirmeSoruId");
 
                     b.HasIndex("KopekId");
+
+                    b.HasIndex("UT_KopekVeIdareciDegerlendirmeFormuId");
 
                     b.ToTable("UT_KursKopekDegerlendirmeCevap");
                 });
@@ -1290,11 +1308,16 @@ namespace Gorkem_.Migrations
                     b.Property<int>("TasinabilirEsyaPuan")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UT_KopekVeIdareciDegerlendirmeFormuId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("KursiyerDegerlendirmeSoruId");
 
                     b.HasIndex("KursiyerId");
+
+                    b.HasIndex("UT_KopekVeIdareciDegerlendirmeFormuId");
 
                     b.ToTable("UT_KursKursiyerDegerlendirmeCevap");
                 });
@@ -1465,36 +1488,6 @@ namespace Gorkem_.Migrations
                     b.HasIndex("KomisyonUyeleriId");
 
                     b.ToTable("UT_KomisyonUT_KomisyonUyeleri");
-                });
-
-            modelBuilder.Entity("UT_KopekVeIdareciDegerlendirmeFormuUT_KursKopekDegerlendirmeCevap", b =>
-                {
-                    b.Property<int>("KopekDegerlendirmeCevaplarId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KopekVeIdareciDegerlendirmeFormuId")
-                        .HasColumnType("int");
-
-                    b.HasKey("KopekDegerlendirmeCevaplarId", "KopekVeIdareciDegerlendirmeFormuId");
-
-                    b.HasIndex("KopekVeIdareciDegerlendirmeFormuId");
-
-                    b.ToTable("UT_KopekVeIdareciDegerlendirmeFormuUT_KursKopekDegerlendirmeCevap");
-                });
-
-            modelBuilder.Entity("UT_KopekVeIdareciDegerlendirmeFormuUT_KursKursiyerDegerlendirmeCevap", b =>
-                {
-                    b.Property<int>("KopekVeIdareciDegerlendirmeFormuId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KursiyerDegerlendirmeCevaplarId")
-                        .HasColumnType("int");
-
-                    b.HasKey("KopekVeIdareciDegerlendirmeFormuId", "KursiyerDegerlendirmeCevaplarId");
-
-                    b.HasIndex("KursiyerDegerlendirmeCevaplarId");
-
-                    b.ToTable("UT_KopekVeIdareciDegerlendirmeFormuUT_KursKursiyerDegerlendirmeCevap");
                 });
 
             modelBuilder.Entity("UT_KursUT_KursEgitmenler", b =>
@@ -1756,9 +1749,21 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekVeIdareciDegerlendirmeFormu", b =>
                 {
+                    b.HasOne("Gorkem_.Context.Entities.UT_IdareciKopekleri", "Kopek")
+                        .WithMany()
+                        .HasForeignKey("KopekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Gorkem_.Context.Entities.UT_Kurs", "Kurs")
                         .WithMany()
                         .HasForeignKey("KursId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kursiyer", "Kursiyer")
+                        .WithMany()
+                        .HasForeignKey("KursiyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1768,7 +1773,11 @@ namespace Gorkem_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Kopek");
+
                     b.Navigation("Kurs");
+
+                    b.Navigation("Kursiyer");
 
                     b.Navigation("TestinYapildigiIl");
                 });
@@ -1839,6 +1848,10 @@ namespace Gorkem_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Gorkem_.Context.Entities.UT_KopekVeIdareciDegerlendirmeFormu", null)
+                        .WithMany("KopekDegerlendirmeCevaplar")
+                        .HasForeignKey("UT_KopekVeIdareciDegerlendirmeFormuId");
+
                     b.Navigation("Kopek");
 
                     b.Navigation("KopekDegerlendirmeSoru");
@@ -1857,6 +1870,10 @@ namespace Gorkem_.Migrations
                         .HasForeignKey("KursiyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_KopekVeIdareciDegerlendirmeFormu", null)
+                        .WithMany("KursiyerDegerlendirmeCevaplar")
+                        .HasForeignKey("UT_KopekVeIdareciDegerlendirmeFormuId");
 
                     b.Navigation("Kursiyer");
 
@@ -1971,36 +1988,6 @@ namespace Gorkem_.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UT_KopekVeIdareciDegerlendirmeFormuUT_KursKopekDegerlendirmeCevap", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_KursKopekDegerlendirmeCevap", null)
-                        .WithMany()
-                        .HasForeignKey("KopekDegerlendirmeCevaplarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_KopekVeIdareciDegerlendirmeFormu", null)
-                        .WithMany()
-                        .HasForeignKey("KopekVeIdareciDegerlendirmeFormuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("UT_KopekVeIdareciDegerlendirmeFormuUT_KursKursiyerDegerlendirmeCevap", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_KopekVeIdareciDegerlendirmeFormu", null)
-                        .WithMany()
-                        .HasForeignKey("KopekVeIdareciDegerlendirmeFormuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_KursKursiyerDegerlendirmeCevap", null)
-                        .WithMany()
-                        .HasForeignKey("KursiyerDegerlendirmeCevaplarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("UT_KursUT_KursEgitmenler", b =>
                 {
                     b.HasOne("Gorkem_.Context.Entities.UT_KursEgitmenler", null)
@@ -2043,6 +2030,13 @@ namespace Gorkem_.Migrations
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.Navigation("Idareci");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekVeIdareciDegerlendirmeFormu", b =>
+                {
+                    b.Navigation("KopekDegerlendirmeCevaplar");
+
+                    b.Navigation("KursiyerDegerlendirmeCevaplar");
                 });
 #pragma warning restore 612, 618
         }
