@@ -60,7 +60,7 @@ public class GetKopekKursByFilterQueryHandler : IRequestHandler<GetKopekKursByFi
             query = query.Provider.CreateQuery<UT_Kurs>(exp);
         }
 
-        var paged = PagedResult<UT_Kurs>.ToPagedResponse(query, request.Request.PageNumber, 10);
+        var paged = PagedResult<UT_Kurs>.ToPagedResponse(query, request.Request.PageNumber, 1);
 
         var mappedItems = paged.Items.Adapt<List<KopekKursGetirFilterResponse>>();
 
