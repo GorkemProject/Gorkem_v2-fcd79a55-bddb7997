@@ -37,7 +37,7 @@ namespace Gorkem_.Features.KopekKurs
                     {
                         AdiSoyadi = e.AdSoyad,
                         Sicil = e.Sicil,
-                        KadroIl = e.Birim.Adi
+                        KadroIl = e.Birim.Adi//
                     }).ToListAsync();
 
                 if (egitmenler == null)
