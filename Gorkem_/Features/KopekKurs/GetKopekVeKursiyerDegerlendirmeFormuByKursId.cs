@@ -33,7 +33,8 @@ namespace Gorkem_.Features.KopekKurs
             public async Task<Result<List<KopekVeKursiyerDegerlendirmeFormuGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var kopekVeIdareciDegerlendirme = await _context.UT_KopekVeIdareciDegerlendirmeFormu
-                    .Where(a => a.Aktifmi)
+                    .Where(a => a.Aktifmi && a.KursId==request.KursId)
+
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
