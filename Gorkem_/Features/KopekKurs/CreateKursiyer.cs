@@ -13,7 +13,7 @@ namespace Gorkem_.Features.KopekKurs
     public static class CreateKursiyer
     {
 
-        public class Command : IRequest<Result<bool>> 
+        public class Command : IRequest<Result<int>> 
         {
             public int IdareciId { get; set; }
         }
@@ -27,7 +27,7 @@ namespace Gorkem_.Features.KopekKurs
             }
         }
 
-        public class CreateKursiyerHandler : IRequestHandler<Command, Result<bool>>
+        public class CreateKursiyerHandler : IRequestHandler<Command, Result<int>>
         {
             public readonly GorkemDbContext _context;
 
@@ -36,13 +36,13 @@ namespace Gorkem_.Features.KopekKurs
                 _context = context;
             }
 
-            public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var idareci = await _context.UT_Idarecis.FindAsync(request.IdareciId);
 
                 if (idareci==null)
                 {
-                    return Result<bool>.Fail("Geçersiz id değeri girildi");
+                    return Result<int>.Fail("Geçersiz id değeri girildi");
                 }
                
                 var kursiyer = new UT_Kursiyer
@@ -56,7 +56,7 @@ namespace Gorkem_.Features.KopekKurs
                 await _context.SaveChangesAsync(cancellationToken);
 
 
-                return await Result<bool>.SuccessAsync(true);
+                return await Result<int>.SuccessAsync(kursiyer.Id);
             }
         }
 

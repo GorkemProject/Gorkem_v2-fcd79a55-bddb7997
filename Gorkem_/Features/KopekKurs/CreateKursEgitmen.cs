@@ -12,7 +12,7 @@ namespace Gorkem_.Features.KopekKurs
 {
     public static class CreateKursEgitmen
     {
-        public record Command(KursEgitmenEkleRequest Request) : IRequest<Result<bool>>
+        public record Command(KursEgitmenEkleRequest Request) : IRequest<Result<int>>
         {
 
         }
@@ -44,22 +44,22 @@ namespace Gorkem_.Features.KopekKurs
 
         }
 
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<int>>
         {
-            public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var isExist = Context.UT_KursEgitmenler.Any(r => r.Sicil == request.Request.Sicil);
-                if (isExist) return await Result<bool>.FailAsync($"{request.Request.Sicil} is already exist");
+                if (isExist) return await Result<int>.FailAsync($"{request.Request.Sicil} is already exist");
 
-                Context.UT_KursEgitmenler.Add(request.ToKursEgitmenler());
+                var kursEgitmen =Context.UT_KursEgitmenler.Add(request.ToKursEgitmenler());
 
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} zamanında eklendi", request.Request.Sicil, "DemoAccount", DateTime.Now);
-                    return await Result<bool>.SuccessAsync(true);
+                    return await Result<int>.SuccessAsync(kursEgitmen.Entity.Id);
                 }
-                return await Result<bool>.FailAsync("Kayıt başarılı değil");
+                return await Result<int>.FailAsync("Kayıt başarılı değil");
 
             }
         }
