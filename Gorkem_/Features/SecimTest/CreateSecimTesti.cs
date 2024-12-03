@@ -67,7 +67,7 @@ namespace Gorkem_.Features.SecimTest
 
 
                 var secimTesti = request.ToSecimTesti();
-
+                kopek.KopekDurum = Enum_KopekDurum.KursHazirlik;
 
                 if (request.Request.ToplamPuan < 60 )
                 {
