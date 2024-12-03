@@ -7,6 +7,7 @@ using Gorkem_.Contracts.KopekKurs;
 using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.KopekKurs
 {
@@ -15,7 +16,8 @@ namespace Gorkem_.Features.KopekKurs
 
         public class Command : IRequest<Result<int>> 
         {
-            public int IdareciId { get; set; }
+            public int? IdareciId { get; set; }
+            public int? Sicil { get; set; }
         }
 
 
@@ -23,7 +25,8 @@ namespace Gorkem_.Features.KopekKurs
         {
             public CreateKursiyerValidator()
             {
-                RuleFor(x => x.IdareciId).NotEmpty().WithMessage("Idareci Id gereklidir.");
+                RuleFor(x => x.IdareciId).NotEmpty().NotNull().WithMessage("Idareci Id gereklidir.");
+                RuleFor(x => x.Sicil).NotEmpty().NotNull().WithMessage(" Sicil gereklidir.");
             }
         }
 
@@ -38,7 +41,8 @@ namespace Gorkem_.Features.KopekKurs
 
             public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var idareci = await _context.UT_Idarecis.FindAsync(request.IdareciId);
+                var idareci = await _context.UT_Idarecis
+                    .FirstOrDefaultAsync(x => x.Id == request.IdareciId || x.Sicil == request.Sicil);
 
                 if (idareci==null)
                 {
@@ -48,6 +52,7 @@ namespace Gorkem_.Features.KopekKurs
                 var kursiyer = new UT_Kursiyer
                 {
                     Idareci = idareci,
+
                 };
                 kursiyer.Aktifmi = true;
                 kursiyer.T_Aktif = DateTime.Now;
@@ -67,7 +72,7 @@ namespace Gorkem_.Features.KopekKurs
         {
             app.MapPost("kopekKurs/CreateKursiyer", async ([FromBody] CreateKursiyerCommand model, ISender sender) =>
             {
-                var request = new CreateKursiyer.Command() { IdareciId = model.IdareciId};
+                var request = new CreateKursiyer.Command() { IdareciId = model.IdareciId, Sicil=model.Sicil};
 
                 var response = await sender.Send(request);
 

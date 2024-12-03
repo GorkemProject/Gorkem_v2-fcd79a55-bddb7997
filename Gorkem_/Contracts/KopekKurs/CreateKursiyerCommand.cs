@@ -3,5 +3,6 @@
     public class CreateKursiyerCommand
     {
         public int IdareciId { get; set; }
+        public int Sicil { get; set; }
     }
 }
