@@ -32,9 +32,11 @@ namespace Gorkem_.Features.KopekKurs
 
             public async Task<Result<List<KursunMufredatlariniGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var kurs = await _context.UT_Kurs.FindAsync(request.KursId);
+
                 var mufredatlar = await _context.KT_KursMufredats
                     .Include(k=>k.KursEgitimListesi)
-                    .Where(u => u.KursEgitimListesiId == request.KursId)
+                    .Where(u => u.KursEgitimListesiId == kurs.KursEgitimListesiId)
                     .Select(k => new KursunMufredatlariniGetirResponse
                     {
                         Id=k.Id,
