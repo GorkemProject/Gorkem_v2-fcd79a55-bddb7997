@@ -10,7 +10,7 @@ namespace Gorkem_.Context.Entities
         public DateTime T_DersTarihi { get; set; }
 
         public string SinifAdi { get; set; }
-        public virtual ICollection<UT_KGRMufredat>? KGRMufredatlar { get; set; }
+        public virtual ICollection<UT_KursGunlukRaporDersler>? KursGunlukRaporDersler { get; set; }
 
 
 

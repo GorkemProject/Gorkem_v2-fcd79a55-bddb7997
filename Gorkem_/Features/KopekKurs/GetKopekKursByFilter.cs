@@ -41,6 +41,7 @@ public class GetKopekKursByFilterQueryHandler : IRequestHandler<GetKopekKursByFi
 
         TypeAdapterConfig<UT_Kurs, KopekKursGetirFilterResponse>
             .NewConfig()
+            .Map(dest =>dest.Id, src => src.Id)
             .Map(dest => dest.KursYeri, src => src.KursYeri.Name)
             .Map(dest => dest.KursEgitimListesi, src => src.KursEgitimListesi.Name);
 

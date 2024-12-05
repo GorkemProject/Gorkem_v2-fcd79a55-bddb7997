@@ -28,7 +28,9 @@ namespace Gorkem_.Features.KopekKurs
 
         public static UT_KursGunlukRapor ToKursGunlukRapor(this Command command)
         {
-            return new UT_KursGunlukRapor
+
+
+            var kursGunlukRapor =  new UT_KursGunlukRapor
             {
                 Id=command.Request.Id,
                 KursId = command.Request.KursId,
@@ -36,9 +38,15 @@ namespace Gorkem_.Features.KopekKurs
                 SinifAdi = command.Request.SinifAdi,
                 Aktifmi = true,
                 T_Aktif=DateTime.Now,
-                
+                KursGunlukRaporDersler = command.Request.DerslerIds
+                .Select(dersId => new UT_KursGunlukRaporDersler
+                {
+                    DersId = dersId,
+                }).ToList()
 
             };
+            return kursGunlukRapor;
+            
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
@@ -47,7 +55,9 @@ namespace Gorkem_.Features.KopekKurs
                 var isExist = Context.UT_KursGunlukRapors.Any(r=>r.Id == request.Request.Id);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.Id} is already exist");
 
-                Context.UT_KursGunlukRapors.Add(request.ToKursGunlukRapor());
+
+                var kursGunlukRapor = request.ToKursGunlukRapor();
+                Context.UT_KursGunlukRapors.Add(kursGunlukRapor);
 
                 var isSaved = await Context.SaveChangesAsync() > 0;
 

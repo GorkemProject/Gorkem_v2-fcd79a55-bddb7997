@@ -39,12 +39,11 @@ namespace Gorkem_.Features.KopekKurs
                     .Where(a => a.Aktifmi && a.KursId == request.KursId)
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)
-                    .Include(a => a.KGRMufredatlar)
-                        .ThenInclude(a => a.Mufredat)
-                    .Include(a=>a.Kurs.KursEgitmenler)
-                    .Include(a=>a.Kurs.Kursiyerler)
-
-                    .Skip((request.PageNumber - 1 ) * request.PageSize)
+                    .Include(a => a.Kurs.KursEgitmenler)
+                    .Include(a => a.Kurs.Kursiyerler)
+                    .Include(a => a.KursGunlukRaporDersler)
+                        .ThenInclude(b => b.Ders)
+                    .Skip((request.PageNumber - 1) * request.PageSize)
                     .Take(request.PageSize)
 
                     .Select(k => new KursunKursGunlukRaporlariniGetirResponse
@@ -53,20 +52,16 @@ namespace Gorkem_.Features.KopekKurs
                         KursAdi = k.Kurs.KursEgitimListesi.Name,
                         SinifAdi = k.SinifAdi,
                         T_DersTarihi = k.T_DersTarihi,
-                        KGRMufredatlar = k.KGRMufredatlar.Select(a => new KGRMufredatResponse
+                        Dersler = k.KursGunlukRaporDersler.Select(d => d.Ders.Name).ToList(),
+                        KursEgitmenler = k.Kurs.KursEgitmenler.Select(a => new KursEgitmenResponse
                         {
-                            MufredatAdi = a.Mufredat.Name,
-                            MufredatId = a.MufredatId
+                            EgitmenAdi = a.AdSoyad,
+                            EgitmenId = a.Id
                         }).ToList(),
-                        KursEgitmenler=k.Kurs.KursEgitmenler.Select(a=> new KursEgitmenResponse
+                        KursKursiyer = k.Kurs.Kursiyerler.Select(a => new KursKursiyerResponse
                         {
-                            EgitmenAdi=a.AdSoyad,
-                            EgitmenId=a.Id
-                        }).ToList(),
-                        KursKursiyer=k.Kurs.Kursiyerler.Select(a=>new KursKursiyerResponse
-                        {
-                            KursiyerAdi=a.Idareci.AdSoyad,
-                            KursiyerId=a.IdareciId
+                            KursiyerAdi = a.Idareci.AdSoyad,
+                            KursiyerId = a.IdareciId
                         }).ToList()
 
 

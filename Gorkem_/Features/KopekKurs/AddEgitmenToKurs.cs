@@ -35,7 +35,7 @@ namespace Gorkem_.Features.KopekKurs
                     return await Result<bool>.FailAsync("Seçilen komisyon bulunamadı");
                 }
 
-                existingKurs.KursEgitmenler?.Clear();
+                //existingKurs.KursEgitmenler?.Clear();
 
                 foreach (var egitmenId in request.Request.EgitmenIds)
                 {
