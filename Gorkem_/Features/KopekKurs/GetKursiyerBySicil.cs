@@ -31,24 +31,20 @@ namespace Gorkem_.Features.KopekKurs
             public async Task<Result<List<SicileGoreKursiyerGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var kursiyer = await _context.UT_Kursiyer
-                    .Include(k => k.Idareci)
-                        .ThenInclude(i => i.Kopek)
-                    .Include(k => k.Kurslar)
-                    .ThenInclude(k => k.KursEgitmenler)
-                    .Where(k => k.Idareci.Sicil == request.Sicil && k.Aktifmi)
+                    .Include(a=>a.Kopek)
+                    .Where(k => k.Sicil == request.Sicil && k.Aktifmi)
                     .Select(k => new SicileGoreKursiyerGetirResponse
                     {
-                        AdiSoyadi = k.Idareci.AdSoyad,
-                        Sicil = k.Idareci.Sicil,
-                        KadroIl = k.Idareci.KadroIl.Name,
-                        KopekBilgileri = k.Idareci.Kopek.Select(a => new SicileGoreKursiyerinKopeginiGetirResponse
-                        {
-                            Adi = a.Kopek.KopekAdi,
-                            Bransi = a.Kopek.Brans.Name,
-                            CipNumarasi = a.Kopek.CipNumarasi,
-                            DogumTarihi = a.Kopek.DogumTarihi
+                        AdiSoyadi = k.PersonelAdi,
+                        Sicil = k.Sicil,
+                        //KopekBilgileri = k.Kopek.Select(a => new SicileGoreKursiyerinKopeginiGetirResponse
+                        //{
+                        //    Adi = a.Kopek.KopekAdi,
+                        //    Bransi = a.Kopek.Brans.Name,
+                        //    CipNumarasi = a.Kopek.CipNumarasi,
+                        //    DogumTarihi = a.Kopek.DogumTarihi
 
-                        }).ToList()
+                        //}).ToList()
                     }).ToListAsync(cancellationToken);
                 if (kursiyer==null)
                 {

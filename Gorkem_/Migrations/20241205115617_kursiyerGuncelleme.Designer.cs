@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    [Migration("20241205071323_UpdateKursGunlukRapor")]
-    partial class UpdateKursGunlukRapor
+    [Migration("20241205115617_kursiyerGuncelleme")]
+    partial class kursiyerGuncelleme
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1317,7 +1317,19 @@ namespace Gorkem_.Migrations
                     b.Property<bool>("Aktifmi")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IdareciId")
+                    b.Property<string>("CipNumarası")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("KopekId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KursId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PersonelAdi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Sicil")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("T_Aktif")
@@ -1328,7 +1340,9 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdareciId");
+                    b.HasIndex("KopekId");
+
+                    b.HasIndex("KursId");
 
                     b.ToTable("UT_Kursiyer");
                 });
@@ -1502,21 +1516,6 @@ namespace Gorkem_.Migrations
                     b.HasIndex("KurslarId");
 
                     b.ToTable("UT_KursUT_KursEgitmenler");
-                });
-
-            modelBuilder.Entity("UT_KursUT_Kursiyer", b =>
-                {
-                    b.Property<int>("KursiyerlerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KurslarId")
-                        .HasColumnType("int");
-
-                    b.HasKey("KursiyerlerId", "KurslarId");
-
-                    b.HasIndex("KurslarId");
-
-                    b.ToTable("UT_KursUT_Kursiyer");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KursMufredat", b =>
@@ -1865,13 +1864,19 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kursiyer", b =>
                 {
-                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", "Idareci")
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kopek", "Kopek")
                         .WithMany()
-                        .HasForeignKey("IdareciId")
+                        .HasForeignKey("KopekId");
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kurs", "Kurs")
+                        .WithMany("Kursiyerler")
+                        .HasForeignKey("KursId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Idareci");
+                    b.Navigation("Kopek");
+
+                    b.Navigation("Kurs");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_SecimTest", b =>
@@ -2001,21 +2006,6 @@ namespace Gorkem_.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UT_KursUT_Kursiyer", b =>
-                {
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kursiyer", null)
-                        .WithMany()
-                        .HasForeignKey("KursiyerlerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gorkem_.Context.Entities.UT_Kurs", null)
-                        .WithMany()
-                        .HasForeignKey("KurslarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
                 {
                     b.Navigation("Kopek");
@@ -2028,6 +2018,11 @@ namespace Gorkem_.Migrations
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
                 {
                     b.Navigation("Idareci");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kurs", b =>
+                {
+                    b.Navigation("Kursiyerler");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursGunlukRapor", b =>

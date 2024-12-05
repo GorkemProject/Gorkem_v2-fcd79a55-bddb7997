@@ -47,7 +47,7 @@ namespace Gorkem_.Features.KopekKurs
 
                     }
 
-                    existingKurs.Kursiyerler?.Add(kursiyer);
+                    //existingKurs.Kursiyerler?.Add(kursiyer);
                 }
 
                 var isSaved = await _context.SaveChangesAsync()>0;

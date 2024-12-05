@@ -51,7 +51,7 @@ namespace Gorkem_.Features.KopekKurs
                
                 var kursiyer = new UT_Kursiyer
                 {
-                    Idareci = idareci,
+                    //Idareci = idareci,
 
                 };
                 kursiyer.Aktifmi = true;

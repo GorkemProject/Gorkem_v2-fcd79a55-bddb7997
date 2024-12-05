@@ -21,20 +21,20 @@ namespace Gorkem_.Features.KopekKurs
             {
                 var aktifKursiyerler = await Context.UT_Kursiyer
                     .Where(a => a.Aktifmi)
-                    .Include(a => a.Idareci)
-                    .ThenInclude(i => i.Kopek)
-                    .ThenInclude(a => a.Kopek)
+                    //.Include(a => a.Idareci)
+                    //.ThenInclude(i => i.Kopek)
+                    //.ThenInclude(a => a.Kopek)
                     .Select(kursiyer => new KursiyerGetirResponse
                     {
-                        KursiyerId = kursiyer.IdareciId,
-                        KursiyerAdi = kursiyer.Idareci.AdSoyad,
-                        Kopekler = kursiyer.Idareci.Kopek
-                        .Select(Kopek => new KursiyerKopekleriResponse
-                        {
-                            KopekAdi = Kopek.Kopek.KopekAdi,
-                            KopekId = Kopek.Kopek.Id
+                        ////KursiyerId = kursiyer.IdareciId,
+                        ////KursiyerAdi = kursiyer.Idareci.AdSoyad,
+                        ////Kopekler = kursiyer.Idareci.Kopek
+                        //.Select(Kopek => new KursiyerKopekleriResponse
+                        //{
+                        //    KopekAdi = Kopek.Kopek.KopekAdi,
+                        //    KopekId = Kopek.Kopek.Id
 
-                        }).ToList()
+                        //}).ToList()
 
                     }).ToListAsync(cancellationToken);
 

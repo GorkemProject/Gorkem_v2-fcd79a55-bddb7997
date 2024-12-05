@@ -39,12 +39,12 @@ namespace Gorkem_.Features.KopekKurs
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
                     .Include(a => a.Kurs.Kursiyerler)
-                        .ThenInclude(a=>a.Idareci)
-                        .ThenInclude(a=>a.Kopek)
-                    .Include(a => a.Kurs)
-                        .ThenInclude(a => a.Kursiyerler)                        
-                        .ThenInclude(a => a.Idareci)
-                        .ThenInclude(a=>a.Kopek)
+                    //    .ThenInclude(a=>a.Idareci)
+                    //    .ThenInclude(a=>a.Kopek)
+                    //.Include(a => a.Kurs)
+                    //    .ThenInclude(a => a.Kursiyerler)                        
+                    //    .ThenInclude(a => a.Idareci)
+                        //.ThenInclude(a=>a.Kopek)
                     .Include(a => a.KopekDegerlendirmeCevaplar)
                     .Include(a => a.KursiyerDegerlendirmeCevaplar)
                     .Select(k => new KopekVeKursiyerDegerlendirmeFormuGetirResponse
@@ -53,21 +53,21 @@ namespace Gorkem_.Features.KopekKurs
                         TestinYapildigiYer=k.TestinYapildigiYer,
                         TestinYapildigiIl=k.TestinYapildigiIl.Name,
                         KursAdı=k.Kurs.KursEgitimListesi.Name,
-                        KopekDegerlendirmeBilgiler = k.Kurs.Kursiyerler.Select(a=> new KopekDegerlendirmeFormuBilgilerResponse
-                        {
-                            Adi=a.Idareci.Kopek.FirstOrDefault().Kopek.KopekAdi,
-                            Bransi = a.Idareci.Kopek.FirstOrDefault().Kopek.Brans.Name,
-                            //Cinsiyet = a.Idareci.Kopek.FirstOrDefault().Kopek.Cinsiyet,
-                            CipNo=a.Idareci.Kopek.FirstOrDefault().Kopek.CipNumarasi,
-                            DogumTarihi=a.Idareci.Kopek.FirstOrDefault().Kopek.DogumTarihi
+                        //KopekDegerlendirmeBilgiler = k.Kurs.Kursiyerler.Select(a=> new KopekDegerlendirmeFormuBilgilerResponse
+                        //{
+                        //    Adi=a.Idareci.Kopek.FirstOrDefault().Kopek.KopekAdi,
+                        //    Bransi = a.Idareci.Kopek.FirstOrDefault().Kopek.Brans.Name,
+                        //    //Cinsiyet = a.Idareci.Kopek.FirstOrDefault().Kopek.Cinsiyet,
+                        //    CipNo=a.Idareci.Kopek.FirstOrDefault().Kopek.CipNumarasi,
+                        //    DogumTarihi=a.Idareci.Kopek.FirstOrDefault().Kopek.DogumTarihi
 
-                        }).ToList(),
-                        KursiyerDegerlendirmeBilgiler = k.Kurs.Kursiyerler.Select(a=> new KursiyerDegerlendirmeFormuBilgilerResponse
-                        {
-                            AdiSoyadi=a.Idareci.AdSoyad,
-                            Kadrosu=a.Idareci.KadroIl.Name,
-                            Sicili=a.Idareci.Sicil
-                        }).ToList(),
+                        //}).ToList(),
+                        //KursiyerDegerlendirmeBilgiler = k.Kurs.Kursiyerler.Select(a=> new KursiyerDegerlendirmeFormuBilgilerResponse
+                        //{
+                        //    AdiSoyadi=a.Idareci.AdSoyad,
+                        //    Kadrosu=a.Idareci.KadroIl.Name,
+                        //    Sicili=a.Idareci.Sicil
+                        //}).ToList(),
                         KopekDegerlendirmeCevaplar=k.KopekDegerlendirmeCevaplar.Select(a=> new KopekDegerlendirmeCevaplarResponse
                         {
                             SoruAdi=a.KopekDegerlendirmeSoru.Name,

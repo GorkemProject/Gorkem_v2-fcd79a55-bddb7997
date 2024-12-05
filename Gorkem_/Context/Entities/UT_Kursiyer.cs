@@ -2,9 +2,17 @@
 {
     public class UT_Kursiyer : UTBaseEntity
     {
-        public virtual UT_Idareci? Idareci { get; set; }
-        public int IdareciId { get; set; }
-        public virtual ICollection<UT_Kurs>? Kurslar { get; set; }
+        public int Sicil { get; set; }
+
+        public string? PersonelAdi { get; set; }
+
+        public virtual UT_Kopek? Kopek { get; set; }
+        public string? CipNumarası { get; set; }
+
+        public int KursId { get; set; }
+        public virtual UT_Kurs Kurs { get; set; }
+
+
 
     }
 }

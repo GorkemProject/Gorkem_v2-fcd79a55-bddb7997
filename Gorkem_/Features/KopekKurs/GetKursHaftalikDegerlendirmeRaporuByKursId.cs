@@ -35,9 +35,9 @@ namespace Gorkem_.Features.KopekKurs
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
-                    .Include(a => a.Kurs.Kursiyerler)
-                        .ThenInclude(a=>a.Idareci)
-                        .ThenInclude(a=>a.Kopek)
+                    //.Include(a => a.Kurs.Kursiyerler)
+                    //    .ThenInclude(a=>a.Idareci)
+                        //.ThenInclude(a=>a.Kopek)
                     .Select(k => new KursunHaftalikRaporlariniGetirResponse
                     {
                         EgitimProgramiAdi = k.Kurs.KursEgitimListesi.Name,
@@ -51,16 +51,16 @@ namespace Gorkem_.Features.KopekKurs
                         KursiyerSayisi = k.Kurs.Kursiyerler.Count(),
                         KursBaslangicTarih=k.Kurs.T_KursBaslangic,
                         KursBitisTarih=k.Kurs.T_KursBitis,
-                        GozlemResponse=k.HaftalıkDegerlendirmeRaporuGozlemler.Select(a=> new HaftalikRaporGozlemResponse
-                        {
-                            GozlemAdi=a.Gozlemler,
-                            GozlemId=a.Id,
-                            Kursiyer=a.Kursiyer.Idareci.AdSoyad,
-                            KursiyerId=a.Kursiyer.Idareci.Id,
-                            KopekId=a.Kursiyer.Idareci.Kopek.FirstOrDefault().Kopek.Id,
-                            KopekAdi=a.Kursiyer.Idareci.Kopek.FirstOrDefault().Kopek.KopekAdi
+                        //GozlemResponse=k.HaftalıkDegerlendirmeRaporuGozlemler.Select(a=> new HaftalikRaporGozlemResponse
+                        //{
+                        //    GozlemAdi=a.Gozlemler,
+                        //    GozlemId=a.Id,
+                        //    Kursiyer=a.Kursiyer.Idareci.AdSoyad,
+                        //    KursiyerId=a.Kursiyer.Idareci.Id,
+                        //    KopekId=a.Kursiyer.Idareci.Kopek.FirstOrDefault().Kopek.Id,
+                        //    KopekAdi=a.Kursiyer.Idareci.Kopek.FirstOrDefault().Kopek.KopekAdi
                             
-                        }).ToList(),
+                        //}).ToList(),
                     }).ToListAsync();
                 
                 if (haftalikRaporlar == null)

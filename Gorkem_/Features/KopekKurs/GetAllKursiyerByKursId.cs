@@ -37,10 +37,10 @@ namespace Gorkem_.Features.KopekKurs
                         .Where(e => e.Aktifmi)
                         .Select(e => new KursIdyeGoreKursiyerGetirResponse
                         {
-                            KursiyerId = e.Id,
-                            AdSoyad = e.Idareci.AdSoyad,
-                            Rutbe = e.Idareci.Rutbe.Name,
-                            Birim = e.Idareci.Brans.Name,
+                            //KursiyerId = e.Id,
+                            //AdSoyad = e.Idareci.AdSoyad,
+                            //Rutbe = e.Idareci.Rutbe.Name,
+                            //Birim = e.Idareci.Brans.Name,
 
                         }))
                     .ToListAsync(cancellationToken);
