@@ -37,6 +37,7 @@ namespace Gorkem_.Features.KopekKurs
                     .Where(u => u.KursEgitimListesiId == request.KursId)
                     .Select(k => new KursunMufredatlariniGetirResponse
                     {
+                        Id=k.Id,
                         KursAdi= k.KursEgitimListesi.Name,
                         MufredatAdi = k.Name,
                         OlusturulmaTarihi = k.T_Aktif
