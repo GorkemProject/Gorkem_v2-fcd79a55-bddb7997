@@ -33,14 +33,18 @@ namespace Gorkem_.Features.KopekKurs
                 var kursiyerler = await _context.UT_Kurs
                     .Where(k => k.Id == request.KursId && k.Aktifmi)
                     .Include(e => e.Kursiyerler)
+                    
                     .SelectMany(k => k.Kursiyerler
                         .Where(e => e.Aktifmi)
                         .Select(e => new KursIdyeGoreKursiyerGetirResponse
                         {
-                            //KursiyerId = e.Id,
-                            //AdSoyad = e.Idareci.AdSoyad,
-                            //Rutbe = e.Idareci.Rutbe.Name,
-                            //Birim = e.Idareci.Brans.Name,
+                            Sicil=e.Sicil,
+                            PersonelAdi=e.PersonelAdi,
+                            CipNumarası=e.CipNumarası,
+                            KopekName=e.Kopek.KopekAdi,
+                            KursAdi=e.Kurs.KursEgitimListesi.Name,
+                            KursDonem=e.Kurs.Donem,
+                            
 
                         }))
                     .ToListAsync(cancellationToken);

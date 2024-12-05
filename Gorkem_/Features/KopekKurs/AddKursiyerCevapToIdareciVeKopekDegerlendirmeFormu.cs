@@ -33,7 +33,7 @@ namespace Gorkem_.Features.KopekKurs
                 {
                     return await Result<bool>.FailAsync("Seçilen değerlendirme formu bulunamadı..");
                 }
-                existingForm.KursiyerDegerlendirmeCevaplar?.Clear();
+                //existingForm.KursiyerDegerlendirmeCevaplar?.Clear();
 
                 foreach (var cevapId in request.Request.KursiyerCevapId)
                 {

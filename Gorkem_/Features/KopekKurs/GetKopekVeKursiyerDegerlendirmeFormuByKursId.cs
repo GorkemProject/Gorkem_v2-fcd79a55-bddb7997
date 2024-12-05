@@ -39,7 +39,7 @@ namespace Gorkem_.Features.KopekKurs
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
                     .Include(a => a.Kurs.Kursiyerler)
-                    //    .ThenInclude(a=>a.Idareci)
+                        .ThenInclude(a=>a.Kurs)
                     //    .ThenInclude(a=>a.Kopek)
                     //.Include(a => a.Kurs)
                     //    .ThenInclude(a => a.Kursiyerler)                        

@@ -6,6 +6,7 @@
 
         public string? PersonelAdi { get; set; }
 
+        public int KopekId { get; set; }
         public virtual UT_Kopek? Kopek { get; set; }
         public string? CipNumarası { get; set; }
 

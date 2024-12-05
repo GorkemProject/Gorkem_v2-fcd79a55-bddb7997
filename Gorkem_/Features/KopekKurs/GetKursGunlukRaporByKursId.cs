@@ -58,11 +58,11 @@ namespace Gorkem_.Features.KopekKurs
                             EgitmenAdi = a.AdSoyad,
                             EgitmenId = a.Id
                         }).ToList(),
-                        //KursKursiyer = k.Kurs.Kursiyerler.Select(a => new KursKursiyerResponse
-                        //{
-                        //    KursiyerAdi = a.PersonelAdi,
-                        //    KursiyerId = a.Id
-                        //}).ToList()
+                        KursKursiyer = k.Kurs.Kursiyerler.Select(a => new KursKursiyerResponse
+                        {
+                            KursiyerAdi = a.PersonelAdi,
+                            KursiyerId = a.Id
+                        }).ToList()
 
 
                     }).ToListAsync(cancellationToken);

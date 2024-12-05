@@ -37,14 +37,14 @@ namespace Gorkem_.Features.KopekKurs
                     {
                         AdiSoyadi = k.PersonelAdi,
                         Sicil = k.Sicil,
-                        //KopekBilgileri = k.Kopek.Select(a => new SicileGoreKursiyerinKopeginiGetirResponse
-                        //{
-                        //    Adi = a.Kopek.KopekAdi,
-                        //    Bransi = a.Kopek.Brans.Name,
-                        //    CipNumarasi = a.Kopek.CipNumarasi,
-                        //    DogumTarihi = a.Kopek.DogumTarihi
+                        Bransi=k.Kopek.Brans.Name,
+                        CipNumarasi=k.Kopek.CipNumarasi,
+                        DogumTarihi=k.Kopek.DogumTarihi,
+                        KopekAdi=k.Kopek.KopekAdi,
+                        KadroIl=k.Kopek.KadroIl.Name,
+                        
 
-                        //}).ToList()
+
                     }).ToListAsync(cancellationToken);
                 if (kursiyer==null)
                 {
