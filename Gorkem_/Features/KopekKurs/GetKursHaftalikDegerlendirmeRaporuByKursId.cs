@@ -30,7 +30,7 @@ namespace Gorkem_.Features.KopekKurs
 
             public async Task<Result<List<KursunHaftalikRaporlariniGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var haftalikRaporlar = await _context.UT_KursHaftalıkDegerlendirmeRaporus
+                var haftalikRaporlar = await _context.UT_HaftalıkDegerlendirmeRaporuGozlemlers
                     .Where(a => a.Aktifmi && a.KursId == request.KursId)
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)

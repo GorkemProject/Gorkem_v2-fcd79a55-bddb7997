@@ -5,5 +5,6 @@
 
         public int KursiyerId { get; set; }
         public string Gozlemler { get; set; }
+
     }
 }

@@ -29,21 +29,30 @@ namespace Gorkem_.Features.KopekKurs
             
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var yeniRapor = new UT_KursHaftalıkDegerlendirmeRaporu
+                //var yeniRapor = new UT_KursHaftalıkDegerlendirmeRaporu
+                //{
+                //    KursId = request.Request.KursId,
+                //    Aktifmi = true,
+                //    T_Aktif = DateTime.Now,
+                //    Gozlemler = request.Request.Gozlemler.Select(g => new UT_HaftalıkDegerlendirmeRaporuGozlemler
+                //    {
+                //        KursiyerId = g.KursiyerId,
+                //        Gozlemler = g.Gozlemler,
+                //        Aktifmi = true,
+                //        T_Aktif = DateTime.Now,
+                //    }).ToList()
+                //};
+                var yeniRapor = request.Request.Gozlemler.Select(g => new UT_HaftalıkDegerlendirmeRaporuGozlemler
                 {
                     KursId = request.Request.KursId,
+                    KursiyerId = g.KursiyerId,
+                    Gozlemler = g.Gozlemler,
                     Aktifmi = true,
                     T_Aktif = DateTime.Now,
-                    Gozlemler = request.Request.Gozlemler.Select(g => new UT_HaftalıkDegerlendirmeRaporuGozlemler
-                    {
-                        KursiyerId = g.KursiyerId,
-                        Gozlemler = g.Gozlemler,
-                        Aktifmi = true,
-                        T_Aktif = DateTime.Now,
-                    }).ToList()
-                };
+                    Hafta = request.Request.Hafta
+                }).ToList();
 
-                _context.UT_KursHaftalıkDegerlendirmeRaporus.Add(yeniRapor);
+                _context.UT_HaftalıkDegerlendirmeRaporuGozlemlers.AddRange(yeniRapor);
 
                 var isSaved = await _context.SaveChangesAsync()>0;
 
