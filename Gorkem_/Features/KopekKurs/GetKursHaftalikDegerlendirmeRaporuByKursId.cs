@@ -50,16 +50,16 @@ namespace Gorkem_.Features.KopekKurs
                         KursiyerSayisi = k.Kurs.Kursiyerler.Count(),
                         KursBaslangicTarih=k.Kurs.T_KursBaslangic,
                         KursBitisTarih=k.Kurs.T_KursBitis,
-                        GozlemResponse=k.HaftalıkDegerlendirmeRaporuGozlemler.Select(a=> new HaftalikRaporGozlemResponse
-                        {
-                            GozlemAdi=a.Gozlemler,
-                            GozlemId=a.Id,
-                            Kursiyer=a.Kursiyer.PersonelAdi,
-                            KursiyerId=a.Kursiyer.Id,
-                            KopekId=a.Kursiyer.Kopek.Id,
-                            KopekAdi=a.Kursiyer.Kopek.KopekAdi
+                        //GozlemResponse=k.HaftalıkDegerlendirmeRaporuGozlemler.Select(a=> new HaftalikRaporGozlemResponse
+                        //{
+                        //    GozlemAdi=a.Gozlemler,
+                        //    GozlemId=a.Id,
+                        //    Kursiyer=a.Kursiyer.PersonelAdi,
+                        //    KursiyerId=a.Kursiyer.Id,
+                        //    KopekId=a.Kursiyer.Kopek.Id,
+                        //    KopekAdi=a.Kursiyer.Kopek.KopekAdi
                             
-                        }).ToList(),
+                        //}).ToList(),
                     }).ToListAsync();
                 
                 if (haftalikRaporlar == null)

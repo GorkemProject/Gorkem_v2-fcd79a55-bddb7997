@@ -14,52 +14,57 @@ namespace Gorkem_.Features.KopekKurs
     public static class CreateHaftalıkDegerlendirmeRaporu
     {
 
-        public record Command(HaftalıkDeferlendirmeRaporuEkleRequest Request) : IRequest<Result<bool>>;
+        public record Command(HaftalikDegerlendirmeRaporuOlusturRequest Request) : IRequest<Result<bool>>;
 
-        public class CreateHaftalıkDegerlendirmeRaporuValidation : AbstractValidator<Command>
+        internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
-            public CreateHaftalıkDegerlendirmeRaporuValidation()
+            private readonly GorkemDbContext _context;
+            private readonly Serilog.ILogger _logger;
+            public Handler(GorkemDbContext context, Serilog.ILogger logger )
             {
-                RuleFor(r => r.Request.KursId).NotEmpty().NotNull().WithMessage("KursId değeri boş geçilemez");
+                _context = context;
+                _logger = logger;
             }
-        }
-        public static UT_KursHaftalıkDegerlendirmeRaporu ToHaftalikDegerlendirmeRaporu(this Command command)
-        {
-            return new UT_KursHaftalıkDegerlendirmeRaporu
-            {
-                KursId = command.Request.KursId,
-                Aktifmi = true,
-                T_Aktif=DateTime.Now
-            };
-        }
 
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
-        {
+            
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.UT_KursHaftalıkDegerlendirmeRaporus.Any(r => r.Id == request.Request.KursId);
-                if (isExist) return await Result<bool>.FailAsync($"{request.Request.KursId} is already exist");
+                var yeniRapor = new UT_KursHaftalıkDegerlendirmeRaporu
+                {
+                    KursId = request.Request.KursId,
+                    Aktifmi = true,
+                    T_Aktif = DateTime.Now,
+                    Gozlemler = request.Request.Gozlemler.Select(g => new UT_HaftalıkDegerlendirmeRaporuGozlemler
+                    {
+                        KursiyerId = g.KursiyerId,
+                        Gozlemler = g.Gozlemler,
+                        Aktifmi = true,
+                        T_Aktif = DateTime.Now,
+                    }).ToList()
+                };
 
-                Context.UT_KursHaftalıkDegerlendirmeRaporus.Add(request.ToHaftalikDegerlendirmeRaporu());
+                _context.UT_KursHaftalıkDegerlendirmeRaporus.Add(yeniRapor);
 
-                var isSaved = await Context.SaveChangesAsync() > 0;
+                var isSaved = await _context.SaveChangesAsync()>0;
 
                 if (isSaved)
                 {
-                    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi", request.Request.KursId, "DemoAccount", DateTime.Now);
+                    _logger.Information("Rapor ve gözlemler başarıyla eklendi.");
                     return await Result<bool>.SuccessAsync(true);
                 }
-                return await Result<bool>.FailAsync("Kayıt başarılı değil");
 
+                return await Result<bool>.FailAsync("rapor oluşturulamadı..");
             }
         }
+
+
     }
 
     public class CreateHaftalikDegerlendirmeRaporuEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("KopekKurs/CreateHaftalikDegerlendirmeRaporu", async ([FromBody] HaftalıkDeferlendirmeRaporuEkleRequest model, ISender sender) =>
+            app.MapPost("kopekKurs/CreateHaftalikDegerlendirmeRaporu", async ([FromBody] HaftalikDegerlendirmeRaporuOlusturRequest model, ISender sender) =>
             {
                 var request = new CreateHaftalıkDegerlendirmeRaporu.Command(model);
                 var response = await sender.Send(request);
