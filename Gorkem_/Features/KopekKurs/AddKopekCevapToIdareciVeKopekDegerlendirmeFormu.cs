@@ -25,31 +25,31 @@ namespace Gorkem_.Features.KopekKurs
 
             public async Task<Result<bool>> Handle(AddKopekCevapToIdareciVeKopekDegerlendirmeFormuCommand request, CancellationToken cancellationToken)
             {
-                var existingForm = await _context.UT_KopekVeIdareciDegerlendirmeFormu
-                     .Include(a => a.KopekDegerlendirmeCevaplar)
-                     .FirstOrDefaultAsync(k => k.Id == request.Request.DegerlendirmeFormId);
+                //var existingForm = await _context.UT_KopekVeIdareciDegerlendirmeFormu
+                //     .Include(a => a.KopekDegerlendirmeCevaplar)
+                //     .FirstOrDefaultAsync(k => k.Id == request.Request.DegerlendirmeFormId);
 
-                if (existingForm == null)
-                {
-                    return await Result<bool>.FailAsync("Seçilen değerlendirme formu bulunamadı");
+                //if (existingForm == null)
+                //{
+                //    return await Result<bool>.FailAsync("Seçilen değerlendirme formu bulunamadı");
 
-                } 
-                existingForm.KopekDegerlendirmeCevaplar?.Clear();
+                //} 
+                //existingForm.KopekDegerlendirmeCevaplar?.Clear();
 
-                foreach (var cevapId in request.Request.KopekCevapId)
-                {
-                    var cevap = await _context.UT_KursKopekDegerlendirmeCevap
-                        .FirstOrDefaultAsync(u => u.Id == cevapId);
-                    if (cevap == null)
-                    {
-                        return await Result<bool>.FailAsync($"Seçilen cevap bulunamadı : {cevapId } ");
-                    }
-                    existingForm.KopekDegerlendirmeCevaplar?.Add(cevap);
-                }
-                var isSaved = await _context.SaveChangesAsync() > 0;
+                //foreach (var cevapId in request.Request.KopekCevapId)
+                //{
+                //    var cevap = await _context.UT_KursKopekDegerlendirmeCevap
+                //        .FirstOrDefaultAsync(u => u.Id == cevapId);
+                //    if (cevap == null)
+                //    {
+                //        return await Result<bool>.FailAsync($"Seçilen cevap bulunamadı : {cevapId } ");
+                //    }
+                //    existingForm.KopekDegerlendirmeCevaplar?.Add(cevap);
+                //}
+                //var isSaved = await _context.SaveChangesAsync() > 0;
 
-                if (isSaved)
-                    return await Result<bool>.SuccessAsync(true);
+                //if (isSaved)
+                //    return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Forma cevap eklenemedi");
             }
         }

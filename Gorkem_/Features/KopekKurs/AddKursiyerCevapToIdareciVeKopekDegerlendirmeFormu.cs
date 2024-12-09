@@ -26,7 +26,7 @@ namespace Gorkem_.Features.KopekKurs
             public async Task<Result<bool>> Handle(AddKursiyerCevapToIdareciVeKopekDegerlendirmeFormuCommand request, CancellationToken cancellationToken)
             {
                 var existingForm = await _context.UT_KopekVeIdareciDegerlendirmeFormu
-                    .Include(a => a.KursiyerDegerlendirmeCevaplar)
+                    //.Include(a => a.KursiyerDegerlendirmeCevaplar)
                     .FirstOrDefaultAsync(k => k.Id == request.Request.DegerlendirmFormId);
 
                 if (existingForm == null)
@@ -38,13 +38,13 @@ namespace Gorkem_.Features.KopekKurs
                 foreach (var cevapId in request.Request.KursiyerCevapId)
                 {
 
-                    var cevap = await _context.UT_KursKursiyerDegerlendirmeCevap
-                        .FirstOrDefaultAsync(u => u.Id == cevapId);
-                    if (cevap == null)
-                    {
-                        return await Result<bool>.FailAsync($"Seçilen cevap bulunamadı : {cevapId}");
-                    }
-                    existingForm.KursiyerDegerlendirmeCevaplar?.Add(cevap); ;
+                    //var cevap = await _context.UT_KursKursiyerDegerlendirmeCevap
+                    //    .FirstOrDefaultAsync(u => u.Id == cevapId);
+                    //if (cevap == null)
+                    //{
+                    //    return await Result<bool>.FailAsync($"Seçilen cevap bulunamadı : {cevapId}");
+                    //}
+                    //existingForm.KursiyerDegerlendirmeCevaplar?.Add(cevap); ;
 
                 }
                 var isSaved = await _context.SaveChangesAsync()>0;

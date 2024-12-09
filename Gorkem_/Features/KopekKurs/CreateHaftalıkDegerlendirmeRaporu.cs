@@ -29,19 +29,7 @@ namespace Gorkem_.Features.KopekKurs
             
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                //var yeniRapor = new UT_KursHaftalıkDegerlendirmeRaporu
-                //{
-                //    KursId = request.Request.KursId,
-                //    Aktifmi = true,
-                //    T_Aktif = DateTime.Now,
-                //    Gozlemler = request.Request.Gozlemler.Select(g => new UT_HaftalıkDegerlendirmeRaporuGozlemler
-                //    {
-                //        KursiyerId = g.KursiyerId,
-                //        Gozlemler = g.Gozlemler,
-                //        Aktifmi = true,
-                //        T_Aktif = DateTime.Now,
-                //    }).ToList()
-                //};
+  
                 var yeniRapor = request.Request.Gozlemler.Select(g => new UT_HaftalıkDegerlendirmeRaporuGozlemler
                 {
                     KursId = request.Request.KursId,

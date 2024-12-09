@@ -14,16 +14,15 @@ namespace Gorkem_.Features.KopekKurs
     public static class CreateKopekVeKursiyerDegerlendirneFormu
     {
 
-        public record Command(KopekVeKursiyerDegerlendirmeFormuRequest Request) : IRequest<Result<int>>;
+        public record Command(KopekVeIdareciDegerlendirmeFormuRequest Request) : IRequest<Result<int>>;
 
         public class CreateKopekVeKursiyerDegerlendirmeFormuValidation : AbstractValidator<Command>
         {
             public CreateKopekVeKursiyerDegerlendirmeFormuValidation()
             {
-                RuleFor(r => r.Request.KursId).NotEmpty().NotNull().WithMessage("Hangi kursa dair değerlendirme yaptığınızı belirtmelisiniz");
-                RuleFor(r => r.Request.TestinYapildigiIlId).NotEmpty().NotNull().WithMessage("Testin hangi ilde yapıldığını belirtmelisiniz");
-                RuleFor(r => r.Request.TestinYapildigiYer).NotEmpty().NotNull().WithMessage("Testin nerede yapıldığını belirtmelisiniz");
-                RuleFor(r => r.Request.TarihSaat).NotEmpty().NotNull().WithMessage("Testin tarihte yapıldığını belirtmelisiniz");
+                RuleFor(r => r.Request.KursId).NotEmpty().WithMessage("Kurs ID'si belirtilmelidir.");
+                RuleFor(r => r.Request.TarihSaat).NotEmpty().WithMessage("Tarih ve saat belirtilmelidir.");
+                RuleFor(r => r.Request.TestinYapildigiIlId).NotEmpty().WithMessage("Testin yapıldığı il belirtilmelidir.");
 
 
             }
@@ -33,14 +32,25 @@ namespace Gorkem_.Features.KopekKurs
         {
             return new UT_KopekVeIdareciDegerlendirmeFormu
             {
-                Aktifmi=true,
-                T_Aktif=DateTime.Now,
-                KursId=command.Request.KursId,
-                TarihSaat=command.Request.TarihSaat,
+                Aktifmi = true,
+                T_Aktif = DateTime.Now,
+                KursId = command.Request.KursId,
+                TarihSaat = command.Request.TarihSaat,
                 TestinYapildigiIlId = command.Request.TestinYapildigiIlId,
                 TestinYapildigiYer = command.Request.TestinYapildigiYer,
- 
-
+                KursDegerlendirmeCevaplar = command.Request.KursDegerlendirmeCevaplar
+                .Select(c => new UT_KursDegerlendirmeCevap
+                {
+                    DegerlendirmeSoruId = c.DegerlendirmeSoruId,
+                    KapaliAlanPuan = c.KapaliAlanPuan,
+                    AracPuan = c.AracPuan,
+                    TasinabilirEsyaPuan = c.TasinabilirEsyaPuan,
+                    DegerlendirmeTuru = c.DegerlendirmeTuru,
+                    DegerlendirilenVarlikId = c.DegerlendirilenVarlikId,
+                    Aktifmi = true,
+                    T_Aktif = DateTime.Now
+                })
+                .ToList()
             };
         }
 
@@ -48,17 +58,18 @@ namespace Gorkem_.Features.KopekKurs
         {
             public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.UT_KopekVeIdareciDegerlendirmeFormu.Any(r => r.Id == request.Request.Id);
-                if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı değerlendirme formu zaten var");
+                var isExist = Context.UT_KopekVeIdareciDegerlendirmeFormu
+                    .Any(r => r.Id == request.Request.Id);
+                if (isExist) return await Result<int>.FailAsync("Bu kurs ve tarihe ait bir değerlendirme zaten mevcut.");
 
                 Context.UT_KopekVeIdareciDegerlendirmeFormu.Add(request.ToKopekVeIdareciDegerlendirmeFormu());
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
-                    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
+                    Logger.Information("Kurs ID {0} değerlendirmesi başarıyla kaydedildi.", request.Request.Id);
                     return await Result<int>.SuccessAsync(request.Request.Id);
                 }
-                return await Result<int>.FailAsync("kayıt başarılı değil");
+                return await Result<int>.FailAsync("Kayıt sırasında bir hata oluştu.");
             }
         }
     }
@@ -66,7 +77,7 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/CreateKopekVeKursiyerDegerlendirneFormu", async ([FromBody] KopekVeKursiyerDegerlendirmeFormuRequest model, ISender sender) =>
+            app.MapPost("kopekKurs/CreateKopekVeKursiyerDegerlendirneFormu", async ([FromBody] KopekVeIdareciDegerlendirmeFormuRequest model, ISender sender) =>
             {
                 var request = new CreateKopekVeKursiyerDegerlendirneFormu.Command(model);
                 var response = await sender.Send(request);

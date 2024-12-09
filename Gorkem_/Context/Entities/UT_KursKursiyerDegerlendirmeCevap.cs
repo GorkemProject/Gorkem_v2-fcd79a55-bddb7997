@@ -6,7 +6,7 @@ namespace Gorkem_.Context.Entities
     {
 
         public int KursiyerDegerlendirmeSoruId { get; set; }
-        public virtual KT_KursKursiyerDegerlendirmeSorular? KursiyerDegerlendirmeSoru { get; set; }
+        public virtual KT_KursDegerlendirmeSorular? KursiyerDegerlendirmeSoru { get; set; }
         public int KapaliAlanPuan { get; set; }
         public int AracPuan { get; set; }
         public int TasinabilirEsyaPuan { get; set; }

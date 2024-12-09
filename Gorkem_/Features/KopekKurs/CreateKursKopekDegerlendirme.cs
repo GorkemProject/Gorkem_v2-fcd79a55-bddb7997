@@ -29,17 +29,17 @@ namespace Gorkem_.Features.KopekKurs
             }
         }
 
-        public static UT_KursKopekDegerlendirmeCevap ToKursKopekDegerlendirmeCevap(this Command command)
+        public static UT_KursDegerlendirmeCevap ToKursKopekDegerlendirmeCevap(this Command command)
         {
-            return new UT_KursKopekDegerlendirmeCevap
+            return new UT_KursDegerlendirmeCevap
             {
                 Aktifmi = true,
                 T_Aktif=DateTime.Now,
                 AracPuan=command.Request.AracPuan,
                 KapaliAlanPuan=command.Request.KapaliAlanPuan,
                 TasinabilirEsyaPuan = command.Request.TasinabilirEsyaPuan,
-                KopekDegerlendirmeSoruId = command.Request.KopekDegerlendirmeSoruId,
-                KopekId= command.Request.KopekId,
+                //KopekDegerlendirmeSoruId = command.Request.KopekDegerlendirmeSoruId,
+                //KopekId= command.Request.KopekId,
             };
         }
 
@@ -47,17 +47,17 @@ namespace Gorkem_.Features.KopekKurs
         {
             public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.UT_KursKopekDegerlendirmeCevap.Any(x => x.Id==request.Request.Id);
-                if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı test zaten var");
+                //var isExist = Context.UT_KursKopekDegerlendirmeCevap.Any(x => x.Id==request.Request.Id);
+                //if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı test zaten var");
 
-                Context.UT_KursKopekDegerlendirmeCevap.Add(request.ToKursKopekDegerlendirmeCevap());
-                var isSaved = await Context.SaveChangesAsync() > 0;
-                if (isSaved)
-                {
-                    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
-                    return await Result<int>.SuccessAsync();
+                //Context.UT_KursKopekDegerlendirmeCevap.Add(request.ToKursKopekDegerlendirmeCevap());
+                //var isSaved = await Context.SaveChangesAsync() > 0;
+                //if (isSaved)
+                //{
+                //    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
+                //    return await Result<int>.SuccessAsync();
 
-                }
+                //}
                 return await Result<int>.FailAsync("Kayıt başarılı değil");
 
             }

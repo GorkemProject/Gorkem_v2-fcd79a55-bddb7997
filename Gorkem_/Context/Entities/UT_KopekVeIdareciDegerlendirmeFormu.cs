@@ -15,8 +15,8 @@ namespace Gorkem_.Context.Entities
         public DateTime TarihSaat { get; set; }
         public int KursId { get; set; }
         public virtual UT_Kurs? Kurs { get; set; }
-        public virtual ICollection<UT_KursKopekDegerlendirmeCevap>? KopekDegerlendirmeCevaplar { get; set; }
-        public virtual ICollection<UT_KursKursiyerDegerlendirmeCevap>? KursiyerDegerlendirmeCevaplar { get; set; }
+        public virtual ICollection<UT_KursDegerlendirmeCevap>? KursDegerlendirmeCevaplar { get; set; }
+
 
         public int? KapaliAlanToplamPuan { get; set; }
         public int? AracToplamPuan { get; set; }

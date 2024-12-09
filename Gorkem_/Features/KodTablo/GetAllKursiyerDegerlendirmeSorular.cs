@@ -18,15 +18,15 @@ namespace Gorkem_.Features.KodTablo
         {
             public async Task<Result<List<KursiyerDegerlendirmeSorularGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aktifSorular = await Context.KT_KursKursiyerDegerlendirmeSorular
-                    .Where(b => b.Aktifmi)
-                    .Select(b => new KursiyerDegerlendirmeSorularGetirResponse
-                    {
-                        Id = b.Id,
-                        Name = b.Name
-                    }).ToListAsync(cancellationToken);
+                //var aktifSorular = await Context.KT_KursKursiyerDegerlendirmeSorular
+                //    .Where(b => b.Aktifmi)
+                //    .Select(b => new KursiyerDegerlendirmeSorularGetirResponse
+                //    {
+                //        Id = b.Id,
+                //        Name = b.Name
+                //    }).ToListAsync(cancellationToken);
 
-                return Result<List<KursiyerDegerlendirmeSorularGetirResponse>>.Success(aktifSorular);
+                return Result<List<KursiyerDegerlendirmeSorularGetirResponse>>.Success();
             }
         }
     }

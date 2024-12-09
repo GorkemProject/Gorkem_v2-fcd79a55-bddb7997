@@ -47,16 +47,16 @@ namespace Gorkem_.Features.KopekKurs
         {
             public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.UT_KursKursiyerDegerlendirmeCevap.Any(x => x.Id == request.Request.Id);
-                if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı test zaten var");
+                //var isExist = Context.UT_KursKursiyerDegerlendirmeCevap.Any(x => x.Id == request.Request.Id);
+                //if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı test zaten var");
 
-                Context.UT_KursKursiyerDegerlendirmeCevap.Add(request.ToKursKursiyerDegerlendirmeCevap());
-                var isSaved = await Context.SaveChangesAsync() > 0;
-                if (isSaved)
-                {
-                    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
-                    return await Result<int>.SuccessAsync();
-                }
+                //Context.UT_KursKursiyerDegerlendirmeCevap.Add(request.ToKursKursiyerDegerlendirmeCevap());
+                //var isSaved = await Context.SaveChangesAsync() > 0;
+                //if (isSaved)
+                //{
+                //    Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
+                //    return await Result<int>.SuccessAsync();
+                //}
                 return await Result<int>.FailAsync("Kayıt başarılı değil");
                 
             }

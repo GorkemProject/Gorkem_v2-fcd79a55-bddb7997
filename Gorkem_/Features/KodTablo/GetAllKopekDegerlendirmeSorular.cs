@@ -17,14 +17,14 @@ namespace Gorkem_.Features.KodTablo
         {
             public async Task<Result<List<KopekDegerlendirmeSorularGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var kopekSorular = await Context.KT_KursKopekDegerlendirmeSorular
-                    .Where(a => a.Aktifmi)
-                    .Select(a => new KopekDegerlendirmeSorularGetirResponse
-                    {
-                        Id = a.Id,
-                        Name = a.Name
-                    }).ToListAsync(cancellationToken);
-                return Result<List<KopekDegerlendirmeSorularGetirResponse>>.Success(kopekSorular);
+                //var kopekSorular = await Context.KT_KursKopekDegerlendirmeSorular
+                //    .Where(a => a.Aktifmi)
+                //    .Select(a => new KopekDegerlendirmeSorularGetirResponse
+                //    {
+                //        Id = a.Id,
+                //        Name = a.Name
+                //    }).ToListAsync(cancellationToken);
+                return Result<List<KopekDegerlendirmeSorularGetirResponse>>.Success();
             }
         }
     }
