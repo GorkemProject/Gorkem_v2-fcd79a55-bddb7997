@@ -4,10 +4,7 @@ namespace Gorkem_.Context.Entities
 {
     public class UT_KopekVeIdareciDegerlendirmeFormu :UTBaseEntity
     {
-        //public int KopekId { get; set; }
-        //public virtual UT_IdareciKopekleri? Kopek { get; set; }
-        //public int KursiyerId { get; set; }
-        //public virtual UT_Kursiyer? Kursiyer { get; set; }
+
 
         public int TestinYapildigiIlId { get; set; }
         public virtual KT_GorevYeri? TestinYapildigiIl { get; set; }

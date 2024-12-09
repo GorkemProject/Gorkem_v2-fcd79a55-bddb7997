@@ -8,6 +8,7 @@
         public int AracPuan { get; set; } // Araç kullanımı için puan
         public int TasinabilirEsyaPuan { get; set; } // Taşınabilir eşya kullanımı için puan
         public int DegerlendirmeTuru { get; set; } // 1: Köpek, 2: Kursiyer
-        public int DegerlendirilenVarlikId { get; set; } // Değerlendirilen köpek/kursiyer ID'si
+        public int KursiyerId { get; set; } // Değerlendirilen köpek/kursiyer ID'si
+        public int KursId { get; set; }
     }
 }
