@@ -26,7 +26,17 @@ namespace Gorkem_.Features.KodTablo
                 //        Name = b.Name
                 //    }).ToListAsync(cancellationToken);
 
-                return Result<List<KursiyerDegerlendirmeSorularGetirResponse>>.Success();
+                var kursiyerSorular = await Context.KT_KursDegerlendirmeSorular
+                    .Where(b => b.Aktifmi && b.DegerlendirmeTuru == 2)
+                    .Select(b => new KursiyerDegerlendirmeSorularGetirResponse
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        MaxPuan = b.MaxPuan
+                    }).ToListAsync(cancellationToken);
+                    
+
+                return Result<List<KursiyerDegerlendirmeSorularGetirResponse>>.Success(kursiyerSorular);
             }
         }
     }
