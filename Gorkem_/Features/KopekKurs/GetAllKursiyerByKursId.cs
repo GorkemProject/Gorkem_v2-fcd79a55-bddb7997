@@ -38,9 +38,11 @@ namespace Gorkem_.Features.KopekKurs
                         .Where(e => e.Aktifmi)
                         .Select(e => new KursIdyeGoreKursiyerGetirResponse
                         {
+                            KursiyerId=e.Id,
                             Sicil=e.Sicil,
                             PersonelAdi=e.PersonelAdi,
-                            CipNumarası=e.CipNumarası,
+                            KopekId = e.KopekId,
+                            CipNumarası =e.CipNumarası,
                             KopekName=e.Kopek.KopekAdi,
                             KursAdi=e.Kurs.KursEgitimListesi.Name,
                             KursDonem=e.Kurs.Donem,
