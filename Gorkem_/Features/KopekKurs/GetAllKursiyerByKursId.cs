@@ -71,7 +71,7 @@ namespace Gorkem_.Features.KopekKurs
                 if (response.Succeeded)
                     return Results.Ok(response);
                 return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KODTABLO);
+            }).WithTags(EndpointConstants.KOPEKKURS);
         }
     }
 }

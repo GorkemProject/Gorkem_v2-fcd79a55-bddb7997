@@ -65,7 +65,7 @@ namespace Gorkem_.Features.KopekKurs
                 T_Aktif = DateTime.Now
             }).ToList()
             };
-
+            
 
             Context.UT_KopekVeIdareciDegerlendirmeFormu.Add(cevaplar);
 
