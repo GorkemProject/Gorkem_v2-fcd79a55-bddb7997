@@ -35,7 +35,6 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
             .Include(x => x.Askerlik)
             .Include(x => x.Brans)
             .Include(x => x.Rutbe)
-            .Include(x=>x.Puan)
             
             .AsQueryable();
 
@@ -44,7 +43,6 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
             .Map(dest => dest.KadroIl, src => src.KadroIl.Name)
             .Map(dest => dest.Askerlik, src => src.Askerlik.Name)
             .Map(dest => dest.Brans, src => src.Brans.Name)
-            .Map(dest => dest.Puan, src => src.Puan)
             .Map(dest => dest.Rutbe, src => src.Rutbe.Name);
 
         if (request.Request.Filters.Count >0)
