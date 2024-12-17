@@ -32,7 +32,7 @@ namespace Gorkem_.Features.KopekAtama
                     {
                         KopekId = k.KopekId,
                         IdareciId = k.IdareciId,
-                        IdareciAdi = k.Idareci.AdSoyad,
+                        IdareciAdi = k.Idareci.Idareci.AdSoyad,
                         BirimAdi = k.Birim.Adi, // Birim adını ekliyoruz
                         GoreveBaslamaTarihi = k.T_GoreveBaslama,
                         EvrakAtamaTarihi = k.T_EvrakAtama,

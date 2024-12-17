@@ -15,6 +15,7 @@ namespace Gorkem_.Context
         public DbSet<KT_Irk> KT_Irks { get; set; }
         public DbSet<KT_Cins> KT_Cinss { get; set; }
         public DbSet<UT_Kopek> UT_Kopek_Kopeks { get; set; }
+        public DbSet<UT_AdayIdareci> UT_AdayIdareci { get; set; }
         public DbSet<UT_Idareci> UT_Idarecis { get; set; }
         public DbSet<UT_IdareciKopekleri> UT_IdareciKopekleri { get; set; }
         public DbSet<KT_Askerlik> KT_Askerliks { get; set; }
@@ -46,6 +47,8 @@ namespace Gorkem_.Context
         public DbSet<KT_KursDegerlendirmeSorular> KT_KursDegerlendirmeSorular { get; set; }
         public DbSet<UT_KursDegerlendirmeCevap> UT_KursDegerlendirmeCevap { get; set; }
         public DbSet<UT_KopekVeIdareciDegerlendirmeFormu> UT_KopekVeIdareciDegerlendirmeFormu { get; set; }
+
+        public DbSet<UT_KopekKuvveDetay> UT_KopekKuvveDetays { get; set; }
 
         //public DbSet<KT_KursKopekDegerlendirmeSorular> KT_KursKopekDegerlendirmeSorular { get; set; }
         //public DbSet<UT_KursKopekDegerlendirmeCevap> UT_KursKopekDegerlendirmeCevap { get; set; }

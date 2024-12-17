@@ -39,7 +39,6 @@ namespace Gorkem_.Features.Kopek
                 RuleFor(r => r.Request.KopekAdi).NotEmpty().NotNull().WithMessage("Köpek ismi boş olamaz");
                 RuleFor(r => r.Request.IrkId).NotEmpty().NotNull().WithMessage("Irk Değeri Boş Olamaz");
                 RuleFor(r => r.Request.KadroIlId).NotEmpty().NotNull().WithMessage("Birim Değeri Boş Olamaz");
-                RuleFor(r => r.Request.BransId).NotEmpty().NotNull().WithMessage("Branş Değeri Boş Olamaz");
                 RuleFor(r => r.Request.CipNumarasi).NotEmpty().NotNull().WithMessage("Çip Numarası Değeri Boş Olamaz");
                 RuleFor(r => r.Request.DogumTarihi).NotEmpty().NotNull().WithMessage("Doğum Tarihi Değeri Boş Olamaz");
                 RuleFor(r => r.Request.YapilanIslem).NotEmpty().NotNull().WithMessage("Yapılan işlem Değeri Boş Olamaz");
@@ -67,7 +66,6 @@ namespace Gorkem_.Features.Kopek
                 KopekAdi = command.Request.KopekAdi,
                 IrkId = command.Request.IrkId,
                 KadroIlId = command.Request.KadroIlId,
-                BransId = command.Request.BransId,
                 CipNumarasi = command.Request.CipNumarasi,
                 DogumTarihi = command.Request.DogumTarihi,
                 YapilanIslem = command.Request.YapilanIslem,

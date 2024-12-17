@@ -19,6 +19,7 @@
         public string? Askerlik { get; set; }
         public List<string>? OgrenimDurumlari { get; set; }
         public List<string>? YabanciDiller { get; set; }
+        public int Puan { get; set; }
 
     }
 }

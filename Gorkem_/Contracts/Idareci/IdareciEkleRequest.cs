@@ -1,4 +1,6 @@
-﻿using Gorkem_.Context.Entities;
+﻿using System.Reflection.Metadata.Ecma335;
+using Gorkem_.Context.Entities;
+using Gorkem_.Enums;
 
 namespace Gorkem_.Contracts.Idareci
 {
@@ -13,6 +15,12 @@ namespace Gorkem_.Contracts.Idareci
         public int BransId { get; set; } 
         public int RutbeId { get; set; } 
         public int AskerlikId { get; set; }
-      
+        public int OgrenimDurumuId { get; set; }
+        public int YabanciDilId { get; set; }
+        public int Puan { get; set; }
+        public Enum_AdayPersonelDurum PersonelDurum  { get; set; }
+        public int TestiYapanId { get; set; }
+        public DateTime TestTarihi { get; set; }
+
     }
 }

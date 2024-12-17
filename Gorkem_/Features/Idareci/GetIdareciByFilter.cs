@@ -30,18 +30,21 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
 
     public async Task<Result<IdareciFilterResponse>> Handle(GetIdareciByFilterQuery request, CancellationToken cancellationToken)
     {
-        var query = context.UT_Idarecis
+        var query = context.UT_AdayIdareci
             .Include(x => x.KadroIl)
             .Include(x => x.Askerlik)
             .Include(x => x.Brans)
             .Include(x => x.Rutbe)
+            .Include(x=>x.Puan)
+            
             .AsQueryable();
 
-        TypeAdapterConfig<UT_Idareci, IdareciGetirFilterResponse>
+        TypeAdapterConfig<UT_AdayIdareci, IdareciGetirFilterResponse>
             .NewConfig()
             .Map(dest => dest.KadroIl, src => src.KadroIl.Name)
             .Map(dest => dest.Askerlik, src => src.Askerlik.Name)
             .Map(dest => dest.Brans, src => src.Brans.Name)
+            .Map(dest => dest.Puan, src => src.Puan)
             .Map(dest => dest.Rutbe, src => src.Rutbe.Name);
 
         if (request.Request.Filters.Count >0)
@@ -52,13 +55,13 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
         if (request.Request.SortedColumn != "")
         {
             var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending";
-            var param = Expression.Parameter(typeof(UT_Idareci), "x");
+            var param = Expression.Parameter(typeof(UT_AdayIdareci), "x");
             var property = Expression.Property(param, request.Request.SortedColumn);
             var lambda = Expression.Lambda(property, param);
-            var exp = Expression.Call(typeof(Queryable), direction, new Type[] { typeof(UT_Idareci), property.Type }, query.Expression, Expression.Quote(lambda));
+            var exp = Expression.Call(typeof(Queryable), direction, new Type[] { typeof(UT_AdayIdareci), property.Type }, query.Expression, Expression.Quote(lambda));
         }
 
-        var paged = PagedResult<UT_Idareci>.ToPagedResponse(query, request.Request.PageNumber, 10);
+        var paged = PagedResult<UT_AdayIdareci>.ToPagedResponse(query, request.Request.PageNumber, 10);
         var mappedItems = paged.Items.Adapt<List<IdareciGetirFilterResponse>>();
 
         var columnValues = GorkemReturning.GetUniqueValues(query, "Brans","Rutbe");

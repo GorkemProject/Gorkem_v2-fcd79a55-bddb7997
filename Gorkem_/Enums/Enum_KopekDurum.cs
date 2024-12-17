@@ -7,7 +7,7 @@
         SecimTestiRed=3,
         KursHazirlik=4,
         Kurs=5,
-        
+        KopekKuvve=6
 
     }
 }

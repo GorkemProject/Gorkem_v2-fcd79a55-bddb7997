@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.Idareci
 {
-    public record CreateIdareciCommand(IdareciEkleRequest Idareci) : IRequest<Result<bool>>;
+    public record CreateAdayIdareciCommand(IdareciEkleRequest Idareci) : IRequest<Result<bool>>;
 
-    internal sealed class CreateIdareciCommandHandler : IRequestHandler<CreateIdareciCommand, Result<bool>>
+    internal sealed class CreateIdareciCommandHandler : IRequestHandler<CreateAdayIdareciCommand, Result<bool>>
     {
         private readonly GorkemDbContext context;
 
@@ -22,14 +22,14 @@ namespace Gorkem_.Features.Idareci
             this.context = context;
         }
 
-        public async Task<Result<bool>> Handle(CreateIdareciCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(CreateAdayIdareciCommand request, CancellationToken cancellationToken)
         {
-            bool isExists = await context.UT_Idarecis.AnyAsync(x => x.Sicil.Equals(request.Idareci.Sicil));
+            bool isExists = await context.UT_AdayIdareci.AnyAsync(x => x.Sicil.Equals(request.Idareci.Sicil));
 
             if (isExists)
                 return await Result<bool>.FailAsync("Bu sicilde idareci zaten kayıtlı");
 
-            UT_Idareci idareci = new UT_Idareci()
+            UT_AdayIdareci idareci = new UT_AdayIdareci()
             {
                 AdSoyad = request.Idareci.AdSoyad,
             
@@ -44,8 +44,14 @@ namespace Gorkem_.Features.Idareci
                 RutbeId = request.Idareci.RutbeId,
                 Sicil = request.Idareci.Sicil, 
                 T_Aktif = DateTime.Now,
+                Puan=request.Idareci.Puan,
+                TestiYapanId=request.Idareci.TestiYapanId,
+                TestTarihi= request.Idareci.TestTarihi,
+                Durum = request.Idareci.PersonelDurum,
+                
+                
             };
-            await context.UT_Idarecis.AddAsync(idareci);
+            await context.UT_AdayIdareci.AddAsync(idareci);
             int result = await context.SaveChangesAsync();
             
             if (result > 0)
@@ -55,13 +61,13 @@ namespace Gorkem_.Features.Idareci
         }
     }
 
-    public class CreateIdareciEndPoint : ICarterModule
+    public class CreateAdayIdareciEndPoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("idareci/createIdareci", async ([FromBody] IdareciEkleRequest request, ISender sender) =>
+            app.MapPost("idareci/createAdayIdareci", async ([FromBody] IdareciEkleRequest request, ISender sender) =>
             {
-                var response = await sender.Send(new CreateIdareciCommand(request));
+                var response = await sender.Send(new CreateAdayIdareciCommand(request));
 
                 if (response.Succeeded)
                     return Results.Ok(response);
@@ -72,7 +78,7 @@ namespace Gorkem_.Features.Idareci
         }
     }
 
-    public class CreateIdareciCommandValidator : AbstractValidator<CreateIdareciCommand>
+    public class CreateIdareciCommandValidator : AbstractValidator<CreateAdayIdareciCommand>
     {
         public CreateIdareciCommandValidator()
         {
