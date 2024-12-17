@@ -27,6 +27,7 @@ namespace Gorkem_.Features.KopekKurs
                     .Include(a=>a.Rutbe)
                     .Select(a => new KursEgitmenGetirResponse
                     {
+                        Id=a.Id,
                         AdSoyad=a.AdSoyad,
                         BirimId=a.BirimId,
                         Birim=a.Birim.Adi,
