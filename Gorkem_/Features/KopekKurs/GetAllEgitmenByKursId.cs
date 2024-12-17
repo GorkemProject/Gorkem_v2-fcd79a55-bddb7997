@@ -11,7 +11,7 @@ namespace Gorkem_.Features.KopekKurs
     public static class GetAllEgitmenByKursId
     {
 
-        public class Query : IRequest<Result<List<KursIdyeGoreKursEgitmenGetirResponse>>>
+        public class Query : IRequest<Result<List<KursEgitmenGetirResponse>>>
         {
             public int KursId { get; set; }
             public Query(int kursId)
@@ -20,7 +20,7 @@ namespace Gorkem_.Features.KopekKurs
             }
         }
 
-        internal sealed class Handler : IRequestHandler<Query, Result<List<KursIdyeGoreKursEgitmenGetirResponse>>>
+        internal sealed class Handler : IRequestHandler<Query, Result<List<KursEgitmenGetirResponse>>>
         {
             private readonly GorkemDbContext _context;
 
@@ -29,27 +29,30 @@ namespace Gorkem_.Features.KopekKurs
                 _context = context;
             }
 
-            public async Task<Result<List<KursIdyeGoreKursEgitmenGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<KursEgitmenGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var kursEgitmenler = await _context.UT_Kurs
                     .Where(k => k.Id == request.KursId && k.Aktifmi)
                     .SelectMany(k => k.KursEgitmenler
                     .Where(e => e.Aktifmi)
-                    .Select(e => new KursIdyeGoreKursEgitmenGetirResponse
+                    .Select(e => new KursEgitmenGetirResponse
                     {
-                        EgitmenId = e.Id,
-                        EgitmenAdi = e.AdSoyad,
-                        BirimAdi = e.Birim.KadroAdi,
-                        RutbeAdi = e.Rutbe.Name
+                        Id = e.Id,
+                        AdSoyad = e.AdSoyad,    
+                        BirimId = e.BirimId,
+                        Birim=e.Birim.Adi,
+                        RutbeId= e.RutbeId,
+                        Rutbe=e.Rutbe.Name,
+                        Sicil = e.Sicil 
 
                     })).ToListAsync(cancellationToken);
 
                 if (kursEgitmenler == null)
                 {
-                    return Result<List<KursIdyeGoreKursEgitmenGetirResponse>>.Fail("Bu kursa ait eğitmen bulunamadı..");
+                    return Result<List<KursEgitmenGetirResponse>>.Fail("Bu kursa ait eğitmen bulunamadı..");
 
                 }
-                return Result<List<KursIdyeGoreKursEgitmenGetirResponse>>.Success(kursEgitmenler);
+                return Result<List<KursEgitmenGetirResponse>>.Success(kursEgitmenler);
             }
         }
     }
