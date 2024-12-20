@@ -37,35 +37,16 @@ namespace Gorkem_.Features.KopekKurs
                     .Include(a => a.Kurs.KursEgitmenler)
                     .Include(a => a.Kurs.Kursiyerler.Where(a=>a.Aktifmi))
                         .ThenInclude(a=>a.Kopek)
-                    .Select(k => new KursunHaftalikRaporlariniGetirResponse
+                    .GroupBy(k => k.Hafta.ToString()) 
+                    .Select(group => new KursunHaftalikRaporlariniGetirResponse
                     {
-                        EgitimProgramiAdi = k.Kurs.KursEgitimListesi.Name,
-                        KursDonemi = k.Kurs.Donem,
-                        KursEgitmenler = k.Kurs.KursEgitmenler.Select(a => new KursEgitmenResponse
+                        Hafta = group.Key, 
+                        Gozlemler = group.Select(y => new HaftalıkRaporGozlemResponse
                         {
-                            EgitmenAdi = a.AdSoyad,
-                            EgitmenId = a.Id,
-                        }).ToList(),
-                       
-                        KursiyerSayisi = k.Kurs.Kursiyerler.Count(),
-                        KursBaslangicTarih=k.Kurs.T_KursBaslangic,
-                        KursBitisTarih=k.Kurs.T_KursBitis,
-                        GozlemAdi=k.Gozlemler,
-                        GozlemId=k.Id,
-                        Kursiyer=k.Kursiyer.PersonelAdi,
-                        KursiyerId=k.KursiyerId,
-                        KopekAdi=k.Kursiyer.Kopek.KopekAdi,
-                        KopekId=k.Kursiyer.KopekId,
-                        //GozlemResponse=k.HaftalıkDegerlendirmeRaporuGozlemler.Select(a=> new HaftalikRaporGozlemResponse
-                        //{
-                        //    GozlemAdi=a.Gozlemler,
-                        //    GozlemId=a.Id,
-                        //    Kursiyer=a.Kursiyer.PersonelAdi,
-                        //    KursiyerId=a.Kursiyer.Id,
-                        //    KopekId=a.Kursiyer.Kopek.Id,
-                        //    KopekAdi=a.Kursiyer.Kopek.KopekAdi
-                            
-                        //}).ToList(),
+                            KursiyerAdi = y.Kursiyer.PersonelAdi,
+                            KopekAdi = y.Kursiyer.Kopek.KopekAdi,
+                            Gozlem = y.Gozlemler
+                        }).ToList()
                     }).ToListAsync();
                 
                 if (haftalikRaporlar == null)
