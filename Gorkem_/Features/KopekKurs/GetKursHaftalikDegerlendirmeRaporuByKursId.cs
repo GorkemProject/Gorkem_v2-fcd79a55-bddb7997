@@ -31,43 +31,35 @@ namespace Gorkem_.Features.KopekKurs
             public async Task<Result<List<KursunHaftalikRaporlariniGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var haftalikRaporlar = await _context.UT_HaftalıkDegerlendirmeRaporuGozlemlers
-                    .Where(a => a.Aktifmi && a.KursId == request.KursId)
-                    .Include(a => a.Kurs)
-                        .ThenInclude(a => a.KursEgitimListesi)
-                    .Include(a => a.Kurs.KursEgitmenler)
-                    .Include(a => a.Kurs.Kursiyerler.Where(a=>a.Aktifmi))
-                        .ThenInclude(a=>a.Kopek)
-                    .Select(k => new KursunHaftalikRaporlariniGetirResponse
-                    {
-                        EgitimProgramiAdi = k.Kurs.KursEgitimListesi.Name,
-                        KursDonemi = k.Kurs.Donem,
-                        KursEgitmenler = k.Kurs.KursEgitmenler.Select(a => new KursEgitmenResponse
+                        .Where(a => a.Aktifmi && a.KursId == request.KursId)
+                        .Include(a => a.Kurs)
+                            .ThenInclude(a => a.KursEgitimListesi)
+                        .Include(a => a.Kurs.KursEgitmenler)
+                        .Include(a => a.Kurs.Kursiyerler.Where(a => a.Aktifmi))
+                            .ThenInclude(a => a.Kopek)
+                        .GroupBy(a => a.Hafta)
+                        .Select(grup => new KursunHaftalikRaporlariniGetirResponse
                         {
-                            EgitmenAdi = a.AdSoyad,
-                            EgitmenId = a.Id,
-                        }).ToList(),
-                       
-                        KursiyerSayisi = k.Kurs.Kursiyerler.Count(),
-                        KursBaslangicTarih=k.Kurs.T_KursBaslangic,
-                        KursBitisTarih=k.Kurs.T_KursBitis,
-                        GozlemAdi=k.Gozlemler,
-                        GozlemId=k.Id,
-                        Kursiyer=k.Kursiyer.PersonelAdi,
-                        KursiyerId=k.KursiyerId,
-                        KopekAdi=k.Kursiyer.Kopek.KopekAdi,
-                        KopekId=k.Kursiyer.KopekId,
-                        //GozlemResponse=k.HaftalıkDegerlendirmeRaporuGozlemler.Select(a=> new HaftalikRaporGozlemResponse
-                        //{
-                        //    GozlemAdi=a.Gozlemler,
-                        //    GozlemId=a.Id,
-                        //    Kursiyer=a.Kursiyer.PersonelAdi,
-                        //    KursiyerId=a.Kursiyer.Id,
-                        //    KopekId=a.Kursiyer.Kopek.Id,
-                        //    KopekAdi=a.Kursiyer.Kopek.KopekAdi
-                            
-                        //}).ToList(),
-                    }).ToListAsync();
-                
+                            EgitimProgramiAdi = grup.First().Kurs.KursEgitimListesi.Name,
+                            KursBaslangicTarih = grup.First().Kurs.T_KursBaslangic,
+                            KursBitisTarih = grup.First().Kurs.T_KursBitis,
+                            KursEgitmenler = grup.First().Kurs.KursEgitmenler.Select(e => new KursEgitmenResponse
+                            {
+                                EgitmenAdi = e.AdSoyad,
+                                EgitmenId = e.Id
+                            }).ToList(),
+                            KursiyerSayisi = grup.First().Kurs.Kursiyerler.Count(),
+                            KursDonemi = grup.First().Kurs.Donem,
+                            Hafta = grup.Key,
+                            GozlemResponse = grup.Select(gozlem => new HaftalikRaporGozlemResponse
+                            {
+                                PersonelAdi = gozlem.Kursiyer.PersonelAdi,
+                                KopekAdi = gozlem.Kursiyer.Kopek.KopekAdi,
+                                Gozlem = gozlem.Gozlemler
+                            }).ToList()
+
+                        }).ToListAsync();
+
                 if (haftalikRaporlar == null)
                 {
                     return Result<List<KursunHaftalikRaporlariniGetirResponse>>.Fail("Kursa ait bir haftalık rapor bulunamadı..");
