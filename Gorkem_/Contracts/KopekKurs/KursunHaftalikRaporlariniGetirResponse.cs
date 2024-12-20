@@ -8,7 +8,14 @@
         public int KursiyerSayisi { get; set; }
         public DateTime? KursBaslangicTarih { get; set; }
         public  DateTime? KursBitisTarih { get; set; }
-        public List<HaftalikRaporGozlemResponse> GozlemResponse { get; set; }
+
+        public int KursiyerId { get; set; }
+        public string? Kursiyer { get; set; }
+        public int GozlemId { get; set; }
+        public string? GozlemAdi { get; set; }
+        public int KopekId { get; set; }
+        public string KopekAdi { get; set; }
+
 
     }
 }

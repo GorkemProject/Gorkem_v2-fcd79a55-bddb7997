@@ -40,7 +40,7 @@ namespace Gorkem_.Features.KopekKurs
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
-                    .Include(a => a.Kurs.Kursiyerler)
+                    .Include(a => a.Kurs.Kursiyerler)                    
                     .Include(a => a.KursGunlukRaporDersler)
                         .ThenInclude(b => b.Ders)
                     .Skip((request.PageNumber - 1) * request.PageSize)
@@ -58,7 +58,9 @@ namespace Gorkem_.Features.KopekKurs
                             EgitmenAdi = a.AdSoyad,
                             EgitmenId = a.Id
                         }).ToList(),
-                        KursKursiyer = k.Kurs.Kursiyerler.Select(a => new KursKursiyerResponse
+                        KursKursiyer = k.Kurs.Kursiyerler
+                        .Where(a => k.Aktifmi)
+                        .Select(a => new KursKursiyerResponse
                         {
                             KursiyerAdi = a.PersonelAdi,
                             KursiyerId = a.Id

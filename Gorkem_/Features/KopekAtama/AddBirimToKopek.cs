@@ -58,17 +58,7 @@ namespace Gorkem_.Features.KopekAtama
                     return await Result<bool>.FailAsync("Seçilen birim bulunamadı");
                 }
 
-                ////İdareci bulduk (idareciyi idareci köpekleri tablosundan aldığım için bu koda gerek yok)
-                //var idareci = await _context.UT_Idarecis
-                //    .FirstOrDefaultAsync(k => k.Id == request.Request.IdareciId);
 
-                //if (idareci == null)
-                //{
-                //    return await Result<bool>.FailAsync("Seçilen idareci bulunamadı");
-
-                //}
-
-                //idareci kopekleri tablosundan köpeğin idarecisini aldık
                 var idareciKopekleri = await _context.UT_IdareciKopekleri
                     .FirstOrDefaultAsync(k => k.KopekId == request.Request.KopekId && k.Aktifmi);
                 

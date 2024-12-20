@@ -45,7 +45,7 @@ namespace Gorkem_.Features.KopekKurs
                 var kopekVeKursiyerDegerlendirme = await _context.UT_KursDegerlendirmeCevap
                     .Include(c => c.Kursiyer)
                         
-                    .Where(a => a.KursId == request.KursId && a.Aktifmi)
+                    .Where(a => a.KursId == request.KursId && a.Aktifmi && a.Kursiyer.Aktifmi)
                     .GroupBy(a => a.Kursiyer) // Kursiyer bazında gruplama
                     .Select(g => new KursiyerKopekDegerlendirmeResponse
                     {

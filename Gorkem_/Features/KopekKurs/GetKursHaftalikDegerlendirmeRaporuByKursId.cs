@@ -35,7 +35,7 @@ namespace Gorkem_.Features.KopekKurs
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
-                    .Include(a => a.Kurs.Kursiyerler)
+                    .Include(a => a.Kurs.Kursiyerler.Where(a=>a.Aktifmi))
                         .ThenInclude(a=>a.Kopek)
                     .Select(k => new KursunHaftalikRaporlariniGetirResponse
                     {
@@ -50,6 +50,12 @@ namespace Gorkem_.Features.KopekKurs
                         KursiyerSayisi = k.Kurs.Kursiyerler.Count(),
                         KursBaslangicTarih=k.Kurs.T_KursBaslangic,
                         KursBitisTarih=k.Kurs.T_KursBitis,
+                        GozlemAdi=k.Gozlemler,
+                        GozlemId=k.Id,
+                        Kursiyer=k.Kursiyer.PersonelAdi,
+                        KursiyerId=k.KursiyerId,
+                        KopekAdi=k.Kursiyer.Kopek.KopekAdi,
+                        KopekId=k.Kursiyer.KopekId,
                         //GozlemResponse=k.HaftalıkDegerlendirmeRaporuGozlemler.Select(a=> new HaftalikRaporGozlemResponse
                         //{
                         //    GozlemAdi=a.Gozlemler,
