@@ -30,8 +30,8 @@ namespace Gorkem_.Context.Entities
         public List<KT_YabanciDil>? YabanciDil { get; set; } = new();
         public int Puan { get; set; }
         public Enum_AdayPersonelDurum Durum { get; set; }
-        public virtual UT_KursEgitmenler TestiYapan { get; set; }
-        public int TestiYapanId { get; set; }
+        
+        public int TestiYapanSicil { get; set; }
         public DateTime TestTarihi { get; set; }
 
 

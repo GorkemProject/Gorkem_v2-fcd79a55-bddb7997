@@ -45,7 +45,7 @@ namespace Gorkem_.Features.Idareci
                 Sicil = request.Idareci.Sicil, 
                 T_Aktif = DateTime.Now,
                 Puan=request.Idareci.Puan,
-                TestiYapanId=request.Idareci.TestiYapanId,
+                TestiYapanSicil=request.Idareci.TestiYapanSicil,
                 TestTarihi= request.Idareci.TestTarihi,
                 Durum = request.Idareci.PersonelDurum,
                 

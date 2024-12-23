@@ -19,7 +19,7 @@ namespace Gorkem_.Contracts.Idareci
         public int YabanciDilId { get; set; }
         public int Puan { get; set; }
         public Enum_AdayPersonelDurum PersonelDurum  { get; set; }
-        public int TestiYapanId { get; set; }
+        public int TestiYapanSicil { get; set; }
         public DateTime TestTarihi { get; set; }
 
     }
