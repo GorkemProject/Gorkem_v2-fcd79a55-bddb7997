@@ -35,6 +35,10 @@ namespace Gorkem_.Features.KopekKurs
 
             public async Task<Result<List<KursunKursGunlukRaporlariniGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var kursiyerList = await _context.UT_Kursiyer
+                .Where(x=>x.Aktifmi && x.KursId.Equals(request.KursId))
+                .ToListAsync(cancellationToken);
+
                 var gunlukRaporlar = await _context.UT_KursGunlukRapors
                     .Where(a => a.Aktifmi && a.KursId == request.KursId)
                     .Include(a => a.Kurs)
@@ -58,8 +62,7 @@ namespace Gorkem_.Features.KopekKurs
                             EgitmenAdi = a.AdSoyad,
                             EgitmenId = a.Id
                         }).ToList(),
-                        KursKursiyer = k.Kurs.Kursiyerler
-                        .Where(a => k.Aktifmi)
+                        KursKursiyer = kursiyerList
                         .Select(a => new KursKursiyerResponse
                         {
                             KursiyerAdi = a.PersonelAdi,
