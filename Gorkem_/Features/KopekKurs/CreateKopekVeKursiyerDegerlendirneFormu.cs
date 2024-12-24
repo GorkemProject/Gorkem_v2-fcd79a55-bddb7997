@@ -36,6 +36,8 @@ namespace Gorkem_.Features.KopekKurs
     {
         public async Task<Result<int>> Handle(KursiyerKopekDegerlendirmeEkleCommand request, CancellationToken cancellationToken)
         {
+
+
             var isExist = Context.UT_KopekVeIdareciDegerlendirmeFormu
                 .Any(r => r.Id == request.Request.Id);
             if (isExist) return await Result<int>.FailAsync("Bu kurs ve tarihe ait bir değerlendirme zaten mevcut.");
@@ -65,7 +67,9 @@ namespace Gorkem_.Features.KopekKurs
                 T_Aktif = DateTime.Now
             }).ToList()
             };
-            
+
+         
+
 
             Context.UT_KopekVeIdareciDegerlendirmeFormu.Add(cevaplar);
 

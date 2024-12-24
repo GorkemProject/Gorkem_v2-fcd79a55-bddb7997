@@ -13,6 +13,8 @@
         public int KursId { get; set; }
         public virtual UT_Kurs Kurs { get; set; }
 
+        public int KopekToplamPuan { get; set; }
+        public int KursiyerToplamPuan { get; set; }
 
 
     }
