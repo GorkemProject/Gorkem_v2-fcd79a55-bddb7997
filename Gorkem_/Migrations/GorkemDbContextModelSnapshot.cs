@@ -45,7 +45,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Askerliks");
+                    b.ToTable("KT_Askerliks", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Birim", b =>
@@ -145,7 +145,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Birims");
+                    b.ToTable("KT_Birims", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Brans", b =>
@@ -171,7 +171,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Branss");
+                    b.ToTable("KT_Branss", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Cins", b =>
@@ -197,7 +197,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Cinss");
+                    b.ToTable("KT_Cinss", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_GorevYeri", b =>
@@ -223,7 +223,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_GorevYeris");
+                    b.ToTable("KT_GorevYeris", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_IdareciDurum", b =>
@@ -249,7 +249,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_IdareciDurum");
+                    b.ToTable("KT_IdareciDurum", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Irk", b =>
@@ -275,7 +275,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Irks");
+                    b.ToTable("KT_Irks", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KadroIl", b =>
@@ -301,7 +301,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_KadroIls");
+                    b.ToTable("KT_KadroIls", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Karar", b =>
@@ -330,7 +330,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Karars");
+                    b.ToTable("KT_Karars", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KopekDurumu", b =>
@@ -356,7 +356,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_KopekDurumus");
+                    b.ToTable("KT_KopekDurumus", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KursDegerlendirmeSorular", b =>
@@ -388,7 +388,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_KursDegerlendirmeSorular");
+                    b.ToTable("KT_KursDegerlendirmeSorular", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KursEgitimListesi", b =>
@@ -414,7 +414,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_KursEgitimListesis");
+                    b.ToTable("KT_KursEgitimListesis", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KursMufredat", b =>
@@ -445,7 +445,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KursEgitimListesiId");
 
-                    b.ToTable("KT_KursMufredats");
+                    b.ToTable("KT_KursMufredats", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_OgrenimDurumu", b =>
@@ -476,7 +476,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("UT_AdayIdareciId");
 
-                    b.ToTable("KT_OgrenimDurumus");
+                    b.ToTable("KT_OgrenimDurumus", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Rutbe", b =>
@@ -502,7 +502,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_Rutbes");
+                    b.ToTable("KT_Rutbes", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_SecimTest", b =>
@@ -528,7 +528,7 @@ namespace Gorkem_.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("KT_SecimTests");
+                    b.ToTable("KT_SecimTests", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_Soru", b =>
@@ -562,7 +562,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("SecimTestId");
 
-                    b.ToTable("KT_Sorus");
+                    b.ToTable("KT_Sorus", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_YabanciDil", b =>
@@ -593,7 +593,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("UT_AdayIdareciId");
 
-                    b.ToTable("KT_YabanciDils");
+                    b.ToTable("KT_YabanciDils", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_AdayIdareci", b =>
@@ -666,7 +666,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("RutbeId");
 
-                    b.ToTable("UT_AdayIdareci");
+                    b.ToTable("UT_AdayIdareci", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_HaftalıkDegerlendirmeRaporuGozlemler", b =>
@@ -704,7 +704,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KursiyerId");
 
-                    b.ToTable("UT_HaftalıkDegerlendirmeRaporuGozlemlers");
+                    b.ToTable("UT_HaftalıkDegerlendirmeRaporuGozlemlers", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
@@ -737,7 +737,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("IdareciId");
 
-                    b.ToTable("UT_Idarecis");
+                    b.ToTable("UT_Idarecis", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_IdareciKopekleri", b =>
@@ -769,7 +769,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KopekId");
 
-                    b.ToTable("UT_IdareciKopekleri");
+                    b.ToTable("UT_IdareciKopekleri", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Komisyon", b =>
@@ -802,7 +802,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("GorevYeriId");
 
-                    b.ToTable("UT_Komisyons");
+                    b.ToTable("UT_Komisyons", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KomisyonUyeleri", b =>
@@ -847,7 +847,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("GorevYeriId");
 
-                    b.ToTable("UT_KomisyonUyeleris");
+                    b.ToTable("UT_KomisyonUyeleris", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>
@@ -944,7 +944,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KararId");
 
-                    b.ToTable("UT_Kopek_Kopeks");
+                    b.ToTable("UT_Kopek_Kopeks", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekCalKad", b =>
@@ -996,7 +996,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KopekId");
 
-                    b.ToTable("UT_KopekCalKads");
+                    b.ToTable("UT_KopekCalKads", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekDurumHistory", b =>
@@ -1026,7 +1026,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KopekId");
 
-                    b.ToTable("UT_KopekDurumHistory");
+                    b.ToTable("UT_KopekDurumHistory", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekKuvveDetay", b =>
@@ -1062,7 +1062,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KopekId");
 
-                    b.ToTable("UT_KopekKuvveDetays");
+                    b.ToTable("UT_KopekKuvveDetays", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KopekVeIdareciDegerlendirmeFormu", b =>
@@ -1100,7 +1100,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("TestinYapildigiIlId");
 
-                    b.ToTable("UT_KopekVeIdareciDegerlendirmeFormu");
+                    b.ToTable("UT_KopekVeIdareciDegerlendirmeFormu", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kurs", b =>
@@ -1141,7 +1141,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KursYeriId");
 
-                    b.ToTable("UT_Kurs");
+                    b.ToTable("UT_Kurs", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursDegerlendirmeCevap", b =>
@@ -1193,7 +1193,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("UT_KopekVeIdareciDegerlendirmeFormuId");
 
-                    b.ToTable("UT_KursDegerlendirmeCevap");
+                    b.ToTable("UT_KursDegerlendirmeCevap", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursEgitmenler", b =>
@@ -1231,7 +1231,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("RutbeId");
 
-                    b.ToTable("UT_KursEgitmenler");
+                    b.ToTable("UT_KursEgitmenler", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursGunlukRapor", b =>
@@ -1265,7 +1265,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KursId");
 
-                    b.ToTable("UT_KursGunlukRapors");
+                    b.ToTable("UT_KursGunlukRapors", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_KursGunlukRaporDersler", b =>
@@ -1297,7 +1297,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KursGunlukRaporId");
 
-                    b.ToTable("UT_KursGunlukRaporDersler");
+                    b.ToTable("UT_KursGunlukRaporDersler", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kursiyer", b =>
@@ -1344,7 +1344,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KursId");
 
-                    b.ToTable("UT_Kursiyer");
+                    b.ToTable("UT_Kursiyer", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_SecimTest", b =>
@@ -1405,7 +1405,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("SinavYeriId");
 
-                    b.ToTable("UT_SecimTests");
+                    b.ToTable("UT_SecimTests", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_SecimTestiCevap", b =>
@@ -1440,7 +1440,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("UtSecimTestId");
 
-                    b.ToTable("UT_SecimTestiCevaplar");
+                    b.ToTable("UT_SecimTestiCevaplar", (string)null);
                 });
 
             modelBuilder.Entity("UT_KomisyonUT_KomisyonUyeleri", b =>
@@ -1455,7 +1455,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KomisyonUyeleriId");
 
-                    b.ToTable("UT_KomisyonUT_KomisyonUyeleri");
+                    b.ToTable("UT_KomisyonUT_KomisyonUyeleri", (string)null);
                 });
 
             modelBuilder.Entity("UT_KursUT_KursEgitmenler", b =>
@@ -1470,7 +1470,7 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("KurslarId");
 
-                    b.ToTable("UT_KursUT_KursEgitmenler");
+                    b.ToTable("UT_KursUT_KursEgitmenler", (string)null);
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.KT_KursMufredat", b =>

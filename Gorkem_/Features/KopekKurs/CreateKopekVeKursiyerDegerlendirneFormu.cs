@@ -1,4 +1,5 @@
-﻿using AspNetCoreHero.Results;
+﻿
+using AspNetCoreHero.Results;
 using Carter;
 using FluentValidation;
 using Gorkem_.Context;
@@ -36,24 +37,45 @@ namespace Gorkem_.Features.KopekKurs
     {
         public async Task<Result<int>> Handle(KursiyerKopekDegerlendirmeEkleCommand request, CancellationToken cancellationToken)
         {
-
-
             var isExist = Context.UT_KopekVeIdareciDegerlendirmeFormu
                 .Any(r => r.Id == request.Request.Id);
             if (isExist) return await Result<int>.FailAsync("Bu kurs ve tarihe ait bir değerlendirme zaten mevcut.");
 
+ 
+
+            var toplamKopekPuan = 0;
+            var toplamKursiyerPuan = 0;
+            int kursiyerId = 0;
+
+            foreach (var cevap in request.Request.KursDegerlendirmeCevaplar)
+            {
+                // Köpek için puanları toplama
+                if (cevap.DegerlendirmeTuru == 1)
+                {
+                    toplamKopekPuan += (cevap.KapaliAlanPuan + cevap.AracPuan + cevap.TasinabilirEsyaPuan)/3;
+                }
+
+                // Kursiyer için puanları toplama ve kursiyer ID'sini alma
+                if (cevap.DegerlendirmeTuru == 2)
+                {
+                    toplamKursiyerPuan += (cevap.KapaliAlanPuan + cevap.AracPuan + cevap.TasinabilirEsyaPuan)/3;
+                    kursiyerId = cevap.KursiyerId;  // Kursiyer ID'sini alıyoruz
+                }
+            }
 
 
-            var cevaplar = 
-            
-                new UT_KopekVeIdareciDegerlendirmeFormu   {
-                Aktifmi = true,
-                T_Aktif = DateTime.Now,
-                KursId = request.Request.KursId,
-                TarihSaat = request.Request.TarihSaat,
-                TestinYapildigiIlId = request.Request.TestinYapildigiIlId,
-                TestinYapildigiYer = request.Request.TestinYapildigiYer,
-                KursDegerlendirmeCevaplar = request.Request.KursDegerlendirmeCevaplar
+
+            var cevaplar =
+
+                new UT_KopekVeIdareciDegerlendirmeFormu
+                {
+                    Aktifmi = true,
+                    T_Aktif = DateTime.Now,
+                    KursId = request.Request.KursId,
+                    TarihSaat = request.Request.TarihSaat,
+                    TestinYapildigiIlId = request.Request.TestinYapildigiIlId,
+                    TestinYapildigiYer = request.Request.TestinYapildigiYer,
+                    KursDegerlendirmeCevaplar = request.Request.KursDegerlendirmeCevaplar
             .Select(c => new UT_KursDegerlendirmeCevap
             {
                 DegerlendirmeSoruId = c.DegerlendirmeSoruId,
@@ -63,15 +85,21 @@ namespace Gorkem_.Features.KopekKurs
                 DegerlendirmeTuru = c.DegerlendirmeTuru,
                 KursiyerId = c.DegerlendirmeTuru == 2 ? c.KursiyerId : Context.UT_Kursiyer.FirstOrDefault(b => b.KopekId == c.KursiyerId).Id,
                 Aktifmi = true,
-                KursId=c.KursId,
+                KursId = c.KursId,
                 T_Aktif = DateTime.Now
+                
             }).ToList()
-            };
-
-         
+                };
 
 
             Context.UT_KopekVeIdareciDegerlendirmeFormu.Add(cevaplar);
+
+            var kursiyer = Context.UT_Kursiyer.FirstOrDefault(k => k.Id == kursiyerId);
+            if (kursiyer != null)
+            {
+                kursiyer.KursiyerToplamPuan += toplamKursiyerPuan;  // Kursiyer toplam puanını güncelle
+                kursiyer.KopekToplamPuan += toplamKopekPuan;
+            }
 
             var isSaved = await Context.SaveChangesAsync() > 0;
             if (isSaved)
@@ -103,5 +131,3 @@ public class CreateKopekVeKursiyerDegerlendirneFormuEndpoint : ICarterModule
         }).WithTags(EndpointConstants.KOPEKKURS);
     }
 }
-
-

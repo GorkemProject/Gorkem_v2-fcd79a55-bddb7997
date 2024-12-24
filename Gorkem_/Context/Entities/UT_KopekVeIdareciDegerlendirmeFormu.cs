@@ -15,9 +15,7 @@ namespace Gorkem_.Context.Entities
         public virtual ICollection<UT_KursDegerlendirmeCevap>? KursDegerlendirmeCevaplar { get; set; }
 
 
-        //public int? KapaliAlanToplamPuan { get; set; }
-        //public int? AracToplamPuan { get; set; }
-        //public int? TasinabilirEsyaToplamPuan { get; set; }
+
 
     }
 }
