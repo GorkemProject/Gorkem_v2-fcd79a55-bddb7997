@@ -108,6 +108,15 @@ namespace Gorkem_.Features.KopekKurs
                 return await Result<int>.SuccessAsync(request.Request.Id);
             }
 
+            if (kursiyer.KopekToplamPuan>70)
+            {
+                kursiyer.Kopek.KopekDurum = Enums.Enum_KopekDurum.KursOlumlu;
+            }
+            else
+            {
+                kursiyer.Kopek.KopekDurum = Enums.Enum_KopekDurum.KursRed;
+
+            }
 
 
             return await Result<int>.FailAsync("Kayıt sırasında bir hata oluştu.");
