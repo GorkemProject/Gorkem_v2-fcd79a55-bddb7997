@@ -60,13 +60,20 @@ namespace Gorkem_.Features.KopekKurs
                     return await Result<int>.FailAsync("Girilen çip numarasına sahip bir köpek bulunamadı.");
                 }
 
-                var isAlreadyEnrolled = await Context.UT_Kursiyer.AnyAsync(k => k.KopekId == kopek.Id && k.KursId == request.Request.KursId);
-                
-                    if (isAlreadyEnrolled)
-                    {
-                    return await Result<int>.FailAsync("Bu köpek ve kursiyer zaten bu kursa eklenmiş..");
-                    }
-                
+                // Köpek daha önce kursa atanmış mı kontrolü
+                var isKopekAlreadyEnrolled = await Context.UT_Kursiyer.AnyAsync(k => k.KopekId == kopek.Id && k.KursId == request.Request.KursId);
+                if (isKopekAlreadyEnrolled)
+                {
+                    return await Result<int>.FailAsync("Bu köpek zaten bu kursa atanmış.");
+                }
+
+                // İdareci daha önce kursa atanmış mı kontrolü
+                var isIdareciAlreadyEnrolled = await Context.UT_Kursiyer.AnyAsync(k => k.Sicil == request.Request.Sicil && k.KursId == request.Request.KursId);
+                if (isIdareciAlreadyEnrolled)
+                {
+                    return await Result<int>.FailAsync("Bu idareci zaten bu kursa atanmış.");
+                }
+
 
                 var isExist = Context.UT_Kursiyer.Any(r => r.Id == request.Request.Id);
                 if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} zaten var");
