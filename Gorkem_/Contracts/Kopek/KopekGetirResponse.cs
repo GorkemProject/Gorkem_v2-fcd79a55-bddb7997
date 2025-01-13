@@ -26,6 +26,7 @@ namespace Gorkem_.Contracts.Kopek
         public string? EdinilenKisiAdres { get; set; }
         public string? EdinilenKisiTelefon { get; set; }
         public DateTime? EdinilmeTarihi { get; set; }
+        public string? ProfileImage { get; set; }
 
 
     }

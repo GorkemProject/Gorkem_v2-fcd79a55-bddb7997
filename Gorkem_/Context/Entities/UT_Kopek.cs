@@ -44,7 +44,7 @@ namespace Gorkem_.Context.Entities
         public Enum_KopekDurum KopekDurum { get; set; }
         public virtual KT_Birim Birim { get; set; }
         public int? BirimId { get; set; }
-
+        public string? ProfileImage { get; set; }
 
 
         //public int EdinimSekli { get; set; } //Uretim=1,Satinalma=2,Hibe=3

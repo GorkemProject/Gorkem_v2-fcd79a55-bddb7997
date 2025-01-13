@@ -61,6 +61,7 @@ namespace Gorkem_.Features.Kopek
                         EdinilmeTarihi=a.EdinilmeTarihi,
                         EdinilenKisiTelefon=a.EdinilenKisiTelefon,
                         EdinilenKisiAdres=a.EdinilenKisiAdres,
+                        ProfileImage=a.ProfileImage
 
                         
                     }).ToListAsync(cancellationToken);

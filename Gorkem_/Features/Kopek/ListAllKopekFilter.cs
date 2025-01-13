@@ -134,7 +134,8 @@ namespace Gorkem_.Features.Kopek
                         KararId = x.KararId,
                         KopekDurum = x.KopekDurum,
                         KuvveNumarasi = x.KuvveNumarasi,
-                        T_Aktif = x.T_Aktif
+                        T_Aktif = x.T_Aktif,
+                        ProfileImage=x.ProfileImage
 
                     }).ToListAsync(cancellationToken);
 

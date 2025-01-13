@@ -83,7 +83,8 @@ namespace Gorkem_.Features.Kopek
                 EdinilenKisiAdres=command.Request.EdinilenKisiAdres,
                 EdinilenKisiTelefon=command.Request.EdinilenKisiTelefon,
                 EdinilmeTarihi=command.Request.EdinilmeTarihi,
-                KopekDurum=kopekDurum
+                KopekDurum=kopekDurum,
+                ProfileImage=command.Request.ProfileImage
                 
                 
             };

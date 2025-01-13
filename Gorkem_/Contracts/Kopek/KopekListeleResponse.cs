@@ -1,4 +1,5 @@
 ﻿using Gorkem_.Enums;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Gorkem_.Contracts.Kopek
 {
@@ -18,6 +19,7 @@ namespace Gorkem_.Contracts.Kopek
 
         public Enum_KopekDurum KopekDurum { get; set; }//
         public int? BirimId { get; set; }//
+        public string? ProfileImage { get; set; }
 
     }
 }

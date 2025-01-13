@@ -34,6 +34,7 @@ namespace Gorkem_.Features.Kopek
             public string? EdinilenKisiAdres { get; set; }
             public string? EdinilenKisiTelefon { get; set; }
             public DateTime EdinilmeTarihi { get; set; }
+            public string ProfileImage { get; set; }
         }
         public class UpdateKopekValidation : AbstractValidator<Command>
         {
@@ -78,6 +79,7 @@ namespace Gorkem_.Features.Kopek
                 kopek.EdinilenKisiAdres = request.EdinilenKisiAdres;
                 kopek.EdinilenKisiTelefon=request.EdinilenKisiTelefon;
                 kopek.EdinilmeTarihi = request.EdinilmeTarihi;
+                kopek.ProfileImage=request.ProfileImage;
                 
                 
                 var isSaved = await Context.SaveChangesAsync(cancellationToken)>0;
