@@ -65,6 +65,7 @@ namespace Gorkem_.Features.KopekKurs
                 if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} zaten var");
 
                 var kursiyer = Context.UT_Kursiyer.Add(request.ToKursiyer(kopek.Id));
+                kopek.KopekDurum = Enums.Enum_KopekDurum.Kurs;
 
                 var isSaved = await Context.SaveChangesAsync() > 0;
 

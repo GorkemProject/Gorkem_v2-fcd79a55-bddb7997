@@ -59,7 +59,7 @@ namespace Gorkem_.Features.Kopek
                 throw new Exception("Geçerli bir karar bulunamadı");
             }
             //Eğer kararın neticesi true ise köpeğin durumu sağlık değil ise sağlık red olacak..
-            Enum_KopekDurum kopekDurum = karar.Neticesi == true ? Enum_KopekDurum.Saglik : Enum_KopekDurum.SaglikRed; 
+            Enum_KopekDurum kopekDurum = karar.Neticesi == true ? Enum_KopekDurum.SaglikOlumlu : Enum_KopekDurum.SaglikRed; 
 
             return new UT_Kopek
             {

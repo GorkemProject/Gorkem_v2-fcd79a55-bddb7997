@@ -67,7 +67,6 @@ namespace Gorkem_.Features.SecimTest
 
 
                 var secimTesti = request.ToSecimTesti();
-                kopek.KopekDurum = Enum_KopekDurum.KursHazirlik;
 
                 if (request.Request.ToplamPuan < 60 )
                 {
@@ -76,6 +75,10 @@ namespace Gorkem_.Features.SecimTest
                     await Context.SaveChangesAsync(cancellationToken);
                     return await Result<int>.SuccessAsync(secimTesti.Id);
                 }
+                else
+                {
+                    kopek.KopekDurum=Enum_KopekDurum.SecimTestiOlumlu;
+                }
 
 
                 Context.UT_SecimTests.Add(secimTesti);
@@ -83,13 +86,8 @@ namespace Gorkem_.Features.SecimTest
                 var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
-                    var kopekDurum = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.KopekId);
-                    if(kopekDurum != null)
-                    {
-                        kopekDurum.KopekDurum = Enum_KopekDurum.KursHazirlik;
-                        await Context.SaveChangesAsync(cancellationToken);
-                    }
 
+                    await Context.SaveChangesAsync(cancellationToken);
 
                     Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
                     return await Result<int>.SuccessAsync(secimTesti.Id);

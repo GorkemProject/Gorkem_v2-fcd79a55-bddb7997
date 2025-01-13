@@ -89,7 +89,7 @@ namespace Gorkem_.Features.KopekAtama
 
                 //Köpeğin durumunu kurs hazırlık olarak değiştiriyoruz
 
-                kopek.KopekDurum = Enum_KopekDurum.KursHazirlik;
+                //kopek.KopekDurum = Enum_KopekDurum.KursHazirlik;
 
 
 

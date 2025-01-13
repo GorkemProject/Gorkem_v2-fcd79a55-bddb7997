@@ -2,12 +2,17 @@
 {
     public enum Enum_KopekDurum
     {
-        SaglikRed=1,
-        Saglik = 2,
-        SecimTestiRed=3,
-        KursHazirlik=4,
+        SaglikRed = 1,
+        SaglikOlumlu = 2,
+        
+        SecimTestiRed = 3,
+        SecimTestiOlumlu = 4,
+        
         Kurs=5,
-        KopekKuvve=6
+        KursRed=6,
+        KursOlumlu=7,
+
+        KopekKuvve=8
 
     }
 }
