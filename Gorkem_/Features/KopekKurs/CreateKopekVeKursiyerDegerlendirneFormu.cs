@@ -101,14 +101,7 @@ namespace Gorkem_.Features.KopekKurs
                 kursiyer.KopekToplamPuan += toplamKopekPuan;
             }
 
-            var isSaved = await Context.SaveChangesAsync() > 0;
-            if (isSaved)
-            {
-                Logger.Information("Kurs ID {0} değerlendirmesi başarıyla kaydedildi.", request.Request.Id);
-                return await Result<int>.SuccessAsync(request.Request.Id);
-            }
-
-            if (kursiyer.KopekToplamPuan>70)
+            if (kursiyer.KopekToplamPuan > 70)
             {
                 kursiyer.Kopek.KopekDurum = Enums.Enum_KopekDurum.KursOlumlu;
             }
@@ -117,6 +110,15 @@ namespace Gorkem_.Features.KopekKurs
                 kursiyer.Kopek.KopekDurum = Enums.Enum_KopekDurum.KursRed;
 
             }
+
+            var isSaved = await Context.SaveChangesAsync() > 0;
+            if (isSaved)
+            {
+                Logger.Information("Kurs ID {0} değerlendirmesi başarıyla kaydedildi.", request.Request.Id);
+                return await Result<int>.SuccessAsync(request.Request.Id);
+            }
+
+
 
 
             return await Result<int>.FailAsync("Kayıt sırasında bir hata oluştu.");

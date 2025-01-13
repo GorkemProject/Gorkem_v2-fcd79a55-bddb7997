@@ -46,8 +46,15 @@ namespace Gorkem_.Features.Idareci
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var idareci = await context.UT_AdayIdareci.FirstOrDefaultAsync(x=>x.Id.Equals(request.Request.IdareciId));
-                if(idareci is null) return await Result<bool>.FailAsync("Idareci Bulunamadı!!");
+                var adayIdareci = await context.UT_AdayIdareci.FirstOrDefaultAsync(x=>x.Id.Equals(request.Request.IdareciId));
+                if(adayIdareci is null) return await Result<bool>.FailAsync("Idareci Bulunamadı!!");
+
+                var idareci = await context.UT_Idarecis.FirstOrDefaultAsync(x => x.Id.Equals(request.Request.IdareciId));
+                if (idareci is null)
+                {
+                    return await Result<bool>.FailAsync("Köpeklere sadece idareci durumunda olan kişiler eklenebilir");
+                }
+                
                 request.Request.IdareciId = idareci.Id;
                 context.UT_IdareciKopekleri.Add(request.Request.toIdareciKopekleri());
                 try
