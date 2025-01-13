@@ -7,6 +7,7 @@ using Gorkem_.Contracts.Idareci;
 using Gorkem_.EndpointTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.Idareci
 {
@@ -28,7 +29,7 @@ namespace Gorkem_.Features.Idareci
             return new UT_IdareciKopekleri
             {
                 Aktifmi=true,
-                IdareciId=model.IdareciId,
+                AdayIdareciId=model.IdareciId,
                 KopekId=model.KopekId,
                 T_Aktif=DateTime.UtcNow
             };
@@ -45,10 +46,25 @@ namespace Gorkem_.Features.Idareci
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                this.context.UT_IdareciKopekleri.Add(request.Request.toIdareciKopekleri());
-                var isDataSaved = await this.context.SaveChangesAsync()>0;
+                var idareci = await context.UT_AdayIdareci.FirstOrDefaultAsync(x=>x.Id.Equals(request.Request.IdareciId));
+                if(idareci is null) return await Result<bool>.FailAsync("Idareci Bulunamadı!!");
+                request.Request.IdareciId = idareci.Id;
+                context.UT_IdareciKopekleri.Add(request.Request.toIdareciKopekleri());
+                try
+                {
+                    var isDataSaved = await context.SaveChangesAsync()>0;
+                    if (isDataSaved) return await Result<bool>.SuccessAsync(true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ana Hata: {ex.Message}");
+                    Console.WriteLine($"İç Hata: {ex.InnerException?.Message}");
+                    Console.WriteLine($"Stack Trace: {ex.InnerException?.StackTrace}");
+                    return await Result<bool>.FailAsync("Idareciye Kopek Eklenemedi!!");
+                }
+                
 
-                if (isDataSaved) return await Result<bool>.SuccessAsync(true);
+                
                 return await Result<bool>.FailAsync("Idareciye Kopek Eklenemedi!!");
             }
         }

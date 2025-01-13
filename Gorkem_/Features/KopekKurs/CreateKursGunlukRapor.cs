@@ -32,7 +32,6 @@ namespace Gorkem_.Features.KopekKurs
 
             var kursGunlukRapor =  new UT_KursGunlukRapor
             {
-                Id=command.Request.Id,
                 KursId = command.Request.KursId,
                 T_DersTarihi = command.Request.T_DersTarihi,
                 SinifAdi = command.Request.SinifAdi,
@@ -59,15 +58,20 @@ namespace Gorkem_.Features.KopekKurs
                 var kursGunlukRapor = request.ToKursGunlukRapor();
                 Context.UT_KursGunlukRapors.Add(kursGunlukRapor);
 
-                var isSaved = await Context.SaveChangesAsync() > 0;
-
-                if (isSaved)
+                try
                 {
+                    var isSaved = await Context.SaveChangesAsync() > 0;
+
+
                     Logger.Information("{0} kaydı {1} tarafından {2} zamanında eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
 
+                
                 }
-                return await Result<bool>.FailAsync("Kayıt başarılı değil");
+                catch (Exception ex)
+                {
+                    throw new Exception("KursGunlukRapor oluşturma hatası",ex.InnerException);
+                }
             }
         }
 

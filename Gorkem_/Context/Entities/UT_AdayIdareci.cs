@@ -34,6 +34,7 @@ namespace Gorkem_.Context.Entities
         public int TestiYapanSicil { get; set; }
         public DateTime TestTarihi { get; set; }
 
+public virtual ICollection<UT_IdareciKopekleri>? Kopek { get; set; }  
 
     }
 }

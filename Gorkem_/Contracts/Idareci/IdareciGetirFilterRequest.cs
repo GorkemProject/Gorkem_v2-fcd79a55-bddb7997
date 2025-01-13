@@ -9,5 +9,6 @@ namespace Gorkem_.Contracts.Idareci
         public int PageNumber { get; set; } = 1;
         public string SortedColumn { get; set; }
         public string SortDirection { get; set; }
+        public bool IsIdareci { get; set; }
     }
 }

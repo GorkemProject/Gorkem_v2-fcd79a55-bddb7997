@@ -34,9 +34,16 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
             .Include(x => x.KadroIl)
             .Include(x => x.Askerlik)
             .Include(x => x.Brans)
-            .Include(x => x.Rutbe)
-            
+            .Include(x => x.Rutbe)  
             .AsQueryable();
+
+        if (request.Request.IsIdareci)
+        {
+            query = query.Where(x=> context.UT_Idarecis.Any(y=>y.IdareciId.Equals(x.Id)));
+        }
+        else{
+            query = query.Where(x=> !context.UT_Idarecis.Any(y=>y.IdareciId.Equals(x.Id)));
+        }
 
         TypeAdapterConfig<UT_AdayIdareci, IdareciGetirFilterResponse>
             .NewConfig()
@@ -57,10 +64,23 @@ public class GetIdareciByFilterQueryHandler : IRequestHandler<GetIdareciByFilter
             var property = Expression.Property(param, request.Request.SortedColumn);
             var lambda = Expression.Lambda(property, param);
             var exp = Expression.Call(typeof(Queryable), direction, new Type[] { typeof(UT_AdayIdareci), property.Type }, query.Expression, Expression.Quote(lambda));
+            query = query.Provider.CreateQuery<UT_AdayIdareci>(exp);
         }
 
         var paged = PagedResult<UT_AdayIdareci>.ToPagedResponse(query, request.Request.PageNumber, 10);
         var mappedItems = paged.Items.Adapt<List<IdareciGetirFilterResponse>>();
+
+        if(request.Request.IsIdareci){
+            mappedItems.ForEach(x=>{
+                var kopek = context.UT_IdareciKopekleri
+                .Include(y=>y.Kopek)
+                .FirstOrDefault(y=>y.AdayIdareciId.Equals(x.Id) && y.Aktifmi);
+                if(kopek is not null){
+                x.KopekId = kopek.KopekId;
+                x.Kopek = kopek.Kopek.KopekAdi;
+                }
+            });
+        };
 
         var columnValues = GorkemReturning.GetUniqueValues(query, "Brans","Rutbe");
 

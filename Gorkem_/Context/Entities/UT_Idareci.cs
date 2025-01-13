@@ -6,7 +6,7 @@
         public int IdareciId { get; set; }
         public string? EbysEvrakTarihi { get; set; }
         public string? EbysEvrakSayisi { get; set; }
-        public virtual ICollection<UT_IdareciKopekleri>? Kopek { get; set; }  
+        
 
     }
 }

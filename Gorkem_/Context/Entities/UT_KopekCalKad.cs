@@ -6,8 +6,8 @@ namespace Gorkem_.Context.Entities
     {
         public virtual UT_Kopek? Kopek { get; set; }
         public int? KopekId { get; set; }
-        public virtual UT_Idareci? Idareci { get; set; }
-        public int? IdareciId { get; set; }
+        public virtual UT_AdayIdareci? AdayIdareci { get; set; }
+        public int? AdayIdareciId { get; set; }
 
         public virtual KT_Birim? Birim { get; set; }
         public int? BirimId { get; set; }

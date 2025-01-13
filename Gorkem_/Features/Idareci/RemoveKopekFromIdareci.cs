@@ -33,7 +33,7 @@ namespace Gorkem_.Features.Idareci
             {
                 
                 var idareciKopek = await _context.UT_IdareciKopekleri
-                    .FirstOrDefaultAsync(r => r.IdareciId == request.Request.IdareciId && r.KopekId == request.Request.KopekId);
+                    .FirstOrDefaultAsync(r => r.AdayIdareciId == request.Request.IdareciId && r.KopekId == request.Request.KopekId);
                 if (idareciKopek == null)
                     return await Result<bool>.FailAsync("Belirtilen köpek ya da idareci bulunamadı");
                 idareciKopek.Aktifmi = false;

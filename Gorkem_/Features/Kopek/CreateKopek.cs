@@ -66,6 +66,7 @@ namespace Gorkem_.Features.Kopek
                 KopekAdi = command.Request.KopekAdi,
                 IrkId = command.Request.IrkId,
                 KadroIlId = command.Request.KadroIlId,
+                BransId=command.Request.BransId,
                 CipNumarasi = command.Request.CipNumarasi,
                 DogumTarihi = command.Request.DogumTarihi,
                 YapilanIslem = command.Request.YapilanIslem,
@@ -90,8 +91,6 @@ namespace Gorkem_.Features.Kopek
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
-
-
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var isExist = Context.UT_Kopek_Kopeks.Any(r => r.CipNumarasi == request.Request.CipNumarasi);
@@ -125,21 +124,35 @@ namespace Gorkem_.Features.Kopek
                         return await Result<bool>.FailAsync("Baba köpek eklenen köpekten küçük olamaz");
                     
                 }
-                request.Request.AnneKopekId = null;
-                request.Request.BabaKopekId = null;
 
+                if(request.Request.EdinimSekli == Enum_TeminSekli.Satinalma || request.Request.EdinimSekli == Enum_TeminSekli.Hibe)
+                {
+                    request.Request.AnneKopekId = null;
+                    request.Request.BabaKopekId = null;
+                }
 
                 var kopek = request.ToKopek(Context);
 
                 Context.UT_Kopek_Kopeks.Add(kopek);
 
-                var isSaved = await Context.SaveChangesAsync() > 0;
-                if (isSaved)
+                try
+                {
+                    var isSaved = await Context.SaveChangesAsync() > 0;
+                    if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.Request.CipNumarasi, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
                 }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.InnerException);
+                    throw;
+                }
+
+                
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");
+                
 
             }
         }

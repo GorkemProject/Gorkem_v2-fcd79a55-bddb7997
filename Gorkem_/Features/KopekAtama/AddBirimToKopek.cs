@@ -96,7 +96,7 @@ namespace Gorkem_.Features.KopekAtama
                 var kopekCalKad = new UT_KopekCalKad
                 {
                     KopekId = kopek.Id,
-                    IdareciId=idareciKopekleri.IdareciId,
+                    AdayIdareciId=idareciKopekleri.AdayIdareciId,
                     Aktifmi = true,
                     T_Aktif=DateTime.Now,
                     T_GoreveBaslama = DateTime.Now,

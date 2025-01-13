@@ -27,15 +27,15 @@ namespace Gorkem_.Features.Idareci
             {
                 var kopekler = _context.UT_Kopek_Kopeks.AsQueryable();
                 var idareciKopekleri = _context.UT_IdareciKopekleri.Where(r => r.Aktifmi==request.Request.Aktifmi &&
-                                                                                r.IdareciId==request.Request.IdareciId).AsQueryable();
+                                                                                r.AdayIdareciId==request.Request.IdareciId).AsQueryable();
                 
                 var idareciler = _context.UT_AdayIdareci.AsQueryable();
                 var query = await (from kopek in kopekler
                                    join idareciKopek in idareciKopekleri on kopek.Id equals idareciKopek.KopekId
-                                   join idareci in idareciler on idareciKopek.IdareciId equals idareci.Id
+                                   join idareci in idareciler on idareciKopek.AdayIdareciId equals idareci.Id
                                    select new KopekIdareciResponse
                                    {
-                                       IdareciId=idareciKopek.IdareciId,
+                                       IdareciId=idareciKopek.AdayIdareciId,
                                        AdSoyad = idareci.AdSoyad,
                                        KopekAdi = kopek.KopekAdi,
                                        KopekCipNumarasi=kopek.CipNumarasi,

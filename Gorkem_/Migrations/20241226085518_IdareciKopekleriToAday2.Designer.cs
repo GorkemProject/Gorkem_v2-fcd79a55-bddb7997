@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241226085518_IdareciKopekleriToAday2")]
+    partial class IdareciKopekleriToAday2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -763,11 +766,16 @@ namespace Gorkem_.Migrations
                     b.Property<DateTime?>("T_Pasif")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("UT_IdareciId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AdayIdareciId");
 
                     b.HasIndex("KopekId");
+
+                    b.HasIndex("UT_IdareciId");
 
                     b.ToTable("UT_IdareciKopekleri");
                 });
@@ -1585,7 +1593,7 @@ namespace Gorkem_.Migrations
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_IdareciKopekleri", b =>
                 {
                     b.HasOne("Gorkem_.Context.Entities.UT_AdayIdareci", "AdayIdareci")
-                        .WithMany("Kopek")
+                        .WithMany()
                         .HasForeignKey("AdayIdareciId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1595,6 +1603,10 @@ namespace Gorkem_.Migrations
                         .HasForeignKey("KopekId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.UT_Idareci", null)
+                        .WithMany("Kopek")
+                        .HasForeignKey("UT_IdareciId");
 
                     b.Navigation("AdayIdareci");
 
@@ -1924,11 +1936,14 @@ namespace Gorkem_.Migrations
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_AdayIdareci", b =>
                 {
-                    b.Navigation("Kopek");
-
                     b.Navigation("OgrenimDurumu");
 
                     b.Navigation("YabanciDil");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Idareci", b =>
+                {
+                    b.Navigation("Kopek");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_Kopek", b =>

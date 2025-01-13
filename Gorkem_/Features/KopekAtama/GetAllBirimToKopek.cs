@@ -26,13 +26,13 @@ namespace Gorkem_.Features.KopekAtama
             {
                 var kopekCalismaDetay = await _context.UT_KopekCalKads
                     .Where(k => k.KopekId == request.KopekId)
-                    .Include(k => k.Idareci)
+                    .Include(k => k.AdayIdareci)
                     .Include(k => k.Birim)
                     .Select(k => new KopekCalKadGetirResponse
                     {
                         KopekId = k.KopekId,
-                        IdareciId = k.IdareciId,
-                        IdareciAdi = k.Idareci.Idareci.AdSoyad,
+                        IdareciId = k.AdayIdareciId,
+                        IdareciAdi = k.AdayIdareci.AdSoyad,
                         BirimAdi = k.Birim.Adi, // Birim adını ekliyoruz
                         GoreveBaslamaTarihi = k.T_GoreveBaslama,
                         EvrakAtamaTarihi = k.T_EvrakAtama,

@@ -2,7 +2,7 @@
 {
     public class IdareciGetirFilterResponse
     {
-
+        public int Id { get; set; }
         public int Sicil { get; set; }
         public string AdSoyad { get; set; } = string.Empty;
         public string CepTelefonu { get; set; } = string.Empty;
@@ -11,6 +11,8 @@
         public string? IdareciDurum { get; set; } 
         public int KadroIlId { get; set; }
         public string? KadroIl { get; set; } 
+        public int KopekId { get; set; }
+        public string? Kopek { get; set; } 
         public int BransId { get; set; }
         public string? Brans { get; set; } 
         public int RutbeId { get; set; }
