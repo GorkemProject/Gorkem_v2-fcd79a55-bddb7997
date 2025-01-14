@@ -53,8 +53,7 @@ namespace Gorkem_.Context
         //public DbSet<KT_KursKopekDegerlendirmeSorular> KT_KursKopekDegerlendirmeSorular { get; set; }
         //public DbSet<UT_KursKopekDegerlendirmeCevap> UT_KursKopekDegerlendirmeCevap { get; set; }
 
-
-
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

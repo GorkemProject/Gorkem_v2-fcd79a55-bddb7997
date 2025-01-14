@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Gorkem_.Features.Kopek
 {
@@ -169,9 +170,9 @@ namespace Gorkem_.Features.Kopek
                 if (response.Succeeded)
                     return Results.Ok(response);
                 return Results.BadRequest(response.Message);
-
-
-            }).WithTags(EndpointConstants.KOPEK);
+            })
+            .RequireAuthorization()
+            .WithTags(EndpointConstants.KOPEK);
         }
     }
 }
