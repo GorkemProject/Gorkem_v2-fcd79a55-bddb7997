@@ -35,15 +35,26 @@ public class GetSecimTestiByFilterQueryHandler : IRequestHandler<GetSecimTestiBy
         var query = _context.UT_SecimTests
             .Where(x => x.Aktifmi)
             .Include(x=>x.SinavYeri)
+            .Include(x=>x.Kopek)
+            .Include(x=>x.Komisyon)
             .AsQueryable();
 
         TypeAdapterConfig<UT_SecimTest, SecimTestiGetirFilterResponse>
-            .NewConfig()
+           .NewConfig()
             .Map(dest => dest.KopekId, src => src.KopekId)
+            .Map(dest => dest.KopekName, src => src.Kopek.KopekAdi) // Köpek ismi eşleştirme
+            .Map(dest => dest.KopekCinsiyet, src => src.Kopek.Cinsiyet) // Köpek cinsiyet eşleştirme
             .Map(dest => dest.SecimTestId, src => src.SecimTestId)
-            .Map(dest => dest.SinavYeriId, src => src.SinavYeri.Id) 
+            .Map(dest => dest.SecimTestName, src => src.SecimTest.Name) // Seçim Testi ismi eşleştirme
+            .Map(dest => dest.SinavYeriId, src => src.SinavYeri.Id)
+            .Map(dest => dest.SinavYeriName, src => src.SinavYeri.Name) // Sınav Yeri ismi eşleştirme
             .Map(dest => dest.Tarih, src => src.Tarih)
+            .Map(dest => dest.TepkiSekli, src => src.TepkiSekli)
+            .Map(dest => dest.Havlama, src => src.Havlama)
             .Map(dest => dest.SecimTestBrans, src => src.SecimTestBrans)
+            .Map(dest => dest.Degerlendirme, src => src.Degerlendirme)
+            .Map(dest => dest.KomisyonId, src => src.KomisyonId)
+            .Map(dest => dest.KomisyonName, src => src.Komisyon.KomisyonAdi) // Komisyon ismi eşleştirme
             .Map(dest => dest.ToplamPuan, src => src.ToplamPuan);
 
         if (request.Request.Filters.Count>0)
