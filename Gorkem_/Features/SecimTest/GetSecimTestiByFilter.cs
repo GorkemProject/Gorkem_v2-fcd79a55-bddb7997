@@ -37,6 +37,7 @@ public class GetSecimTestiByFilterQueryHandler : IRequestHandler<GetSecimTestiBy
             .Include(x=>x.SinavYeri)
             .Include(x=>x.Kopek)
             .Include(x=>x.Komisyon)
+            .Include(x=>x.SecimTest)
             .AsQueryable();
 
         TypeAdapterConfig<UT_SecimTest, SecimTestiGetirFilterResponse>
