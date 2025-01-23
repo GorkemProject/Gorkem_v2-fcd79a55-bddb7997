@@ -52,6 +52,7 @@ public class GetSecimTestiByFilterQueryHandler : IRequestHandler<GetSecimTestiBy
             .Map(dest => dest.Tarih, src => src.Tarih)
             .Map(dest => dest.TepkiSekli, src => src.TepkiSekli)
             .Map(dest => dest.Havlama, src => src.Havlama)
+            .Map(dest => dest.ProfileImage, src => src.Kopek.ProfileImage)
             .Map(dest => dest.SecimTestBrans, src => src.SecimTestBrans)
             .Map(dest => dest.Degerlendirme, src => src.Degerlendirme)
             .Map(dest => dest.KomisyonId, src => src.KomisyonId)

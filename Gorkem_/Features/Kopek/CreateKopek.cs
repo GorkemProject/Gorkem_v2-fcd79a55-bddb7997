@@ -171,7 +171,6 @@ namespace Gorkem_.Features.Kopek
                     return Results.Ok(response);
                 return Results.BadRequest(response.Message);
             })
-            .RequireAuthorization()
             .WithTags(EndpointConstants.KOPEK);
         }
     }

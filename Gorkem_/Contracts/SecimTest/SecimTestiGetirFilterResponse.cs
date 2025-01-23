@@ -31,6 +31,7 @@ namespace Gorkem_.Contracts.SecimTest
         public int? KomisyonId { get; set; }
         public string KomisyonName { get; set; }
         public int ToplamPuan { get; set; }
+        public string ProfileImage { get; set; }
 
     }
 }

@@ -1,6 +1,7 @@
 using AspNetCoreHero.Results;
 using Carter;
 using Gorkem_.Context;
+using Gorkem_.Contracts.User;
 using Gorkem_.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,23 +17,33 @@ namespace Gorkem_.Features.Auth
             public string Password { get; set; }
         }
 
-        public record Command(LoginRequest Request) : IRequest<Result<string>>;
+        public record Command(LoginRequest Request) : IRequest<Result<UserResponse>>;
 
-        internal sealed record Handler(GorkemDbContext Context, JwtService JwtService) : IRequestHandler<Command, Result<string>>
+        internal sealed record Handler(GorkemDbContext Context, JwtService JwtService) : IRequestHandler<Command, Result<UserResponse>>
         {
-            public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<UserResponse>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await Context.Users
                     .FirstOrDefaultAsync(u => u.Username == request.Request.Username && u.Password == request.Request.Password);
 
                 if (user == null)
-                    return await Result<string>.FailAsync("Kullanıcı adı veya şifre hatalı");
+                    return await Result<UserResponse>.FailAsync("Kullanıcı adı veya şifre hatalı");
 
                 if (!user.IsActive)
-                    return await Result<string>.FailAsync("Hesabınız aktif değil");
+                    return await Result<UserResponse>.FailAsync("Hesabınız aktif değil");
 
                 var token = JwtService.GenerateToken(user);
-                return await Result<string>.SuccessAsync(token);
+                var userResponse = new UserResponse
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Email = user.Email,
+                    Role = user.Role,
+                    IsActive = user.IsActive,
+                    Token = token
+                };
+                return await Result<UserResponse>.SuccessAsync(userResponse, "Giriş başarılı");
             }
         }
     }
@@ -47,7 +58,7 @@ namespace Gorkem_.Features.Auth
                 var response = await sender.Send(request);
                 if (response.Succeeded)
                     return Results.Ok(response);
-                return Results.BadRequest(response.Message);
+                return Results.BadRequest(response);
             })
             .AllowAnonymous()
             .WithTags("Auth");

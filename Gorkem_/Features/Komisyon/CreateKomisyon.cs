@@ -14,7 +14,7 @@ namespace Gorkem_.Features.Komisyon
 {
     public static class CreateKomisyon
     {
-        public record Command(KomisyonEkleRequest Request) : IRequest<Result<bool>>
+        public record Command(KomisyonEkleRequest Request) : IRequest<Result<int>>
         {
 
         }
@@ -42,23 +42,25 @@ namespace Gorkem_.Features.Komisyon
             };
 
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
+        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<int>>
         {
-            public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var isExist = Context.UT_Komisyons.Any(r=>r.Id ==request.Request.Id);
-                if (isExist) return await Result<bool>.FailAsync($"{request.Request.Id} is already exist");
+                if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} is already exist");
 
-                Context.UT_Komisyons.Add(request.ToKomisyon());
+                var komisyon = request.ToKomisyon();
+
+                Context.UT_Komisyons.Add(komisyon);
 
 
                 var isSaved = await Context.SaveChangesAsync()>0;
                 if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi", request.Request.KomisyonAdi, "DemoAccount", DateTime.Now);
-                    return await Result<bool>.SuccessAsync(true);
+                    return await Result<int>.SuccessAsync(komisyon.Id);
                 }
-                return await Result<bool>.FailAsync("Kayıt başarılı değil.");
+                return await Result<int>.FailAsync("Kayıt başarılı değil.");
             }
         }
     }

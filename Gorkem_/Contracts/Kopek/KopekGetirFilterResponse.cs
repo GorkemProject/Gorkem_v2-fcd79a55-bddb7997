@@ -21,6 +21,7 @@ public class KopekGetirFilterResponse
     public string? NihaiKanaat { get; set; }
     public int KararId { get; set; }
     public string? Karar { get; set; }
+    public string? ProfileImage { get; set; }
 
     public DateTime T_Aktif { get; set; }
     public DateTime? T_Pasif { get; set; }

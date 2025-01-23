@@ -52,7 +52,8 @@ namespace Gorkem_.Features.SecimTest
                     SinavYeriId= secimTest.SinavYeriId,
                     Tarih= secimTest.Tarih,
                     TepkiSekli=secimTest.TepkiSekli,
-                    ToplamPuan=secimTest.ToplamPuan
+                    ToplamPuan=secimTest.ToplamPuan,
+                    ProfileImage=secimTest.Kopek.ProfileImage
                     
                 };
 
