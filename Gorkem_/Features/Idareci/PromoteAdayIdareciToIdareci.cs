@@ -48,7 +48,8 @@ namespace Gorkem_.Features.Idareci
                     throw new Exception("Aday İdareci bulunamadı");
 
                 if (adayIdareci.Durum != Enums.Enum_AdayPersonelDurum.Basarili)
-                    throw new Exception("Bu  aday idareci, idareci olmaya uygun değildir.");
+                    return await Result<bool>.FailAsync("Bu  aday idareci, idareci olmaya uygun değildir.");
+                    
 
 
                 var idareci = new UT_Idareci

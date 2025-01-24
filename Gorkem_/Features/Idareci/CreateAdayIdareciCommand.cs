@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.Idareci; 
 using Gorkem_.EndpointTags;
+using Gorkem_.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,9 @@ namespace Gorkem_.Features.Idareci
             if (isExists)
                 return await Result<bool>.FailAsync("Bu sicilde idareci zaten kayıtlı");
 
+            //puana göre durum atama
+            Enum_AdayPersonelDurum durum = request.Idareci.Puan >= 80 ? Enum_AdayPersonelDurum.Basarili : Enum_AdayPersonelDurum.Basarisiz;
+
             UT_AdayIdareci idareci = new UT_AdayIdareci()
             {
                 AdSoyad = request.Idareci.AdSoyad,
@@ -47,7 +51,7 @@ namespace Gorkem_.Features.Idareci
                 Puan=request.Idareci.Puan,
                 TestiYapanSicil=request.Idareci.TestiYapanSicil,
                 TestTarihi= request.Idareci.TestTarihi,
-                Durum = request.Idareci.PersonelDurum,
+                Durum = durum,
                 
                 
             };
