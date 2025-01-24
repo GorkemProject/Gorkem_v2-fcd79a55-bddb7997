@@ -89,7 +89,7 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/GetKopekVeKursiyerDegerlendirmeFormuKursiyerKursId", async (int KursId, ISender sender) =>
+            app.MapGet("kopekKurs/GetKopekVeKursiyerDegerlendirmeFormuKursiyerKursId", async (int KursId, ISender sender) =>
             {
                 var request = new GetKopekVeKursiyerDegerlendirmeFormuKursId.Query(KursId);
                 var response = await sender.Send(request);

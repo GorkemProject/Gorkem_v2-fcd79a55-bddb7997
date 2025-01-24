@@ -9,6 +9,7 @@ using Gorkem_.EndpointTags;
 using Gorkem_.Migrations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static Gorkem_.Features.KopekKurs.CreateKopekVeKursiyerDegerlendirneFormu;
 
 namespace Gorkem_.Features.KopekKurs
@@ -94,11 +95,11 @@ namespace Gorkem_.Features.KopekKurs
 
             Context.UT_KopekVeIdareciDegerlendirmeFormu.Add(cevaplar);
 
-            var kursiyer = Context.UT_Kursiyer.FirstOrDefault(k => k.Id == kursiyerId);
+            var kursiyer = Context.UT_Kursiyer.Include(k => k.Kopek).FirstOrDefault(k => k.Id == kursiyerId);
             if (kursiyer != null)
             {
-                kursiyer.KursiyerToplamPuan += toplamKursiyerPuan;  // Kursiyer toplam puanını güncelle
-                kursiyer.KopekToplamPuan += toplamKopekPuan;
+                kursiyer.KursiyerToplamPuan = toplamKursiyerPuan;  // Kursiyer toplam puanını güncelle
+                kursiyer.KopekToplamPuan = toplamKopekPuan;
             }
 
             if (kursiyer.KopekToplamPuan > 70)
@@ -111,14 +112,13 @@ namespace Gorkem_.Features.KopekKurs
 
             }
 
+
             var isSaved = await Context.SaveChangesAsync() > 0;
             if (isSaved)
             {
                 Logger.Information("Kurs ID {0} değerlendirmesi başarıyla kaydedildi.", request.Request.Id);
                 return await Result<int>.SuccessAsync(request.Request.Id);
             }
-
-
 
 
             return await Result<int>.FailAsync("Kayıt sırasında bir hata oluştu.");
