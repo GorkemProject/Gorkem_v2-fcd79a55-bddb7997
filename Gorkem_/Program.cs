@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Gorkem_.Configuration;
 using Gorkem_.Services;
+using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 string ConnectionString = builder.Configuration.GetConnectionString("GorkemAppConnection")??string.Empty;
@@ -26,7 +27,7 @@ string ConnectionString = builder.Configuration.GetConnectionString("GorkemAppCo
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
- 
+
 #endregion
 
 
@@ -48,33 +49,37 @@ builder.Services.RegisterApiServiceCollection(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-// JWT Settings
-var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-builder.Services.AddSingleton(jwtSettings);
-builder.Services.AddScoped<JwtService>();
 
-// Add Authorization
-builder.Services.AddAuthorization();
 
-// JWT Authentication
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings.Issuer,
-        ValidAudience = jwtSettings.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
-    };
-});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+   .AddJwtBearer(options =>
+   {
+       options.Authority = "https://narkoauth.polnet.intra"; // IdentityServer URL
+       options.Audience = "narkonet.resource"; // Ensure this matches the API resource name
+       options.RequireHttpsMetadata=false;
+       options.IncludeErrorDetails = true;
+       options.TokenValidationParameters = new TokenValidationParameters
+       {
+           NameClaimType = ClaimTypes.Name,
+           RoleClaimType=ClaimTypes.Role,
+           ValidateIssuer = false,
+           ValidateAudience = true,
+           ValidateIssuerSigningKey=false,
+           IssuerSigningKeyResolver = (token, securityToken, identifier, validationParameters) =>
+           {
+               var client = new HttpClient();
+               var response = client.GetStringAsync("https://narkoauth.polnet.intra/.well-known/openid-configuration/jwks").Result;
+               var keys = new JsonWebKeySet(response);
+               return keys.GetSigningKeys();
+           }
+
+
+       };
+   });
+
+builder.Services.AddAuthorizationBuilder()
+  .AddPolicy("GorkemAuth", policy =>
+        policy.RequireClaim("scope", "narkoScope"));
 
 var app = builder.Build();
 
@@ -92,7 +97,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("GorkemCORS");
 app.UseSerilogRequestLogging();
-app.UseHttpsRedirection(); 
+app.UseHttpsRedirection();
 app.UseExceptionHandler();
 app.MapCarter();
 
