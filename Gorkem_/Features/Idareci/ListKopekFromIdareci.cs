@@ -22,43 +22,51 @@ namespace Gorkem_.Features.Idareci
                 _context = context;
             }
 
-
             public async Task<Result<List<KopekIdareciResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var kopekler = _context.UT_Kopek_Kopeks.AsQueryable();
-                var idareciKopekleri = _context.UT_IdareciKopekleri.Where(r => r.Aktifmi==request.Request.Aktifmi &&
-                                                                                r.AdayIdareciId==request.Request.IdareciId).AsQueryable();
-                
+                var idareciKopekleri = _context.UT_IdareciKopekleri.Where(r => r.Aktifmi == request.Request.Aktifmi).AsQueryable();
                 var idareciler = _context.UT_AdayIdareci.AsQueryable();
-                var query = await (from kopek in kopekler
-                                   join idareciKopek in idareciKopekleri on kopek.Id equals idareciKopek.KopekId
-                                   join idareci in idareciler on idareciKopek.AdayIdareciId equals idareci.Id
-                                   select new KopekIdareciResponse
-                                   {
-                                       IdareciId=idareciKopek.AdayIdareciId,
-                                       AdSoyad = idareci.AdSoyad,
-                                       KopekAdi = kopek.KopekAdi,
-                                       KopekCipNumarasi=kopek.CipNumarasi,
-                                       KopekKuvveNumarasi=kopek.KuvveNumarasi
-                                   }).ToListAsync(cancellationToken);
 
+                if (request.Request.IdareciId.HasValue)
+                {
+                    idareciKopekleri = idareciKopekleri.Where(r => r.AdayIdareciId == request.Request.IdareciId);
+                }
+
+                if (request.Request.KopekId.HasValue)
+                {
+                    idareciKopekleri = idareciKopekleri.Where(r => r.KopekId == request.Request.KopekId);
+                }
+
+                var query = await (from kopek in kopekler
+                                 join idareciKopek in idareciKopekleri on kopek.Id equals idareciKopek.KopekId
+                                 join idareci in idareciler on idareciKopek.AdayIdareciId equals idareci.Id
+                                 select new KopekIdareciResponse
+                                 {
+                                     IdareciId = idareciKopek.AdayIdareciId,
+                                     AdSoyad = idareci.AdSoyad,
+                                     KopekAdi = kopek.KopekAdi,
+                                     Sicil = idareci.Sicil,
+                                     KopekCipNumarasi = kopek.CipNumarasi,
+                                     KopekKuvveNumarasi = kopek.KuvveNumarasi,
+                                     KopekId = kopek.Id
+                                 }).ToListAsync(cancellationToken);
 
                 return await Result<List<KopekIdareciResponse>>.SuccessAsync(query);
-
             }
         }
     }
+
     public class ListKopekFromIdareciEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("idareci/getIdarecisKopek", async ([FromQuery]int idareciId, [FromQuery] bool aktifmi, ISender sender) =>
+            app.MapGet("idareci/getIdarecisKopek", async ([FromQuery] int? idareciId, [FromQuery] int? kopekId, [FromQuery] bool aktifmi, ISender sender) =>
             {
-                var request = new IdareciKopekListeleRequest {IdareciId=idareciId, Aktifmi = aktifmi };
+                var request = new IdareciKopekListeleRequest { IdareciId = idareciId, KopekId = kopekId, Aktifmi = aktifmi };
                 var response = await sender.Send(new ListKopekFromIdareci.Query(request));
                 if (response.Succeeded)
                     return Results.Ok(response.Data);
-
 
                 return Results.BadRequest(response.Message);
             }).WithTags(EndpointConstants.IDARECI);
