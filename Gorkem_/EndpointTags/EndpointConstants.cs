@@ -9,5 +9,6 @@
         public const string SECİMTEST = "SecimTest";
         public const string KOPEKATAMA = "KopekAtama";
         public const string KOPEKKURS = "KopekKurs";
+        public const string DASHBOARD = "Dashboard";
     }
 }
