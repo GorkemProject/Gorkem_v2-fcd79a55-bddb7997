@@ -64,7 +64,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kodtablo/CreateKursEgitimListesi", async ([FromBody] KursEgitimListesiEkleRequest model, ISender sender ) =>
+           var mapGet= app.MapPost("kodtablo/CreateKursEgitimListesi", async ([FromBody] KursEgitimListesiEkleRequest model, ISender sender ) =>
             {
                 var request = new CreateKursEgitimListesi.Command() { Name = model.KursAdi };
 
@@ -75,6 +75,11 @@ namespace Gorkem_.Features.KodTablo
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

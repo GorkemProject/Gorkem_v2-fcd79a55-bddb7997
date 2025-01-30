@@ -38,12 +38,12 @@ namespace Gorkem_.Features.KopekKurs
                     .Select(e => new KursEgitmenGetirResponse
                     {
                         Id = e.Id,
-                        AdSoyad = e.AdSoyad,    
+                        AdSoyad = e.AdSoyad,
                         BirimId = e.BirimId,
-                        Birim=e.Birim.Adi,
-                        RutbeId= e.RutbeId,
-                        Rutbe=e.Rutbe.Name,
-                        Sicil = e.Sicil 
+                        Birim = e.Birim.Adi,
+                        RutbeId = e.RutbeId,
+                        Rutbe = e.Rutbe.Name,
+                        Sicil = e.Sicil
 
                     })).ToListAsync(cancellationToken);
 
@@ -61,16 +61,21 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetKursEgitmenByKursId", async (int kursId, ISender sender) =>
+            var mapGet = app.MapGet("kopekKurs/GetKursEgitmenByKursId", async (int kursId, ISender sender) =>
+             {
+                 var request = new GetAllEgitmenByKursId.Query(kursId);
+
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetAllEgitmenByKursId.Query(kursId);
-
-                var response = await sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

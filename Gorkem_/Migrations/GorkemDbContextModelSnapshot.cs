@@ -669,6 +669,61 @@ namespace Gorkem_.Migrations
                     b.ToTable("UT_AdayIdareci");
                 });
 
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_AyinKopegi", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KopekId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KopekId");
+
+                    b.ToTable("UT_AyinKopegis");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_Duyurular", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Aktifmi")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Baslik")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Icerik")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("T_Aktif")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("T_Pasif")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UT_Duyurulars");
+                });
+
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_HaftalıkDegerlendirmeRaporuGozlemler", b =>
                 {
                     b.Property<int>("Id")
@@ -1594,6 +1649,17 @@ namespace Gorkem_.Migrations
                     b.Navigation("KadroIl");
 
                     b.Navigation("Rutbe");
+                });
+
+            modelBuilder.Entity("Gorkem_.Context.Entities.UT_AyinKopegi", b =>
+                {
+                    b.HasOne("Gorkem_.Context.Entities.UT_Kopek", "Kopek")
+                        .WithMany()
+                        .HasForeignKey("KopekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Kopek");
                 });
 
             modelBuilder.Entity("Gorkem_.Context.Entities.UT_HaftalıkDegerlendirmeRaporuGozlemler", b =>

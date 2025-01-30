@@ -13,7 +13,7 @@ namespace Gorkem_.Features.SecimTest
 {
     public static class CreateSecimTesti
     {
-        public record Command (SecimTestiEkleRequest Request) : IRequest<Result<int>>
+        public record Command(SecimTestiEkleRequest Request) : IRequest<Result<int>>
         {
 
         }
@@ -33,7 +33,7 @@ namespace Gorkem_.Features.SecimTest
         {
             return new UT_SecimTest
             {
-                T_Aktif=DateTime.Now,
+                T_Aktif = DateTime.Now,
                 Aktifmi = true,
                 KopekId = command.Request.KopekId,
                 SecimTestId = command.Request.SecimTestId,
@@ -56,7 +56,7 @@ namespace Gorkem_.Features.SecimTest
                 if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} numaralı test zaten var..");
 
                 var kopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.KopekId);
-                if (kopek==null)
+                if (kopek == null)
                 {
                     return await Result<int>.FailAsync("Kopek bulunamadı");
                 }
@@ -68,7 +68,7 @@ namespace Gorkem_.Features.SecimTest
 
                 var secimTesti = request.ToSecimTesti();
 
-                if (request.Request.ToplamPuan < 60 )
+                if (request.Request.ToplamPuan < 60)
                 {
                     kopek.KopekDurum = Enum_KopekDurum.SecimTestiRed;
                     Context.UT_SecimTests.Add(secimTesti);
@@ -77,7 +77,7 @@ namespace Gorkem_.Features.SecimTest
                 }
                 else
                 {
-                    kopek.KopekDurum=Enum_KopekDurum.SecimTestiOlumlu;
+                    kopek.KopekDurum = Enum_KopekDurum.SecimTestiOlumlu;
                 }
 
 
@@ -102,16 +102,21 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("secimTesti/CreateSecimTesti", async ([FromBody] SecimTestiEkleRequest model, ISender sender) =>
+            var mapGet = app.MapPost("secimTesti/CreateSecimTesti", async ([FromBody] SecimTestiEkleRequest model, ISender sender) =>
+             {
+                 var request = new CreateSecimTesti.Command(model);
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+             }).WithTags(EndpointConstants.SECİMTEST);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new CreateSecimTesti.Command(model);
-                var response = await sender.Send(request);
+                mapGet.RequireAuthorization();
+            }
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-            }).WithTags(EndpointConstants.SECİMTEST);
         }
     }
 }

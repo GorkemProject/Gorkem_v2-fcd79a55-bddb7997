@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 string ConnectionString = builder.Configuration.GetConnectionString("GorkemAppConnection")??string.Empty;
 
-
+var authEnabled = builder.Configuration.GetValue<bool>("Authentication:Enabled");
 
 #region SeriLog Start
 
@@ -49,37 +49,40 @@ builder.Services.RegisterApiServiceCollection(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-   .AddJwtBearer(options =>
-   {
-       options.Authority = "https://narkoauth.polnet.intra"; // IdentityServer URL
-       options.Audience = "narkonet.resource"; // Ensure this matches the API resource name
-       options.RequireHttpsMetadata=false;
-       options.IncludeErrorDetails = true;
-       options.TokenValidationParameters = new TokenValidationParameters
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+       .AddJwtBearer(options =>
        {
-           NameClaimType = ClaimTypes.Name,
-           RoleClaimType=ClaimTypes.Role,
-           ValidateIssuer = false,
-           ValidateAudience = true,
-           ValidateIssuerSigningKey=false,
-           IssuerSigningKeyResolver = (token, securityToken, identifier, validationParameters) =>
+           options.Authority = "https://narkoauth.polnet.intra"; // IdentityServer URL
+           options.Audience = "narkonet.resource"; // Ensure this matches the API resource name
+           options.RequireHttpsMetadata = false;
+           options.IncludeErrorDetails = true;
+           options.TokenValidationParameters = new TokenValidationParameters
            {
-               var client = new HttpClient();
-               var response = client.GetStringAsync("https://narkoauth.polnet.intra/.well-known/openid-configuration/jwks").Result;
-               var keys = new JsonWebKeySet(response);
-               return keys.GetSigningKeys();
-           }
+               NameClaimType = ClaimTypes.Name,
+               RoleClaimType = ClaimTypes.Role,
+               ValidateIssuer = false,
+               ValidateAudience = true,
+               ValidateIssuerSigningKey = false,
+               IssuerSigningKeyResolver = (token, securityToken, identifier, validationParameters) =>
+               {
+                   var client = new HttpClient();
+                   var response = client.GetStringAsync("https://narkoauth.polnet.intra/.well-known/openid-configuration/jwks").Result;
+                   var keys = new JsonWebKeySet(response);
+                   return keys.GetSigningKeys();
+               }
 
 
-       };
-   });
+           };
+       });
 
-builder.Services.AddAuthorizationBuilder()
-  .AddPolicy("GorkemAuth", policy =>
-        policy.RequireClaim("scope", "narkoScope"));
+    builder.Services.AddAuthorizationBuilder()
+      .AddPolicy("GorkemAuth", policy =>
+            policy.RequireClaim("scope", "narkoScope"));
+}
+
+
 
 var app = builder.Build();
 
@@ -98,12 +101,20 @@ if (app.Environment.IsDevelopment())
 app.UseCors("GorkemCORS");
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
+
 app.UseExceptionHandler();
+
+if (app.Environment.IsProduction())
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
+
+
 app.MapCarter();
 
+
 // Add Authentication middleware
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.Run();
 

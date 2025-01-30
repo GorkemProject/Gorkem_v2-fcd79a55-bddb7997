@@ -94,7 +94,7 @@ public class IdareciFilterEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("idareci/idareciFilter", async ([FromBody] IdareciGetirFilterRequest request, ISender sender) =>
+       var mapGet= app.MapPost("idareci/idareciFilter", async ([FromBody] IdareciGetirFilterRequest request, ISender sender) =>
         {
             var response = await sender.Send(new GetIdareciByFilterQuery(request));
             if (response.Succeeded)
@@ -102,6 +102,10 @@ public class IdareciFilterEndPoint : ICarterModule
 
             return Results.BadRequest(response.Message);
         }).WithTags(EndpointConstants.IDARECI);
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+        {
+            mapGet.RequireAuthorization();
+        }
     }
 }
 

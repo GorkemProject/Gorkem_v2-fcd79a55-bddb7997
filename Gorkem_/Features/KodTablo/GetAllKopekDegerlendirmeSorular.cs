@@ -17,15 +17,15 @@ namespace Gorkem_.Features.KodTablo
         {
             public async Task<Result<List<KopekDegerlendirmeSorularGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                
+
 
                 var kopekDegerlendirmeSorular = await Context.KT_KursDegerlendirmeSorular
-                    .Where(a=>a.Aktifmi && a.DegerlendirmeTuru==1)
-                    .Select(a=> new KopekDegerlendirmeSorularGetirResponse
+                    .Where(a => a.Aktifmi && a.DegerlendirmeTuru == 1)
+                    .Select(a => new KopekDegerlendirmeSorularGetirResponse
                     {
                         Id = a.Id,
-                        Name=a.Name,
-                        MaxPuan=a.MaxPuan
+                        Name = a.Name,
+                        MaxPuan = a.MaxPuan
                     }).ToListAsync(cancellationToken);
                 return Result<List<KopekDegerlendirmeSorularGetirResponse>>.Success(kopekDegerlendirmeSorular);
             }
@@ -36,15 +36,19 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kodtablo/GetAllKopekDegerlendimeSorular", async (ISender sender) =>
-            {
-                var request = new GetAllKopekDegerlendirmeSorular.Query();
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("kodtablo/GetAllKopekDegerlendimeSorular", async (ISender sender) =>
+             {
+                 var request = new GetAllKopekDegerlendirmeSorular.Query();
+                 var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KODTABLO);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KODTABLO);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

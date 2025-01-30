@@ -25,7 +25,7 @@ namespace Gorkem_.Features.KopekKurs
         {
             public async Task<Result<IdNumarasinaGoreKursGetirResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                
+
 
                 var kurs = await Context.UT_Kurs
                     .Include(a => a.KursEgitimListesi)
@@ -34,7 +34,7 @@ namespace Gorkem_.Features.KopekKurs
 
                 if (kurs == null)
                 {
-                    
+
                     return Result<IdNumarasinaGoreKursGetirResponse>.Fail($"Kurs bulunamadı: {request.KursId}");
                 }
 
@@ -57,15 +57,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetKursByKursId/{kursId:int}", async (int kursId, ISender sender) =>
-            {
-                var request = new GetKursByKursId.Query(kursId);
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("kopekKurs/GetKursByKursId/{kursId:int}", async (int kursId, ISender sender) =>
+              {
+                  var request = new GetKursByKursId.Query(kursId);
+                  var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+              }).WithTags(EndpointConstants.KOPEKKURS);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
+
         }
     }
 }

@@ -11,6 +11,7 @@ using Gorkem_.Enums;
 using Gorkem_.Features.Komisyon;
 using GorkemPagingAndFiltering.Extension;
 using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,10 +35,10 @@ public class GetSecimTestiByFilterQueryHandler : IRequestHandler<GetSecimTestiBy
     {
         var query = _context.UT_SecimTests
             .Where(x => x.Aktifmi)
-            .Include(x=>x.SinavYeri)
-            .Include(x=>x.Kopek)
-            .Include(x=>x.Komisyon)
-            .Include(x=>x.SecimTest)
+            .Include(x => x.SinavYeri)
+            .Include(x => x.Kopek)
+            .Include(x => x.Komisyon)
+            .Include(x => x.SecimTest)
             .AsQueryable();
 
         TypeAdapterConfig<UT_SecimTest, SecimTestiGetirFilterResponse>
@@ -59,14 +60,14 @@ public class GetSecimTestiByFilterQueryHandler : IRequestHandler<GetSecimTestiBy
             .Map(dest => dest.KomisyonName, src => src.Komisyon.KomisyonAdi) // Komisyon ismi eşleştirme
             .Map(dest => dest.ToplamPuan, src => src.ToplamPuan);
 
-        if (request.Request.Filters.Count>0)
+        if (request.Request.Filters.Count > 0)
         {
             query = FilterData.Filter(query, request.Request.Filters);
         }
 
         if (request.Request.SortedColumn != "")
         {
-            var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending"; 
+            var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending";
             var param = Expression.Parameter(typeof(UT_SecimTest), "x");
             var property = Expression.Property(param, request.Request.SortedColumn);
             var lambda = Expression.Lambda(property, param);
@@ -88,14 +89,18 @@ public class SecimTestiFilterEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("secimTesti/SecimTestiFilter", async ([FromBody] SecimTestiGetirFilterRequest request, ISender sender) =>
+        var mapGet = app.MapPost("secimTesti/SecimTestiFilter", async ([FromBody] SecimTestiGetirFilterRequest request, ISender sender) =>
+          {
+              var response = await sender.Send(new GetSecimTestiByFilterQuery(request));
+              if (response.Succeeded)
+                  return Results.Ok(response);
+              return Results.BadRequest(response);
+
+
+          }).WithTags(EndpointConstants.SECİMTEST);
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
         {
-            var response = await sender.Send(new GetSecimTestiByFilterQuery(request));
-            if (response.Succeeded)
-                return Results.Ok(response);
-            return Results.BadRequest(response);
-
-
-        }).WithTags(EndpointConstants.SECİMTEST);
+            mapGet.RequireAuthorization();
+        }
     }
 }

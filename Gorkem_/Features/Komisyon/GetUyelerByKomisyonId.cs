@@ -4,6 +4,7 @@ using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Komisyon;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -67,7 +68,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("komisyon/{komisyonId}/getKomisyonUyeleri", async (int komisyonId, ISender sender) =>
+           var mapGet= app.MapGet("komisyon/{komisyonId}/getKomisyonUyeleri", async (int komisyonId, ISender sender) =>
             {
                 var query = new GetUyelerByKomisyonId.Query(komisyonId);
                 var response = await sender.Send(query);
@@ -75,6 +76,11 @@ namespace Gorkem_.Features.Komisyon
                     return Results.Ok(response);
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KOMISYON);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

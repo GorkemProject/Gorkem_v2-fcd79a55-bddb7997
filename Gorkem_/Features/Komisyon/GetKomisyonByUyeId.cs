@@ -11,7 +11,7 @@ using System.Reflection.Metadata.Ecma335;
 namespace Gorkem_.Features.Komisyon
 {
     public static class GetKomisyonByUyeId
-    { 
+    {
         public class Query : IRequest<Result<List<UyeninKomisyonlariniGetirResponse>>>
         {
             public int UyeId { get; set; }
@@ -45,8 +45,8 @@ namespace Gorkem_.Features.Komisyon
 
                     }).ToListAsync(cancellationToken);
 
-                
-                
+
+
                 if (komisyonlar == null || !komisyonlar.Any())
                 {
                     return Result<List<UyeninKomisyonlariniGetirResponse>>.Fail("Üyeye ait bir komisyon bulunamadı..");
@@ -61,16 +61,20 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("komisyonUye/{uyeId}/getKomisyon", async ( int uyeId, ISender sender ) =>
+            var mapGet = app.MapGet("komisyonUye/{uyeId}/getKomisyon", async (int uyeId, ISender sender) =>
+             {
+                 var request = new GetKomisyonByUyeId.Query(uyeId);
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+             }).WithTags(EndpointConstants.KOMISYON);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetKomisyonByUyeId.Query(uyeId);
-                var response = await sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-            }).WithTags(EndpointConstants.KOMISYON);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

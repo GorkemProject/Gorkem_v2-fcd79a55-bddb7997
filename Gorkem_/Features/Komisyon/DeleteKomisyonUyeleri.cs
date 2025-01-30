@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Contracts.Komisyon;
 using Gorkem_.EndpointTags;
 using Gorkem_.Features.Kopek;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,8 +34,8 @@ namespace Gorkem_.Features.Komisyon
                 if (currentKomisyonUye is null) return await Result<bool>.FailAsync($"with the {request.Id} Id data could not found!");
 
                 currentKomisyonUye.Aktifmi = false;
-                currentKomisyonUye.T_Pasif=DateTime.Now;
-                var isDeleted = await Context.SaveChangesAsync()>0;
+                currentKomisyonUye.T_Pasif = DateTime.Now;
+                var isDeleted = await Context.SaveChangesAsync() > 0;
 
                 if (isDeleted)
                 {
@@ -49,7 +50,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("komisyonUyeleri/deleteKomisyonUyeleri", async ([FromBody] KomisyonUyesiSilRequest model, ISender sender ) =>
+           var mapGet= app.MapDelete("komisyonUyeleri/deleteKomisyonUyeleri", async ([FromBody] KomisyonUyesiSilRequest model, ISender sender) =>
             {
                 var request = new DeleteKomisyonUyeleri.Command() { Id = model.Id };
                 var response = await sender.Send(request);
@@ -57,6 +58,11 @@ namespace Gorkem_.Features.Komisyon
                     return Results.Ok(response);
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KOMISYON);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

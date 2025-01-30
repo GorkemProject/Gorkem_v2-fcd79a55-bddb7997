@@ -44,17 +44,17 @@ namespace Gorkem_.Features.Komisyon
                     var uye = await _context.UT_KomisyonUyeleris
                         .FirstOrDefaultAsync(u => u.Id == uyeId);
 
-                    if (uye==null)
+                    if (uye == null)
                     {
                         return await Result<bool>.FailAsync($"Seçilen üye bulunamadı: {uyeId}");
                     }
-                   
-                        existingKomisyon.KomisyonUyeleri?.Add(uye);
-                    
+
+                    existingKomisyon.KomisyonUyeleri?.Add(uye);
+
                 }
-                var isSaved = await _context.SaveChangesAsync()>0;
-                
-                if (isSaved) 
+                var isSaved = await _context.SaveChangesAsync() > 0;
+
+                if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
 
 
@@ -67,15 +67,19 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("komisyon/addKomisyonToUye", async ([FromBody] KomisyonaBirdenFazlaUyeEkle request, ISender sender) =>
+            var mapGet = app.MapPost("komisyon/addKomisyonToUye", async ([FromBody] KomisyonaBirdenFazlaUyeEkle request, ISender sender) =>
+              {
+                  var response = await sender.Send(new AddMultipleUyeToKomisyonCommand(request));
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+
+
+              }).WithTags(EndpointConstants.KOMISYON);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var response = await sender.Send(new AddMultipleUyeToKomisyonCommand(request));
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-
-            }).WithTags(EndpointConstants.KOMISYON);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

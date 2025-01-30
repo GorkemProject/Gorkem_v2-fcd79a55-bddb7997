@@ -4,6 +4,7 @@ using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Komisyon;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ namespace Gorkem_.Features.Komisyon
     {
         public class Query : IRequest<Result<List<KomisyonGetirResponse>>>
         {
-            
+
         }
         public class KomisyonGetirValidation : AbstractValidator<Query>
         {
@@ -27,13 +28,13 @@ namespace Gorkem_.Features.Komisyon
             public async Task<Result<List<KomisyonGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var komisyonList = await Context.UT_Komisyons
-                    .Where(a=>a.Aktifmi)
-                    .Select(a=> new KomisyonGetirResponse
+                    .Where(a => a.Aktifmi)
+                    .Select(a => new KomisyonGetirResponse
                     {
-                        Id=a.Id,
+                        Id = a.Id,
                         GorevYeriId = a.GorevYeriId,
                         KomisyonAdi = a.KomisyonAdi,
-                        OlusturulmaTarihi=a.OlusturulmaTarihi,
+                        OlusturulmaTarihi = a.OlusturulmaTarihi,
                     }).ToListAsync(cancellationToken);
                 return Result<List<KomisyonGetirResponse>>.Success(komisyonList);
             }
@@ -43,14 +44,19 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("komisyon/getAllKomisyon", async (ISender sender) =>
+            var mapGet = app.MapGet("komisyon/getAllKomisyon", async (ISender sender) =>
+             {
+                 var request = new GetAllKomisyon.Query();
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOMISYON);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetAllKomisyon.Query();
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOMISYON);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

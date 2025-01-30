@@ -6,6 +6,7 @@ using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.Idareci; 
 using Gorkem_.EndpointTags;
 using Gorkem_.Enums;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +70,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("idareci/createAdayIdareci", async ([FromBody] IdareciEkleRequest request, ISender sender) =>
+            var mapGet=app.MapPost("idareci/createAdayIdareci", async ([FromBody] IdareciEkleRequest request, ISender sender) =>
             {
                 var response = await sender.Send(new CreateAdayIdareciCommand(request));
 
@@ -79,6 +80,10 @@ namespace Gorkem_.Features.Idareci
                 return Results.BadRequest(response.Message);
 
             }).WithTags(EndpointConstants.IDARECI);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 

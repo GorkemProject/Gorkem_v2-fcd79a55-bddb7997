@@ -41,7 +41,7 @@ namespace Gorkem_.Features.KopekKurs
                     var kursiyer = await _context.UT_Kursiyer
                         .FirstOrDefaultAsync(u => u.Id == kursiyerId);
 
-                    if (kursiyer==null)
+                    if (kursiyer == null)
                     {
                         return await Result<bool>.FailAsync($"Secilen kursiyer bulunamadı: {kursiyerId}");
 
@@ -50,8 +50,8 @@ namespace Gorkem_.Features.KopekKurs
                     existingKurs.Kursiyerler?.Add(kursiyer);
                 }
 
-                var isSaved = await _context.SaveChangesAsync()>0;
-                if (isSaved) 
+                var isSaved = await _context.SaveChangesAsync() > 0;
+                if (isSaved)
                     return await Result<bool>.SuccessAsync();
                 return await Result<bool>.FailAsync("Kursa kursiyer eklenemedi");
 
@@ -63,16 +63,21 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/AddKursiyerToKurs", async ([FromBody] KursaKursiyerEkleRequest command, ISender sender) =>
+            var mapGet = app.MapPost("kopekKurs/AddKursiyerToKurs", async ([FromBody] KursaKursiyerEkleRequest command, ISender sender) =>
+             {
+                 var request = new AddKursiyerToKurs.AddKursiyerToKursCommand(command);
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+
+             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new AddKursiyerToKurs.AddKursiyerToKursCommand(command);
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

@@ -154,7 +154,7 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("secimTesti/ListSecimTesti", async ([FromBody] SecimTestiListeleRequest model, ISender sender) =>
+            var mapGet = app.MapPost("secimTesti/ListSecimTesti", async ([FromBody] SecimTestiListeleRequest model, ISender sender) =>
             {
                 var query = new ListSecimTest.Query(model);
                 var response = await sender.Send(query);
@@ -164,6 +164,11 @@ namespace Gorkem_.Features.SecimTest
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.SECİMTEST);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

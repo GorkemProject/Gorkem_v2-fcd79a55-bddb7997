@@ -2,6 +2,7 @@
 using Carter;
 using Gorkem_.Context;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ namespace Gorkem_.Features.KopekAtama
             {
                 //İlişik kesilecek köpeği bul
                 var kopek = await _context.UT_Kopek_Kopeks
-                    .FirstOrDefaultAsync(k=>k.Id==request.KopekId);
+                    .FirstOrDefaultAsync(k => k.Id == request.KopekId);
 
                 if (kopek == null)
                 {
@@ -33,7 +34,7 @@ namespace Gorkem_.Features.KopekAtama
                 }
 
                 var kopekCalKad = await _context.UT_KopekCalKads
-                    .Where(k=>k.KopekId == request.KopekId && k.Aktifmi)
+                    .Where(k => k.KopekId == request.KopekId && k.Aktifmi)
                     .FirstOrDefaultAsync();
 
                 if (kopekCalKad != null)
@@ -43,11 +44,11 @@ namespace Gorkem_.Features.KopekAtama
                     kopekCalKad.T_Pasif = DateTime.Now;
                     kopekCalKad.AtamaTuru = Enums.Enum_AtamaTuru.IlisikKesme;
                     kopekCalKad.BirimId = null;
-                    
+
                 }
                 kopek.BirimId = null;
 
-                var isSaved = await _context.SaveChangesAsync()>0;
+                var isSaved = await _context.SaveChangesAsync() > 0;
 
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
@@ -60,16 +61,21 @@ namespace Gorkem_.Features.KopekAtama
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekAtama/DeleteKopekIlisik", async (int kopekId, ISender sender) =>
+           var mapGet= app.MapPost("kopekAtama/DeleteKopekIlisik", async (int kopekId, ISender sender) =>
             {
                 var request = new DeleteKopekIlisik.Command(kopekId);
                 var response = await sender.Send(request);
 
                 if (response.Succeeded)
                     return Results.Ok(response);
-                return Results.BadRequest(response); 
+                return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KOPEKATAMA);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

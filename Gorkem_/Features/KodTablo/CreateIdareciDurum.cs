@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.KodTablo;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
@@ -56,7 +57,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kodtablo/idarecidurum", async ([FromBody] IdareciDurumEkleRequest model, ISender sender) =>
+           var mapGet= app.MapPost("kodtablo/idarecidurum", async ([FromBody] IdareciDurumEkleRequest model, ISender sender) =>
             {
                 var request = new CreateIdareciDurum.Command() { Name = model.DurumAdi };
                 var response = await sender.Send(request);
@@ -66,6 +67,11 @@ namespace Gorkem_.Features.KodTablo
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

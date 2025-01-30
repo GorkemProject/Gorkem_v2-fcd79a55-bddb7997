@@ -67,7 +67,7 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("secimTesti/getSecimTestiById", async (int id, ISender sender) =>
+          var mapGet=  app.MapGet("secimTesti/getSecimTestiById", async (int id, ISender sender) =>
             {
                 var request = new GetSecimTestiById.Query { Id = id };
                 var response = await sender.Send(request);
@@ -78,6 +78,11 @@ namespace Gorkem_.Features.SecimTest
 
 
             }).WithTags(EndpointConstants.SECİMTEST);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

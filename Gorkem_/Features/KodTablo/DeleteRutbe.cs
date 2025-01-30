@@ -48,7 +48,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/rutbe", async ([FromBody] RutbeSilRequest model, ISender sender) =>
+           var mapGet= app.MapDelete("kodtablo/rutbe", async ([FromBody] RutbeSilRequest model, ISender sender) =>
             {
                 var request = new DeleteRutbe.Command() { Id = model.Id };
                 var response = await sender.Send(request);
@@ -56,6 +56,11 @@ namespace Gorkem_.Features.KodTablo
                     return Results.Ok(response);
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

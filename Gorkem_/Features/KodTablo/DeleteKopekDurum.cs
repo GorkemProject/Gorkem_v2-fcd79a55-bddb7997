@@ -48,7 +48,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/kopekdurum", async ([FromBody] KopekDurumSilRequest model, ISender sender) =>
+          var mapGet=  app.MapDelete("kodtablo/kopekdurum", async ([FromBody] KopekDurumSilRequest model, ISender sender) =>
             {
                 var request = new DeleteKopekDurum.Command() { Id = model.Id };
                 var response = await sender.Send(request);
@@ -58,6 +58,11 @@ namespace Gorkem_.Features.KodTablo
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

@@ -129,7 +129,7 @@ public class CreateKopekVeKursiyerDegerlendirneFormuEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("kopekKurs/CreateKopekVeKursiyerDegerlendirneFormu", async ([FromBody] KopekVeIdareciDegerlendirmeFormuRequest model, ISender sender) =>
+       var mapGet= app.MapPost("kopekKurs/CreateKopekVeKursiyerDegerlendirneFormu", async ([FromBody] KopekVeIdareciDegerlendirmeFormuRequest model, ISender sender) =>
         {
             var request = new KursiyerKopekDegerlendirmeEkleCommand(model);
             var response = await sender.Send(request);
@@ -140,5 +140,9 @@ public class CreateKopekVeKursiyerDegerlendirneFormuEndpoint : ICarterModule
 
 
         }).WithTags(EndpointConstants.KOPEKKURS);
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+        {
+            mapGet.RequireAuthorization();
+        }
     }
 }

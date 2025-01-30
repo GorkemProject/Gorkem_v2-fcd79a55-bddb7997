@@ -4,6 +4,7 @@ using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Idareci;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +52,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("idareci/removeKopekToIdareci", async ([FromBody] IdarecidenKopekCikartRequest request, ISender sender) =>
+            var mapGet=app.MapDelete("idareci/removeKopekToIdareci", async ([FromBody] IdarecidenKopekCikartRequest request, ISender sender) =>
             {
                 var response = await sender.Send(new RemoveKopekFromIdareci.Command(request));
 
@@ -61,6 +62,11 @@ namespace Gorkem_.Features.Idareci
                 return Results.BadRequest(response.Message);
 
             }).WithTags(EndpointConstants.IDARECI);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

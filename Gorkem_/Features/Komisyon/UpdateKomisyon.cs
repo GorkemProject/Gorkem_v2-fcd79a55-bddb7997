@@ -35,9 +35,9 @@ namespace Gorkem_.Features.Komisyon
                 {
                     return await Result<bool>.FailAsync("Komisyon bulunamadı..");
                 };
-                komisyon.KomisyonAdi=request.KomisyonAdi;
-                komisyon.OlusturulmaTarihi=request.OlusturulmaTarihi;
-                komisyon.GorevYeriId=request.GorevYeriId;
+                komisyon.KomisyonAdi = request.KomisyonAdi;
+                komisyon.OlusturulmaTarihi = request.OlusturulmaTarihi;
+                komisyon.GorevYeriId = request.GorevYeriId;
 
                 var isSaved = await Context.SaveChangesAsync(cancellationToken) > 0;
                 if (isSaved)
@@ -53,15 +53,19 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("komisyon/{id}/updateKomisyon", async (int id, [FromBody] UpdateKomisyon.KomisyonCommand model, ISender send) =>
-            {
-                model.Id = id;
-                var result = await send.Send(model);
-                if (result.Succeeded)
-                    return Results.Ok(result);
-                return Results.BadRequest(result);
+            var mapGet = app.MapPut("komisyon/{id}/updateKomisyon", async (int id, [FromBody] UpdateKomisyon.KomisyonCommand model, ISender send) =>
+             {
+                 model.Id = id;
+                 var result = await send.Send(model);
+                 if (result.Succeeded)
+                     return Results.Ok(result);
+                 return Results.BadRequest(result);
 
-            }).WithTags(EndpointConstants.KOMISYON);
+             }).WithTags(EndpointConstants.KOMISYON);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

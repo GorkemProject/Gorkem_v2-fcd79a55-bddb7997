@@ -20,16 +20,16 @@ namespace Gorkem_.Features.KopekKurs
         {
             private readonly GorkemDbContext _context;
             private readonly Serilog.ILogger _logger;
-            public Handler(GorkemDbContext context, Serilog.ILogger logger )
+            public Handler(GorkemDbContext context, Serilog.ILogger logger)
             {
                 _context = context;
                 _logger = logger;
             }
 
-            
+
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-  
+
                 var yeniRapor = request.Request.Gozlemler.Select(g => new UT_HaftalıkDegerlendirmeRaporuGozlemler
                 {
                     KursId = request.Request.KursId,
@@ -42,7 +42,7 @@ namespace Gorkem_.Features.KopekKurs
 
                 _context.UT_HaftalıkDegerlendirmeRaporuGozlemlers.AddRange(yeniRapor);
 
-                var isSaved = await _context.SaveChangesAsync()>0;
+                var isSaved = await _context.SaveChangesAsync() > 0;
 
                 if (isSaved)
                 {
@@ -61,14 +61,18 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/CreateHaftalikDegerlendirmeRaporu", async ([FromBody] HaftalikDegerlendirmeRaporuOlusturRequest model, ISender sender) =>
+            var mapGet = app.MapPost("kopekKurs/CreateHaftalikDegerlendirmeRaporu", async ([FromBody] HaftalikDegerlendirmeRaporuOlusturRequest model, ISender sender) =>
+             {
+                 var request = new CreateHaftalıkDegerlendirmeRaporu.Command(model);
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOPEKKURS);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new CreateHaftalıkDegerlendirmeRaporu.Command(model);
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

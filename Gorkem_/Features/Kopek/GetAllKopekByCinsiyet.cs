@@ -4,15 +4,16 @@ using Carter;
 using Gorkem_.Context;
 using Gorkem_.EndpointTags;
 using Gorkem_.Enums;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.Kopek;
 
 public record KopekCinsiyetResponse(int Id, string Name, string CipNumarasi);
-public record GetAllKopekByCinsiyetQuery(DateTime DogumTarihi) : IRequest<Result<Dictionary<string,List<KopekCinsiyetResponse>>>>;
+public record GetAllKopekByCinsiyetQuery(DateTime DogumTarihi) : IRequest<Result<Dictionary<string, List<KopekCinsiyetResponse>>>>;
 
-public class GetAllKopekByCinsiyetQueryHandler : IRequestHandler<GetAllKopekByCinsiyetQuery, Result<Dictionary<string,List<KopekCinsiyetResponse>>>>
+public class GetAllKopekByCinsiyetQueryHandler : IRequestHandler<GetAllKopekByCinsiyetQuery, Result<Dictionary<string, List<KopekCinsiyetResponse>>>>
 {
     private readonly GorkemDbContext context;
 
@@ -21,42 +22,47 @@ public class GetAllKopekByCinsiyetQueryHandler : IRequestHandler<GetAllKopekByCi
         this.context = context;
     }
 
-    public async Task<Result<Dictionary<string,List<KopekCinsiyetResponse>>>> Handle(GetAllKopekByCinsiyetQuery request, CancellationToken cancellationToken)
+    public async Task<Result<Dictionary<string, List<KopekCinsiyetResponse>>>> Handle(GetAllKopekByCinsiyetQuery request, CancellationToken cancellationToken)
     {
         var query = context.UT_Kopek_Kopeks.AsQueryable();
-        var kopekList = new Dictionary<string,List<KopekCinsiyetResponse>>();
+        var kopekList = new Dictionary<string, List<KopekCinsiyetResponse>>();
 
         var disiKopekler = await query
-        .Where(x=>x.Cinsiyet.Equals(Enum_Cinsiyet.Disi) && x.DogumTarihi < request.DogumTarihi)
-        .Select(x=> new KopekCinsiyetResponse(x.Id,x.KopekAdi,x.CipNumarasi))
+        .Where(x => x.Cinsiyet.Equals(Enum_Cinsiyet.Disi) && x.DogumTarihi < request.DogumTarihi)
+        .Select(x => new KopekCinsiyetResponse(x.Id, x.KopekAdi, x.CipNumarasi))
         .ToListAsync();
 
         var ErkekKopekler = await query
-        .Where(x=>x.Cinsiyet.Equals(Enum_Cinsiyet.Erkek) && x.DogumTarihi < request.DogumTarihi)
-        .Select(x=> new KopekCinsiyetResponse(x.Id,x.KopekAdi,x.CipNumarasi))
+        .Where(x => x.Cinsiyet.Equals(Enum_Cinsiyet.Erkek) && x.DogumTarihi < request.DogumTarihi)
+        .Select(x => new KopekCinsiyetResponse(x.Id, x.KopekAdi, x.CipNumarasi))
         .ToListAsync();
 
         kopekList.Add("disi", disiKopekler);
         kopekList.Add("erkek", ErkekKopekler);
 
         return await Result<Dictionary<string, List<KopekCinsiyetResponse>>>.SuccessAsync(kopekList);
-    
+
     }
 }
 
 public class KopekFilterByCinsiyetEndPoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        public void AddRoutes(IEndpointRouteBuilder app)
+        var mapGet = app.MapGet("kopek/kopekFilterByCinsiyet", async (DateTime dogumTarihi, ISender sender) =>
         {
-            app.MapGet("kopek/kopekFilterByCinsiyet", async (DateTime dogumTarihi, ISender sender) =>
-            {
-                var response = await sender.Send(new GetAllKopekByCinsiyetQuery(dogumTarihi));
+            var response = await sender.Send(new GetAllKopekByCinsiyetQuery(dogumTarihi));
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
+            if (response.Succeeded)
+                return Results.Ok(response);
 
-                return Results.BadRequest(response.Message);
+            return Results.BadRequest(response.Message);
 
-            }).WithTags(EndpointConstants.KOPEK);
+        }).WithTags(EndpointConstants.KOPEK);
+
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+        {
+            mapGet.RequireAuthorization();
         }
     }
+}

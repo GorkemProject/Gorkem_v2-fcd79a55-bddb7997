@@ -47,7 +47,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/cins", async ([FromBody] CinsSilRequest model, ISender sender) =>
+          var mapGet=  app.MapDelete("kodtablo/cins", async ([FromBody] CinsSilRequest model, ISender sender) =>
             {
                 var request = new DeleteCins.Command() { Id = model.Id };
                 var response = await sender.Send(request);
@@ -56,6 +56,10 @@ namespace Gorkem_.Features.KodTablo
                     return Results.Ok(response);
                 return Results.BadRequest(response.Message);
             }).WithTags(EndpointConstants.KODTABLO);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

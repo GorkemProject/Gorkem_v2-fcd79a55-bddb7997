@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Gorkem_.Contracts.SecimTest;
 using Gorkem_.EndpointTags;
 using Gorkem_.Enums;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +43,7 @@ namespace Gorkem_.Features.SecimTest
                         Puan = k.Puan
                     }).ToListAsync(cancellationToken);
 
-                if (sorular ==null || !sorular.Any())
+                if (sorular == null || !sorular.Any())
                 {
                     return Result<List<TestinSorulariniGetirResponse>>.Fail("Teste ait bir soru bulunamadı");
                 }
@@ -56,16 +57,21 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("secimTesti/{testId}/getTestSorular", async (int testId, ISender sender) =>
+            var mapGet = app.MapGet("secimTesti/{testId}/getTestSorular", async (int testId, ISender sender) =>
+              {
+                  var request = new GetQuestionsByTestId.Query(testId);
+                  var response = await sender.Send(request);
+
+
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+              }).WithTags(EndpointConstants.SECİMTEST);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetQuestionsByTestId.Query(testId);
-                var response = await sender.Send(request);
-
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.SECİMTEST);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

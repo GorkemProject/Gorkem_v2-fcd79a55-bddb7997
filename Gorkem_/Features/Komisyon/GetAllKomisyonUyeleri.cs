@@ -31,13 +31,13 @@ namespace Gorkem_.Features.Komisyon
                     .Select(a => new KomisyonUyeleriGetirResponse
                     {
                         Id = a.Id,
-                        TcKimlikNo=a.TcKimlikNo,
-                        AdSoyad=a.AdSoyad,
-                        Sicil=a.Sicil,
-                        GorevUnvani=a.GorevUnvani,
-                        GorevYeriId=a.GorevYeriId,
-                        Eposta=a.Eposta,
-                        CepTelefonu=a.CepTelefonu
+                        TcKimlikNo = a.TcKimlikNo,
+                        AdSoyad = a.AdSoyad,
+                        Sicil = a.Sicil,
+                        GorevUnvani = a.GorevUnvani,
+                        GorevYeriId = a.GorevYeriId,
+                        Eposta = a.Eposta,
+                        CepTelefonu = a.CepTelefonu
                     }).ToListAsync(cancellationToken);
                 return Result<List<KomisyonUyeleriGetirResponse>>.Success(aktifUyeler);
             }
@@ -48,14 +48,19 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("komisyonUyeleri/getAllKomisyonUyeleri", async (ISender sender) =>
+            var mapGet = app.MapGet("komisyonUyeleri/getAllKomisyonUyeleri", async (ISender sender) =>
+             {
+                 var request = new GetAllKomisyonUyeleri.Query();
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOMISYON);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetAllKomisyonUyeleri.Query();
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOMISYON);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

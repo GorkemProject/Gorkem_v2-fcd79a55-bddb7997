@@ -35,24 +35,24 @@ namespace Gorkem_.Features.KopekKurs
                 var kurs = await _context.UT_Kurs.FindAsync(request.KursId);
 
                 var mufredatlar = await _context.KT_KursMufredats
-                    .Include(k=>k.KursEgitimListesi)
+                    .Include(k => k.KursEgitimListesi)
                     .Where(u => u.KursEgitimListesiId == kurs.KursEgitimListesiId)
                     .Select(k => new KursunMufredatlariniGetirResponse
                     {
-                        Id=k.Id,
-                        KursAdi= k.KursEgitimListesi.Name,
+                        Id = k.Id,
+                        KursAdi = k.KursEgitimListesi.Name,
                         MufredatAdi = k.Name,
                         OlusturulmaTarihi = k.T_Aktif
                     }).ToListAsync(cancellationToken);
-            
+
                 if (mufredatlar == null || !mufredatlar.Any())
                 {
                     return Result<List<KursunMufredatlariniGetirResponse>>.Fail("Kursa ait bir müfredat bulunamadı..");
-                } 
+                }
                 return Result<List<KursunMufredatlariniGetirResponse>>.Success(mufredatlar);
             }
 
-            
+
         }
     }
 
@@ -60,17 +60,21 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetMufredatByKursId", async (int kursId, ISender sender) =>
+            var mapGet = app.MapGet("kopekKurs/GetMufredatByKursId", async (int kursId, ISender sender) =>
+             {
+                 var request = new GetAllMufredatByKurs.Query(kursId);
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+
+             }).WithTags(EndpointConstants.KOPEKKURS);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetAllMufredatByKurs.Query(kursId);
-                var response = await sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

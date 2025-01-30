@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Contracts.Idareci;
 using Gorkem_.EndpointTags;
 using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +36,7 @@ public class GetIdareciBySicilEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("idareci/getIdareciBySicil", async (int sicil, ISender sender) =>
+        var mapGet=app.MapGet("idareci/getIdareciBySicil", async (int sicil, ISender sender) =>
         {
             var response = await sender.Send(new GetIdareciBySicilQuery(sicil));
             if (response.Succeeded)
@@ -43,5 +44,10 @@ public class GetIdareciBySicilEndPoint : ICarterModule
 
             return Results.BadRequest(response.Message);
         }).WithTags(EndpointConstants.IDARECI);
+
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+        {
+            mapGet.RequireAuthorization();
+        }
     }
 }

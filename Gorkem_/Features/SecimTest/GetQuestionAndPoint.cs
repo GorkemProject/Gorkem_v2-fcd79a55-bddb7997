@@ -34,21 +34,21 @@ namespace Gorkem_.Features.SecimTest
             public async Task<Result<List<SorularıVePuanlarınıGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var questionAndPoint = await _context.UT_SecimTestiCevaplar
-                    .Include(a=>a.Soru)
-                    .Where(a=>a.UtSecimTestId==request.CevapId)
-                    .Select(a=> new SorularıVePuanlarınıGetirResponse
+                    .Include(a => a.Soru)
+                    .Where(a => a.UtSecimTestId == request.CevapId)
+                    .Select(a => new SorularıVePuanlarınıGetirResponse
                     {
-                        Soru=a.Soru.Name,
-                        KopekPuan=a.Puan,
-                        SoruPuan=a.Soru.Puan
- 
+                        Soru = a.Soru.Name,
+                        KopekPuan = a.Puan,
+                        SoruPuan = a.Soru.Puan
+
 
                     }).ToListAsync(cancellationToken);
 
                 if (questionAndPoint == null)
                 {
                     return Result<List<SorularıVePuanlarınıGetirResponse>>.Fail("Sorular ve puanları bulunamadı..");
-                    
+
                 }
                 return Result<List<SorularıVePuanlarınıGetirResponse>>.Success(questionAndPoint);
             }
@@ -59,15 +59,20 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("secimTesti/{cevapId}/GetQuestionAndPoint", async (int cevapId, ISender sender) =>
-            {
-                var request = new GetQuestionAndPoint.Query(cevapId);
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("secimTesti/{cevapId}/GetQuestionAndPoint", async (int cevapId, ISender sender) =>
+              {
+                  var request = new GetQuestionAndPoint.Query(cevapId);
+                  var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.SECİMTEST);
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+              }).WithTags(EndpointConstants.SECİMTEST);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

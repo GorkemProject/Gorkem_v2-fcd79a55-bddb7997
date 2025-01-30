@@ -24,7 +24,7 @@ namespace Gorkem_.Features.KodTablo
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
- 
+
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -44,14 +44,19 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/brans", async ([FromBody] BransSilRequest model, ISender sender) =>
+            var mapGet = app.MapDelete("kodtablo/brans", async ([FromBody] BransSilRequest model, ISender sender) =>
+             {
+                 var request = new DeleteBrans.Command() { Id = model.Id };
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KODTABLO);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new DeleteBrans.Command() { Id = model.Id };
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KODTABLO);
+                mapGet.RequireAuthorization();
+            }
+
         }
     }
 }

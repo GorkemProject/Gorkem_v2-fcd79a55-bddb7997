@@ -5,6 +5,8 @@ using Gorkem_.Context;
 using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.Idareci;
 using Gorkem_.EndpointTags;
+using Gorkem_.Features.Dashboard;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +56,16 @@ namespace Gorkem_.Features.Idareci
                 {
                     return await Result<bool>.FailAsync("Köpeklere sadece idareci durumunda olan kişiler eklenebilir");
                 }
-                
+
+                bool mevcutKayitVarMi = await context.UT_IdareciKopekleri
+                    .AnyAsync(x => x.AdayIdareciId == request.Request.IdareciId && x.KopekId == request.Request.KopekId, cancellationToken);
+
+                if (mevcutKayitVarMi)
+                {
+                    return Result<bool>.Fail("Bu idareciye bu köpek zaten eklenmiş");
+
+                }
+
                 request.Request.IdareciId = idareci.Id;
                 context.UT_IdareciKopekleri.Add(request.Request.toIdareciKopekleri());
                 try
@@ -80,7 +91,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("idareci/addKopekToIdareci", async ([FromBody] IdareciyeKopekEkleRequest request, ISender sender) =>
+            var mapGet=app.MapPost("idareci/addKopekToIdareci", async ([FromBody] IdareciyeKopekEkleRequest request, ISender sender) =>
             {
                 var response = await sender.Send(new AddKopekToIdareci.Command(request));
 
@@ -90,6 +101,10 @@ namespace Gorkem_.Features.Idareci
                 return Results.BadRequest(response.Message);
 
             }).WithTags(EndpointConstants.IDARECI);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

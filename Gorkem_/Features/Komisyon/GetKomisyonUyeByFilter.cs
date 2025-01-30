@@ -71,7 +71,7 @@ public class KomisyonUyeleriFilterEndPoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("komisyonuye/komisyonUyeFilter", async ([FromBody] KomisyonUyeGetirFilterRequest request, ISender sender) =>
+       var mapGet= app.MapPost("komisyonuye/komisyonUyeFilter", async ([FromBody] KomisyonUyeGetirFilterRequest request, ISender sender) =>
         {
             var response = await sender.Send(new GetKomisyonUyeleriByFilterQuery(request));
             if (response.Succeeded)
@@ -80,5 +80,10 @@ public class KomisyonUyeleriFilterEndPoint : ICarterModule
             return Results.BadRequest(response);
 
         }).WithTags(EndpointConstants.KOMISYON);
+
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+        {
+            mapGet.RequireAuthorization();
+        }
     }
 }

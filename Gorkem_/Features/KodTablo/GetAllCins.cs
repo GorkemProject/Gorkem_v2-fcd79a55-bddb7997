@@ -4,6 +4,7 @@ using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KodTablo;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +44,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kodtablo/cins", async (ISender sender) =>
+           var mapGet= app.MapGet("kodtablo/cins", async (ISender sender) =>
             {
                 var request = new GetAllCins.Query();
                 var response = await sender.Send(request);
@@ -52,6 +53,11 @@ namespace Gorkem_.Features.KodTablo
                     return Results.Ok(response);
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 

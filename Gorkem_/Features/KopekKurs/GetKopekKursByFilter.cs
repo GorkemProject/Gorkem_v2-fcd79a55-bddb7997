@@ -18,8 +18,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.KopekKurs;
 
-    public record KopekKursFilterResponse(List<KopekKursGetirFilterResponse> KopekKurs, Dictionary<string, List<object>> ColumnValues, int TotalCount);
-    public record GetKopekKursByFilterQuery(KopekKursGetirFilterRequest Request) : IRequest<Result<KopekKursFilterResponse>>;
+public record KopekKursFilterResponse(List<KopekKursGetirFilterResponse> KopekKurs, Dictionary<string, List<object>> ColumnValues, int TotalCount);
+public record GetKopekKursByFilterQuery(KopekKursGetirFilterRequest Request) : IRequest<Result<KopekKursFilterResponse>>;
 
 public class GetKopekKursByFilterQueryHandler : IRequestHandler<GetKopekKursByFilterQuery, Result<KopekKursFilterResponse>>
 {
@@ -35,13 +35,13 @@ public class GetKopekKursByFilterQueryHandler : IRequestHandler<GetKopekKursByFi
         var query = _context.UT_Kurs
         .Include(x => x.Kursiyerler)
         .Include(x => x.KursYeri)
-        .Include((x=>x.KursEgitimListesi))
+        .Include((x => x.KursEgitimListesi))
         .Include(x => x.KursEgitmenler)
         .AsQueryable();
 
         TypeAdapterConfig<UT_Kurs, KopekKursGetirFilterResponse>
             .NewConfig()
-            .Map(dest =>dest.Id, src => src.Id)
+            .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.KursYeri, src => src.KursYeri.Name)
             .Map(dest => dest.KursEgitimListesi, src => src.KursEgitimListesi.Name);
 
@@ -80,14 +80,18 @@ public class KopekKursFilterEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("kopekKurs/GetKopekKursFilter", async ([FromBody] KopekKursGetirFilterRequest model, ISender sender) =>
-        {
-            var request = new GetKopekKursByFilterQuery(model);
-            var response = await sender.Send(request);
+        var mapGet = app.MapPost("kopekKurs/GetKopekKursFilter", async ([FromBody] KopekKursGetirFilterRequest model, ISender sender) =>
+          {
+              var request = new GetKopekKursByFilterQuery(model);
+              var response = await sender.Send(request);
 
-            if (response.Succeeded)
-                return Results.Ok(response);
-            return Results.BadRequest(response);
-        }).WithTags(EndpointConstants.KOPEKKURS);
+              if (response.Succeeded)
+                  return Results.Ok(response);
+              return Results.BadRequest(response);
+          }).WithTags(EndpointConstants.KOPEKKURS);
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+        {
+            mapGet.RequireAuthorization();
+        }
     }
 }

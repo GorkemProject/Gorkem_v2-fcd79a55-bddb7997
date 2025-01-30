@@ -13,10 +13,10 @@ namespace Gorkem_.Features.KopekKurs
         public class Query : IRequest<Result<List<SicileGoreKursiyerGetirResponse>>>
         {
             public int Sicil { get; set; }
-            public Query(int sicil) 
+            public Query(int sicil)
             {
                 Sicil = sicil;
-            }  
+            }
         }
 
         internal sealed class Handler : IRequestHandler<Query, Result<List<SicileGoreKursiyerGetirResponse>>>
@@ -31,22 +31,22 @@ namespace Gorkem_.Features.KopekKurs
             public async Task<Result<List<SicileGoreKursiyerGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var kursiyer = await _context.UT_Kursiyer
-                    .Include(a=>a.Kopek)
+                    .Include(a => a.Kopek)
                     .Where(k => k.Sicil == request.Sicil && k.Aktifmi)
                     .Select(k => new SicileGoreKursiyerGetirResponse
                     {
                         AdiSoyadi = k.PersonelAdi,
                         Sicil = k.Sicil,
-                        Bransi=k.Kopek.Brans.Name,
-                        CipNumarasi=k.Kopek.CipNumarasi,
-                        DogumTarihi=k.Kopek.DogumTarihi,
-                        KopekAdi=k.Kopek.KopekAdi,
-                        KadroIl=k.Kopek.KadroIl.Name,
-                        
+                        Bransi = k.Kopek.Brans.Name,
+                        CipNumarasi = k.Kopek.CipNumarasi,
+                        DogumTarihi = k.Kopek.DogumTarihi,
+                        KopekAdi = k.Kopek.KopekAdi,
+                        KadroIl = k.Kopek.KadroIl.Name,
+
 
 
                     }).ToListAsync(cancellationToken);
-                if (kursiyer==null)
+                if (kursiyer == null)
                 {
                     return Result<List<SicileGoreKursiyerGetirResponse>>.Fail("Sicile ait kursiyer bulunamadı.");
                 }
@@ -60,15 +60,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetKursiyerBySicil", async (int sicil, ISender sender) =>
-            {
-                var request = new GetKursiyerBySicil.Query(sicil);
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("kopekKurs/GetKursiyerBySicil", async (int sicil, ISender sender) =>
+              {
+                  var request = new GetKursiyerBySicil.Query(sicil);
+                  var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+              }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

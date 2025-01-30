@@ -4,6 +4,7 @@ using FluentValidation;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KodTablo;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kodtablo/DeleteKursEgitimListesi", async ([FromBody] KursEgitimListesiSilRequest model, ISender sender) =>
+           var mapGet= app.MapDelete("kodtablo/DeleteKursEgitimListesi", async ([FromBody] KursEgitimListesiSilRequest model, ISender sender) =>
             {
                 var request = new DeleteKursEgitimListesi.Command() { Id=model.Id };
 
@@ -59,6 +60,12 @@ namespace Gorkem_.Features.KodTablo
 
 
             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
+
         }
     }
 }

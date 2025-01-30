@@ -54,7 +54,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kodtablo/yabancidil", async ([FromBody] YabanciDilEkleRequest model, ISender sender) =>
+            var mapGet=app.MapPost("kodtablo/yabancidil", async ([FromBody] YabanciDilEkleRequest model, ISender sender) =>
             {
                 var request = new CreateYabanciDil.Command() { Name = model.YabanciDil };
                 var response = await sender.Send(request);
@@ -64,6 +64,10 @@ namespace Gorkem_.Features.KodTablo
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KODTABLO);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

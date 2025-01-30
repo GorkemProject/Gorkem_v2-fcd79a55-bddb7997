@@ -36,7 +36,7 @@ namespace Gorkem_.Features.KopekKurs
             public async Task<Result<List<KursunKursGunlukRaporlariniGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var kursiyerList = await _context.UT_Kursiyer
-                .Where(x=>x.Aktifmi && x.KursId.Equals(request.KursId))
+                .Where(x => x.Aktifmi && x.KursId.Equals(request.KursId))
                 .ToListAsync(cancellationToken);
 
                 var gunlukRaporlar = await _context.UT_KursGunlukRapors
@@ -44,7 +44,7 @@ namespace Gorkem_.Features.KopekKurs
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
-                    .Include(a => a.Kurs.Kursiyerler)                    
+                    .Include(a => a.Kurs.Kursiyerler)
                     .Include(a => a.KursGunlukRaporDersler)
                         .ThenInclude(b => b.Ders)
                     .Skip((request.PageNumber - 1) * request.PageSize)
@@ -72,7 +72,7 @@ namespace Gorkem_.Features.KopekKurs
 
                     }).ToListAsync(cancellationToken);
 
-                if (gunlukRaporlar==null && !gunlukRaporlar.Any())
+                if (gunlukRaporlar == null && !gunlukRaporlar.Any())
                 {
                     return Result<List<KursunKursGunlukRaporlariniGetirResponse>>.Fail("Kursa ait bir günlük rapor bulunamadı..");
                 }
@@ -85,16 +85,21 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetKursGunlukRaporByKursId", async (int kursId, int pageNumber, int pageSize, ISender sender) =>
+            var mapGet = app.MapGet("kopekKurs/GetKursGunlukRaporByKursId", async (int kursId, int pageNumber, int pageSize, ISender sender) =>
+              {
+
+                  var request = new GetKursGunlukRaporByKursId.Query(kursId, pageNumber, pageSize);
+                  var response = await sender.Send(request);
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+
+              }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-
-                var request = new GetKursGunlukRaporByKursId.Query(kursId, pageNumber,pageSize);
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

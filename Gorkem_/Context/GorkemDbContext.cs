@@ -41,7 +41,6 @@ namespace Gorkem_.Context
         public DbSet<UT_Kursiyer> UT_Kursiyer  { get; set; }
         public DbSet<UT_KursGunlukRapor> UT_KursGunlukRapors  { get; set; }
         public DbSet<UT_KursGunlukRaporDersler> UT_KursGunlukRaporDersler  { get; set; }
-        //public DbSet<UT_KursHaftalıkDegerlendirmeRaporu> UT_KursHaftalıkDegerlendirmeRaporus  { get; set; }
         public DbSet<UT_HaftalıkDegerlendirmeRaporuGozlemler> UT_HaftalıkDegerlendirmeRaporuGozlemlers  { get; set; }
 
         public DbSet<KT_KursDegerlendirmeSorular> KT_KursDegerlendirmeSorular { get; set; }
@@ -49,10 +48,8 @@ namespace Gorkem_.Context
         public DbSet<UT_KopekVeIdareciDegerlendirmeFormu> UT_KopekVeIdareciDegerlendirmeFormu { get; set; }
 
         public DbSet<UT_KopekKuvveDetay> UT_KopekKuvveDetays { get; set; }
-
-        //public DbSet<KT_KursKopekDegerlendirmeSorular> KT_KursKopekDegerlendirmeSorular { get; set; }
-        //public DbSet<UT_KursKopekDegerlendirmeCevap> UT_KursKopekDegerlendirmeCevap { get; set; }
-
+        public DbSet<UT_AyinKopegi> UT_AyinKopegis { get; set; }
+        public DbSet<UT_Duyurular> UT_Duyurulars { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

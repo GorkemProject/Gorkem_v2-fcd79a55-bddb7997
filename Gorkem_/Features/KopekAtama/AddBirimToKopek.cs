@@ -6,6 +6,7 @@ using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.KopekAtama;
 using Gorkem_.EndpointTags;
 using Gorkem_.Enums;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,7 @@ namespace Gorkem_.Features.KopekAtama
             {
                 //Köpeği bulduk
                 var kopek = await _context.UT_Kopek_Kopeks
-                    .Include(k=>k.Idareci)
+                    .Include(k => k.Idareci)
                     .Include(k => k.Birim)
                     .FirstOrDefaultAsync(k => k.Id == request.Request.KopekId);
 
@@ -53,7 +54,7 @@ namespace Gorkem_.Features.KopekAtama
                 var birim = await _context.KT_Birims
                     .FirstOrDefaultAsync(k => k.Id == request.Request.BirimTabloID);
 
-                if (birim==null)
+                if (birim == null)
                 {
                     return await Result<bool>.FailAsync("Seçilen birim bulunamadı");
                 }
@@ -61,7 +62,7 @@ namespace Gorkem_.Features.KopekAtama
 
                 var idareciKopekleri = await _context.UT_IdareciKopekleri
                     .FirstOrDefaultAsync(k => k.KopekId == request.Request.KopekId && k.Aktifmi);
-                
+
                 if (idareciKopekleri == null)
                 {
                     return await Result<bool>.FailAsync("Seçilen köpeğin idarecisi bulunamadı..");
@@ -77,7 +78,7 @@ namespace Gorkem_.Features.KopekAtama
                 {
                     mevcutCalKad.Aktifmi = false;
                     mevcutCalKad.T_IlisikKesme = DateTime.Now;
-                    mevcutCalKad.T_Pasif= DateTime.Now; 
+                    mevcutCalKad.T_Pasif = DateTime.Now;
 
                 }
 
@@ -96,16 +97,16 @@ namespace Gorkem_.Features.KopekAtama
                 var kopekCalKad = new UT_KopekCalKad
                 {
                     KopekId = kopek.Id,
-                    AdayIdareciId=idareciKopekleri.AdayIdareciId,
+                    AdayIdareciId = idareciKopekleri.AdayIdareciId,
                     Aktifmi = true,
-                    T_Aktif=DateTime.Now,
+                    T_Aktif = DateTime.Now,
                     T_GoreveBaslama = DateTime.Now,
                     T_EvrakAtama = DateTime.Now,
-                    T_IlisikKesme =null,
+                    T_IlisikKesme = null,
                     AtamaEvrakSayısı = request.Request.AtamaEvrakSayisi,
                     AtamaTuru = request.Request.AtamaTuru,
-                    BirimId=birim.Id,
-                    
+                    BirimId = birim.Id,
+
 
                 };
 
@@ -118,7 +119,7 @@ namespace Gorkem_.Features.KopekAtama
                 if (isSaved)
                     return await Result<bool>.SuccessAsync(true);
                 return await Result<bool>.FailAsync("Köpeğe birim eklenemedi.");
-            
+
             }
         }
     }
@@ -127,13 +128,18 @@ namespace Gorkem_.Features.KopekAtama
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekAtama/addBirimToKopek", async ([FromBody] KopegeBirimEkleRequest request, ISender sender) =>
+            var mapGet = app.MapPost("kopekAtama/addBirimToKopek", async ([FromBody] KopegeBirimEkleRequest request, ISender sender) =>
             {
                 var response = await sender.Send(new AddBirimToKopek.Command(request));
                 if (response.Succeeded)
                     return Results.Ok(response);
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KOPEKATAMA);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

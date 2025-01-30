@@ -33,20 +33,20 @@ namespace Gorkem_.Features.KopekKurs
                 var kursiyerler = await _context.UT_Kurs
                     .Where(k => k.Id == request.KursId && k.Aktifmi)
                     .Include(e => e.Kursiyerler)
-                    
+
                     .SelectMany(k => k.Kursiyerler
                         .Where(e => e.Aktifmi)
                         .Select(e => new KursIdyeGoreKursiyerGetirResponse
                         {
-                            Id=e.Id,
-                            Sicil=e.Sicil,
-                            PersonelAdi=e.PersonelAdi,
+                            Id = e.Id,
+                            Sicil = e.Sicil,
+                            PersonelAdi = e.PersonelAdi,
                             KopekId = e.KopekId,
-                            CipNumarası =e.CipNumarası,
-                            KopekName=e.Kopek.KopekAdi,
-                            KursAdi=e.Kurs.KursEgitimListesi.Name,
-                            KursDonem=e.Kurs.Donem,
-                            
+                            CipNumarası = e.CipNumarası,
+                            KopekName = e.Kopek.KopekAdi,
+                            KursAdi = e.Kurs.KursEgitimListesi.Name,
+                            KursDonem = e.Kurs.Donem,
+
 
                         }))
                     .ToListAsync(cancellationToken);
@@ -65,15 +65,19 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetAllKursiyerByKursId", async (int kursId, ISender sender) =>
-            {
-                var request = new GetAllKursiyerByKursId.Query(kursId);
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("kopekKurs/GetAllKursiyerByKursId", async (int kursId, ISender sender) =>
+             {
+                 var request = new GetAllKursiyerByKursId.Query(kursId);
+                 var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOPEKKURS);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

@@ -35,12 +35,12 @@ namespace Gorkem_.Features.KopekKurs
                     .Include(a => a.Kurs)
                         .ThenInclude(a => a.KursEgitimListesi)
                     .Include(a => a.Kurs.KursEgitmenler)
-                    .Include(a => a.Kurs.Kursiyerler.Where(a=>a.Aktifmi))
-                        .ThenInclude(a=>a.Kopek)
-                    .GroupBy(k => k.Hafta.ToString()) 
+                    .Include(a => a.Kurs.Kursiyerler.Where(a => a.Aktifmi))
+                        .ThenInclude(a => a.Kopek)
+                    .GroupBy(k => k.Hafta.ToString())
                     .Select(group => new KursunHaftalikRaporlariniGetirResponse
                     {
-                        Hafta = group.Key, 
+                        Hafta = group.Key,
                         Gozlemler = group.Select(y => new HaftalıkRaporGozlemResponse
                         {
                             KursiyerAdi = y.Kursiyer.PersonelAdi,
@@ -48,7 +48,7 @@ namespace Gorkem_.Features.KopekKurs
                             Gozlem = y.Gozlemler
                         }).ToList()
                     }).ToListAsync();
-                
+
                 if (haftalikRaporlar == null)
                 {
                     return Result<List<KursunHaftalikRaporlariniGetirResponse>>.Fail("Kursa ait bir haftalık rapor bulunamadı..");
@@ -62,16 +62,21 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetKursHaftalikRaporByKursId", async (int kursId, ISender sender) =>
-            {
-                var request = new GetKursHaftalikDegerlendirmeRaporuByKursId.Query(kursId);
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("kopekKurs/GetKursHaftalikRaporByKursId", async (int kursId, ISender sender) =>
+              {
+                  var request = new GetKursHaftalikDegerlendirmeRaporuByKursId.Query(kursId);
+                  var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-                
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+
+              }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 

@@ -50,11 +50,11 @@ namespace Gorkem_.Features.Komisyon
         {
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.UT_KomisyonUyeleris.Any(r=>r.TcKimlikNo ==request.Request.TcKimlikNo);
+                var isExist = Context.UT_KomisyonUyeleris.Any(r => r.TcKimlikNo == request.Request.TcKimlikNo);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.TcKimlikNo} is already exist");
 
                 Context.UT_KomisyonUyeleris.Add(request.ToKomisyonUyeleri());
-                var isSaved = await Context.SaveChangesAsync()>0;
+                var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} zamanında eklendi", request.Request.TcKimlikNo, "DemoAccount", DateTime.Now);
@@ -68,14 +68,19 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("komisyonUyeleri/createKomisyonUye", async ([FromBody] KomisyonUyeEkleRequest model, ISender sender) =>
+            var mapGet = app.MapPost("komisyonUyeleri/createKomisyonUye", async ([FromBody] KomisyonUyeEkleRequest model, ISender sender) =>
+             {
+                 var request = new CreateKomisyonUyeleri.Command(model);
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOMISYON);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new CreateKomisyonUyeleri.Command(model);
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOMISYON);
+                mapGet.RequireAuthorization();
+            }
+
         }
     }
 }

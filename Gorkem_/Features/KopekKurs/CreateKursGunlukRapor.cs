@@ -30,13 +30,13 @@ namespace Gorkem_.Features.KopekKurs
         {
 
 
-            var kursGunlukRapor =  new UT_KursGunlukRapor
+            var kursGunlukRapor = new UT_KursGunlukRapor
             {
                 KursId = command.Request.KursId,
                 T_DersTarihi = command.Request.T_DersTarihi,
                 SinifAdi = command.Request.SinifAdi,
                 Aktifmi = true,
-                T_Aktif=DateTime.Now,
+                T_Aktif = DateTime.Now,
                 KursGunlukRaporDersler = command.Request.DerslerIds
                 .Select(dersId => new UT_KursGunlukRaporDersler
                 {
@@ -45,13 +45,13 @@ namespace Gorkem_.Features.KopekKurs
 
             };
             return kursGunlukRapor;
-            
+
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.UT_KursGunlukRapors.Any(r=>r.Id == request.Request.Id);
+                var isExist = Context.UT_KursGunlukRapors.Any(r => r.Id == request.Request.Id);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.Id} is already exist");
 
 
@@ -66,11 +66,11 @@ namespace Gorkem_.Features.KopekKurs
                     Logger.Information("{0} kaydı {1} tarafından {2} zamanında eklendi..", request.Request.Id, "DemoAccount", DateTime.Now);
                     return await Result<bool>.SuccessAsync(true);
 
-                
+
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("KursGunlukRapor oluşturma hatası",ex.InnerException);
+                    throw new Exception("KursGunlukRapor oluşturma hatası", ex.InnerException);
                 }
             }
         }
@@ -81,15 +81,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/CreateKursGunlukRapor", async ([FromBody] KursGunlukRaporEkleRequest model, ISender sender) =>
-            {
-                var request = new CreateKursGunlukRapor.Command(model);
-                var response = await sender.Send(request);
+            var mapGet = app.MapPost("kopekKurs/CreateKursGunlukRapor", async ([FromBody] KursGunlukRaporEkleRequest model, ISender sender) =>
+             {
+                 var request = new CreateKursGunlukRapor.Command(model);
+                 var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

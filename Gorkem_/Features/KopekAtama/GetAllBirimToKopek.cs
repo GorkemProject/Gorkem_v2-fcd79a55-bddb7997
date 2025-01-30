@@ -3,6 +3,7 @@ using Carter;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KopekAtama;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +57,7 @@ namespace Gorkem_.Features.KopekAtama
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekAtama/getAllBirimToKopek", async (int kopekId, ISender sender) =>
+           var mapGet= app.MapGet("kopekAtama/getAllBirimToKopek", async (int kopekId, ISender sender) =>
             {
                 var request = new GetAllBirimToKopek.Query(kopekId);
                 var response = await sender.Send(request);
@@ -66,6 +67,10 @@ namespace Gorkem_.Features.KopekAtama
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.KOPEKATAMA);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

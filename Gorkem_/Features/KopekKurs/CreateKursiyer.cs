@@ -14,7 +14,7 @@ namespace Gorkem_.Features.KopekKurs
     public static class CreateKursiyer
     {
 
-        public record Command(KursiyerKaydetRequest Request) : IRequest<Result<int>> 
+        public record Command(KursiyerKaydetRequest Request) : IRequest<Result<int>>
         {
 
         }
@@ -28,7 +28,7 @@ namespace Gorkem_.Features.KopekKurs
                 RuleFor(r => r.Request.Sicil).NotEmpty().NotEmpty().WithMessage("Perseonel sicilini boş geçemezsiniz");
                 RuleFor(r => r.Request.KursId).NotEmpty().NotEmpty().WithMessage("hangi kursa kayıt olacağını boş geçemezsiniz");
                 RuleFor(r => r.Request.CipNumarası).NotEmpty().NotEmpty().WithMessage("çip numarasını  boş geçemezsiniz");
-                
+
 
 
 
@@ -44,7 +44,7 @@ namespace Gorkem_.Features.KopekKurs
                 Sicil = command.Request.Sicil,
                 KursId = command.Request.KursId,
                 CipNumarası = command.Request.CipNumarası,
-                KopekId= kopekId,
+                KopekId = kopekId,
                 Aktifmi = true,
                 T_Aktif = DateTime.Now,
             };
@@ -99,17 +99,22 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/CreateKursiyer", async ([FromBody] KursiyerKaydetRequest model, ISender sender) =>
+            var mapGet = app.MapPost("kopekKurs/CreateKursiyer", async ([FromBody] KursiyerKaydetRequest model, ISender sender) =>
+              {
+                  var request = new CreateKursiyer.Command(model);
+
+                  var response = await sender.Send(request);
+
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+
+              }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new CreateKursiyer.Command(model) ;
-
-                var response = await sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 

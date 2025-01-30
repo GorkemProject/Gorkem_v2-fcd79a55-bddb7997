@@ -4,6 +4,7 @@ using Carter;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KopekAtama;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -59,7 +60,7 @@ namespace Gorkem_.Features.KopekAtama
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("kopekAtama/updateBirimToKopek", async ( [FromBody] KopeginBiriminiGuncelleRequest model, ISender sender) =>
+           var mapGet= app.MapPut("kopekAtama/updateBirimToKopek", async ( [FromBody] KopeginBiriminiGuncelleRequest model, ISender sender) =>
             {
                 var response = await sender.Send(new UpdateBirimToKopek.Command(model.KopekId, model.BirimId));
 
@@ -68,6 +69,10 @@ namespace Gorkem_.Features.KopekAtama
 
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KOPEKATAMA);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

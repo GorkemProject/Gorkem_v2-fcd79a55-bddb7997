@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Gorkem_.Contracts.Idareci;
 using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -135,7 +136,7 @@ namespace Gorkem_.Features.Kopek
                         KopekDurum = x.KopekDurum,
                         KuvveNumarasi = x.KuvveNumarasi,
                         T_Aktif = x.T_Aktif,
-                        ProfileImage=x.ProfileImage
+                        ProfileImage = x.ProfileImage
 
                     }).ToListAsync(cancellationToken);
 
@@ -158,16 +159,21 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopek/ListAllKopekFilter", async ([FromBody] KopekListeleRequest model, ISender sender) =>
+            var mapGet = app.MapPost("kopek/ListAllKopekFilter", async ([FromBody] KopekListeleRequest model, ISender sender) =>
+             {
+                 var query = new ListAllKopekFilter.Query(model);
+                 var response = await sender.Send(query);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+             }).WithTags(EndpointConstants.KOPEK);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var query = new ListAllKopekFilter.Query(model);
-                var response = await sender.Send(query);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-            }).WithTags(EndpointConstants.KOPEK);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
 using Gorkem_.Enums;
 using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +28,7 @@ namespace Gorkem_.Features.Kopek
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<KopekGetirResponse>>>
         {
- 
+
 
             public async Task<Result<List<KopekGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -41,7 +42,7 @@ namespace Gorkem_.Features.Kopek
 
                         Id = a.Id,
                         KopekAdi = a.KopekAdi,
-       
+
                         IrkId = a.IrkId,
                         KadroIlId = a.KadroIlId,
                         BransId = a.BransId,
@@ -51,19 +52,19 @@ namespace Gorkem_.Features.Kopek
                         DogumTarihi = a.DogumTarihi,
                         YapilanIslem = a.YapilanIslem,
                         NihaiKanaat = a.NihaiKanaat,
-                        EdinimSekli=a.EdinimSekli,
+                        EdinimSekli = a.EdinimSekli,
                         T_Aktif = a.T_Aktif,
                         T_Pasif = a.T_Pasif,
                         Cinsiyet = a.Cinsiyet,
                         AnneKopekId = a.AnneKopekId,
-                        BabaKopekId= a.BabaKopekId,
+                        BabaKopekId = a.BabaKopekId,
                         EdinilenKisi = a.EdinilenKisi,
-                        EdinilmeTarihi=a.EdinilmeTarihi,
-                        EdinilenKisiTelefon=a.EdinilenKisiTelefon,
-                        EdinilenKisiAdres=a.EdinilenKisiAdres,
-                        ProfileImage=a.ProfileImage
+                        EdinilmeTarihi = a.EdinilmeTarihi,
+                        EdinilenKisiTelefon = a.EdinilenKisiTelefon,
+                        EdinilenKisiAdres = a.EdinilenKisiAdres,
+                        ProfileImage = a.ProfileImage
 
-                        
+
                     }).ToListAsync(cancellationToken);
                 return Result<List<KopekGetirResponse>>.Success(aktifKopekler);
             }
@@ -73,12 +74,17 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopek/getAllKopek", async (ISender sender) =>
+            var mapGet = app.MapGet("kopek/getAllKopek", async (ISender sender) =>
+             {
+                 var request = new GetAllKopek.Query();
+                 var response = await sender.Send(request);
+                 return Results.Ok(response);
+             }).WithTags(EndpointConstants.KOPEK);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetAllKopek.Query();
-                var response = await sender.Send(request);
-                return Results.Ok(response);
-            }).WithTags(EndpointConstants.KOPEK);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

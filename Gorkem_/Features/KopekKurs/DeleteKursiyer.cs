@@ -15,7 +15,7 @@ namespace Gorkem_.Features.KopekKurs
 
         public class Command : IRequest<Result<bool>>
         {
-            public int  Id { get; set; }
+            public int Id { get; set; }
         }
         public class DeleteKursiyerValidation : AbstractValidator<Command>
         {
@@ -44,7 +44,7 @@ namespace Gorkem_.Features.KopekKurs
                 }
 
                 return await Result<bool>.FailAsync("Silme işlemi yapılamadı");
-                
+
             }
         }
     }
@@ -53,17 +53,22 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kopekKurs/DeleteKursiyer", async ([FromBody] DeleteKursiyerRequest model, ISender sender) =>
+            var mapGet = app.MapDelete("kopekKurs/DeleteKursiyer", async ([FromBody] DeleteKursiyerRequest model, ISender sender) =>
+             {
+                 var request = new DeleteKursiyer.Command() { Id = model.Id };
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+
+             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new DeleteKursiyer.Command() { Id = model.Id };
-                var response = await sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-                
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

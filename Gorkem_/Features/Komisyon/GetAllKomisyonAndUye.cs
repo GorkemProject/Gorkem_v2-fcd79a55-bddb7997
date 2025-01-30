@@ -27,8 +27,8 @@ namespace Gorkem_.Features.Komisyon
 
             public async Task<Result<TumKomisyonlarVeUyelerResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var komisyonlar =await _context.UT_Komisyons
-                    .Include(k=>k.KomisyonUyeleri)
+                var komisyonlar = await _context.UT_Komisyons
+                    .Include(k => k.KomisyonUyeleri)
                     .ToListAsync(cancellationToken);
 
                 var response = new TumKomisyonlarVeUyelerResponse
@@ -56,15 +56,19 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("komisyon/getAllKomisyonAndKomisyonUye", async (ISender sender) =>
-            {
-                var request = new GetAllKomisyonAndUye.Query();
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("komisyon/getAllKomisyonAndKomisyonUye", async (ISender sender) =>
+             {
+                 var request = new GetAllKomisyonAndUye.Query();
+                 var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOMISYON);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOMISYON);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

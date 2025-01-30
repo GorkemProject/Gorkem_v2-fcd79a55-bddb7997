@@ -31,7 +31,7 @@ namespace Gorkem_.Features.SecimTest
         {
             return new UT_SecimTestiCevap
             {
-                
+
                 Aktifmi = true,
                 T_Aktif = DateTime.Now,
                 UtSecimTestId = command.Request.UtSecimTestId,
@@ -54,7 +54,7 @@ namespace Gorkem_.Features.SecimTest
                     return await Result<bool>.FailAsync("Seçilen Seçim Testi Bulunamadı");
 
                 var soru = await Context.KT_Sorus
-                    .Where(s=>s.Id == request.Request.SoruId && s.SecimTestId == secimTest)
+                    .Where(s => s.Id == request.Request.SoruId && s.SecimTestId == secimTest)
                     .FirstOrDefaultAsync(cancellationToken);
 
                 if (soru == null)
@@ -70,7 +70,7 @@ namespace Gorkem_.Features.SecimTest
                 var secimTestiCevap = new UT_SecimTestiCevap
                 {
                     T_Aktif = DateTime.Now,
-                    Aktifmi=true,
+                    Aktifmi = true,
                     UtSecimTestId = request.Request.UtSecimTestId,
                     SoruId = request.Request.SoruId,
                     Puan = request.Request.Puan,
@@ -93,14 +93,19 @@ namespace Gorkem_.Features.SecimTest
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("secimTesti/CreateSecimTestiCevap", async ([FromBody] SecimTestiCevapEkleRequest model, ISender sender) =>
+            var mapGet = app.MapPost("secimTesti/CreateSecimTestiCevap", async ([FromBody] SecimTestiCevapEkleRequest model, ISender sender) =>
+              {
+                  var request = new CreateSecimTestiCevap.Command(model);
+                  var response = await sender.Send(request);
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+              }).WithTags(EndpointConstants.SECİMTEST);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new CreateSecimTestiCevap.Command(model);
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.SECİMTEST);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Contracts.KopekKurs;
 using Gorkem_.EndpointTags;
 using Gorkem_.Features.Komisyon;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -37,20 +38,20 @@ namespace Gorkem_.Features.KopekKurs
 
             public async Task<Result<List<KursiyerKopekDegerlendirmeResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var aaa =  _context.UT_KursDegerlendirmeCevap
+                var aaa = _context.UT_KursDegerlendirmeCevap
                     .Include(c => c.Kursiyer)
                         .ThenInclude(k => k.Kopek).ToList();
 
 
                 var kopekVeKursiyerDegerlendirme = await _context.UT_KursDegerlendirmeCevap
                     .Include(c => c.Kursiyer)
-                        
+
                     .Where(a => a.KursId == request.KursId && a.Aktifmi && a.Kursiyer.Aktifmi)
                     .GroupBy(a => a.Kursiyer) // Kursiyer bazında gruplama
                     .Select(g => new KursiyerKopekDegerlendirmeResponse
                     {
-                        KopekAdi = _context.UT_Kopek_Kopeks.FirstOrDefault(a=>a.Id == g.Key.KopekId).KopekAdi,
-                        KopekCip = _context.UT_Kopek_Kopeks.FirstOrDefault(a=>a.Id == g.Key.KopekId).CipNumarasi,
+                        KopekAdi = _context.UT_Kopek_Kopeks.FirstOrDefault(a => a.Id == g.Key.KopekId).KopekAdi,
+                        KopekCip = _context.UT_Kopek_Kopeks.FirstOrDefault(a => a.Id == g.Key.KopekId).CipNumarasi,
                         KopekDegerlendirmeCevaplar = g
                             .Where(c => c.DegerlendirmeTuru == 1) // Köpek değerlendirme türü
                             .Select(c => new DegerlendirmeCevapResponse
@@ -89,15 +90,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetKopekVeKursiyerDegerlendirmeFormuKursiyerKursId", async (int KursId, ISender sender) =>
-            {
-                var request = new GetKopekVeKursiyerDegerlendirmeFormuKursId.Query(KursId);
-                var response = await sender.Send(request);
+            var mapGet = app.MapGet("kopekKurs/GetKopekVeKursiyerDegerlendirmeFormuKursiyerKursId", async (int KursId, ISender sender) =>
+             {
+                 var request = new GetKopekVeKursiyerDegerlendirmeFormuKursId.Query(KursId);
+                 var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

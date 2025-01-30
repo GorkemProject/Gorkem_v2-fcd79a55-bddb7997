@@ -22,7 +22,7 @@ namespace Gorkem_.Features.Komisyon
         {
             public CreateKomisyonValidation()
             {
-                RuleFor(r=>r.Request.KomisyonAdi).NotEmpty().NotNull().WithMessage("Komisyon Adı boş bırakılamaz..");
+                RuleFor(r => r.Request.KomisyonAdi).NotEmpty().NotNull().WithMessage("Komisyon Adı boş bırakılamaz..");
                 RuleFor(r => r.Request.OlusturulmaTarihi).NotEmpty().NotNull().WithMessage("Komisyon Oluşturulma Tarihi boş bırakılamaz..");
                 RuleFor(r => r.Request.GorevYeriId).NotEmpty().NotNull().WithMessage("Komisyon Görev Yeri boş bırakılamaz");
 
@@ -36,8 +36,8 @@ namespace Gorkem_.Features.Komisyon
                 OlusturulmaTarihi = command.Request.OlusturulmaTarihi,
                 GorevYeriId = command.Request.GorevYeriId,
                 T_Aktif = DateTime.Now,
-                Aktifmi =true,
-                
+                Aktifmi = true,
+
 
             };
 
@@ -46,7 +46,7 @@ namespace Gorkem_.Features.Komisyon
         {
             public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var isExist = Context.UT_Komisyons.Any(r=>r.Id ==request.Request.Id);
+                var isExist = Context.UT_Komisyons.Any(r => r.Id == request.Request.Id);
                 if (isExist) return await Result<int>.FailAsync($"{request.Request.Id} is already exist");
 
                 var komisyon = request.ToKomisyon();
@@ -54,7 +54,7 @@ namespace Gorkem_.Features.Komisyon
                 Context.UT_Komisyons.Add(komisyon);
 
 
-                var isSaved = await Context.SaveChangesAsync()>0;
+                var isSaved = await Context.SaveChangesAsync() > 0;
                 if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} tarihinde eklendi", request.Request.KomisyonAdi, "DemoAccount", DateTime.Now);
@@ -68,14 +68,18 @@ namespace Gorkem_.Features.Komisyon
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("komisyon/createKomisyon", async ([FromBody] KomisyonEkleRequest model, ISender sender) =>
+            var mapGet = app.MapPost("komisyon/createKomisyon", async ([FromBody] KomisyonEkleRequest model, ISender sender) =>
+             {
+                 var request = new CreateKomisyon.Command(model);
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOMISYON);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new CreateKomisyon.Command(model);
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOMISYON);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

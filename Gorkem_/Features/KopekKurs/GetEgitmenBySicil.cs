@@ -52,15 +52,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetEgitmenBySicil", async (int sicil, ISender sender) =>
-            {
-                var request = new GetEgitmenBySicil.Query(sicil);
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
+            var mapGet = app.MapGet("kopekKurs/GetEgitmenBySicil", async (int sicil, ISender sender) =>
+             {
+                 var request = new GetEgitmenBySicil.Query(sicil);
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
 
-            }).WithTags(EndpointConstants.KOPEKKURS);
+             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

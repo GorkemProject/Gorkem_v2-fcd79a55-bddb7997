@@ -25,13 +25,13 @@ namespace Gorkem_.Features.KodTablo
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<KopekDurumGetirResponse>>>
         {
- 
+
 
             public async Task<Result<List<KopekDurumGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var aktifKopekDurumlari = await Context.KT_KopekDurumus
-                    .Where(b=>b.Aktifmi)
-                    .Select(b=> new KopekDurumGetirResponse
+                    .Where(b => b.Aktifmi)
+                    .Select(b => new KopekDurumGetirResponse
                     {
                         Id = b.Id,
                         Name = b.Name,
@@ -44,15 +44,19 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kodtablo/kopekdurum", async (ISender sender) =>
-            {
-                var request = new GetAllKopekDurum.Query();
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
+            var mapGet = app.MapGet("kodtablo/kopekdurum", async (ISender sender) =>
+             {
+                 var request = new GetAllKopekDurum.Query();
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
 
-            }).WithTags(EndpointConstants.KODTABLO);
+             }).WithTags(EndpointConstants.KODTABLO);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

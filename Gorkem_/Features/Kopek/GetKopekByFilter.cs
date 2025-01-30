@@ -17,26 +17,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.Kopek;
 
-    public record KopekFilterResponse(List<KopekGetirFilterResponse> Kopek, Dictionary<string,List<object>> ColumnValues, int TotalCount);
-    public record GetKopekByFilterQuery(KopekGetirFilterRequest Request) : IRequest<Result<KopekFilterResponse>>;
+public record KopekFilterResponse(List<KopekGetirFilterResponse> Kopek, Dictionary<string, List<object>> ColumnValues, int TotalCount);
+public record GetKopekByFilterQuery(KopekGetirFilterRequest Request) : IRequest<Result<KopekFilterResponse>>;
 
-    public class GetKopekByFilterQueryHandler : IRequestHandler<GetKopekByFilterQuery, Result<KopekFilterResponse>>
+public class GetKopekByFilterQueryHandler : IRequestHandler<GetKopekByFilterQuery, Result<KopekFilterResponse>>
+{
+    private readonly GorkemDbContext context;
+
+    public GetKopekByFilterQueryHandler(GorkemDbContext context)
     {
-        private readonly GorkemDbContext context;
+        this.context = context;
+    }
 
-        public GetKopekByFilterQueryHandler(GorkemDbContext context)
-        {
-            this.context = context;
-        }
-
-        public async Task<Result<KopekFilterResponse>> Handle(GetKopekByFilterQuery request, CancellationToken cancellationToken)
-        {
-            var query = context.UT_Kopek_Kopeks
-            .Include(x=>x.Irk)
-            .Include(x=>x.KadroIl)
-            .Include(x=>x.Brans)
-            .Include(x=>x.Karar)
-            .AsQueryable();
+    public async Task<Result<KopekFilterResponse>> Handle(GetKopekByFilterQuery request, CancellationToken cancellationToken)
+    {
+        var query = context.UT_Kopek_Kopeks
+        .Include(x => x.Irk)
+        .Include(x => x.KadroIl)
+        .Include(x => x.Brans)
+        .Include(x => x.Karar)
+        .AsQueryable();
 
         TypeAdapterConfig<UT_Kopek, KopekGetirFilterResponse>
         .NewConfig()
@@ -45,45 +45,52 @@ namespace Gorkem_.Features.Kopek;
         .Map(dest => dest.Brans, src => src.Brans.Name)
         .Map(dest => dest.Karar, src => src.Karar.Name);
 
-        if (request.Request.Filters.Count > 0){
-                query = FilterData.Filter(query, request.Request.Filters);
-            }
-
-            if(request.Request.SortedColumn != ""){
-                var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending";
-                var param = Expression.Parameter(typeof(UT_Kopek), "x");
-                var property = Expression.Property(param, request.Request.SortedColumn);
-                var lambda = Expression.Lambda(property, param);
-                var exp = Expression.Call(typeof(Queryable), direction, new Type [] {typeof(UT_Kopek), property.Type}, query.Expression, Expression.Quote(lambda));
-                query = query.Provider.CreateQuery<UT_Kopek>(exp);
-            }
-
-            var paged = PagedResult<UT_Kopek>.ToPagedResponse(query,request.Request.PageNumber,10);
-
-            var mappedItems = paged.Items.Adapt<List<KopekGetirFilterResponse>>();
-
-            var columnValues = GorkemReturning.GetUniqueValues(query,"NihaiKanaat");
-
-            var response = new KopekFilterResponse(mappedItems, columnValues, query.Count());
-
-            return await Result<KopekFilterResponse>.SuccessAsync(response);
-        }
-    }
-
-    public class KopekFilterEndPoint : ICarterModule
-    {
-        public void AddRoutes(IEndpointRouteBuilder app)
+        if (request.Request.Filters.Count > 0)
         {
-            app.MapPost("kopek/kopekFilter", async ([FromBody] KopekGetirFilterRequest request, ISender sender) =>
-            {
-                var response = await sender.Send(new GetKopekByFilterQuery(request));
+            query = FilterData.Filter(query, request.Request.Filters);
+        }
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
+        if (request.Request.SortedColumn != "")
+        {
+            var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending";
+            var param = Expression.Parameter(typeof(UT_Kopek), "x");
+            var property = Expression.Property(param, request.Request.SortedColumn);
+            var lambda = Expression.Lambda(property, param);
+            var exp = Expression.Call(typeof(Queryable), direction, new Type[] { typeof(UT_Kopek), property.Type }, query.Expression, Expression.Quote(lambda));
+            query = query.Provider.CreateQuery<UT_Kopek>(exp);
+        }
 
-                return Results.BadRequest(response.Message);
+        var paged = PagedResult<UT_Kopek>.ToPagedResponse(query, request.Request.PageNumber, 10);
 
-            }).WithTags(EndpointConstants.KOPEK);
+        var mappedItems = paged.Items.Adapt<List<KopekGetirFilterResponse>>();
+
+        var columnValues = GorkemReturning.GetUniqueValues(query, "NihaiKanaat");
+
+        var response = new KopekFilterResponse(mappedItems, columnValues, query.Count());
+
+        return await Result<KopekFilterResponse>.SuccessAsync(response);
+    }
+}
+
+public class KopekFilterEndPoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        var mapGet = app.MapPost("kopek/kopekFilter", async ([FromBody] KopekGetirFilterRequest request, ISender sender) =>
+          {
+              var response = await sender.Send(new GetKopekByFilterQuery(request));
+
+              if (response.Succeeded)
+                  return Results.Ok(response);
+
+              return Results.BadRequest(response.Message);
+
+          }).WithTags(EndpointConstants.KOPEK);
+
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+        {
+            mapGet.RequireAuthorization();
         }
     }
+}
 

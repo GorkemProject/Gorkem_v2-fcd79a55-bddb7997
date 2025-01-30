@@ -3,6 +3,7 @@ using Carter;
 using Gorkem_.Context;
 using Gorkem_.Contracts.KopekKurs;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -62,7 +63,7 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/AddEgitmenToKurs", async ([FromBody] KursaEgitmenEkleRequest model, ISender sender) =>
+           var mapGet= app.MapPost("kopekKurs/AddEgitmenToKurs", async ([FromBody] KursaEgitmenEkleRequest model, ISender sender) =>
             {
                 var request = new AddEgitmenToKurs.AddEgitmenToKursCommand(model);
                 var response = await sender.Send(request);
@@ -72,6 +73,11 @@ namespace Gorkem_.Features.KopekKurs
                 return Results.BadRequest(response);
                 
             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

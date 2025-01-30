@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Context.Entities;
 using Gorkem_.Contracts.KodTablo;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -60,7 +61,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public async void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kodtablo/askerlik", async ([FromBody] AskerlikEkleRequest model, ISender sender) =>
+            var mapGet=app.MapPost("kodtablo/askerlik", async ([FromBody] AskerlikEkleRequest model, ISender sender) =>
             {
                 var request = new CreateAskerlik.Command() { Name = model.AskerlikDurumAdi };
                 var response = await sender.Send(request);
@@ -69,6 +70,10 @@ namespace Gorkem_.Features.KodTablo
                     return Results.Ok(response);
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

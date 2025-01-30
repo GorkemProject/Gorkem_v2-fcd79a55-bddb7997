@@ -11,7 +11,7 @@ namespace Gorkem_.Features.KopekKurs
 {
     public static class RemoveEgitmenToKurs
     {
-        public record Command (KurstanEgitmenCıkartRequest Request) : IRequest<Result<bool>>;
+        public record Command(KurstanEgitmenCıkartRequest Request) : IRequest<Result<bool>>;
 
         internal sealed class Handler : IRequestHandler<Command, Result<bool>>
         {
@@ -36,7 +36,7 @@ namespace Gorkem_.Features.KopekKurs
                 foreach (var egitmenId in request.Request.EgitmenId)
                 {
                     var egitmen = existingKurs.KursEgitmenler?.FirstOrDefault(e => e.Id == egitmenId);
-                    if (egitmen== null)
+                    if (egitmen == null)
                     {
                         return await Result<bool>.FailAsync($"Seçilen eğitmen herhangi bir kursa atanmamış");
                     }
@@ -56,16 +56,21 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/RemoveEgitmenToKurs", async ([FromBody] KurstanEgitmenCıkartRequest model, ISender sender) =>
+            var mapGet = app.MapPost("kopekKurs/RemoveEgitmenToKurs", async ([FromBody] KurstanEgitmenCıkartRequest model, ISender sender) =>
+             {
+                 var request = new RemoveEgitmenToKurs.Command(model);
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request =new RemoveEgitmenToKurs.Command(model);
-                var response = await sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-            }).WithTags(EndpointConstants.KODTABLO);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

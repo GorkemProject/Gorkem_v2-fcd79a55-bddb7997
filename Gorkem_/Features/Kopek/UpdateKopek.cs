@@ -5,6 +5,7 @@ using Gorkem_.Context;
 using Gorkem_.Contracts.Kopek;
 using Gorkem_.EndpointTags;
 using Gorkem_.Enums;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace Gorkem_.Features.Kopek
 {
     public class UpdateKopek
     {
-        public class Command : IRequest<Result<bool>> 
+        public class Command : IRequest<Result<bool>>
         {
             public int Id { get; set; }
             public string KopekAdi { get; set; }
@@ -52,15 +53,15 @@ namespace Gorkem_.Features.Kopek
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
- 
+
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var kopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Id);
-                if (kopek==null)
+                if (kopek == null)
                 {
                     return await Result<bool>.FailAsync("Köpek Bulunamadı..");
                 }
-                    
+
                 kopek.KopekAdi = request.KopekAdi;
                 kopek.IrkId = request.IrkId;
                 kopek.KadroIlId = request.KadroIlId;
@@ -71,18 +72,18 @@ namespace Gorkem_.Features.Kopek
                 kopek.YapilanIslem = request.YapilanIslem;
                 kopek.NihaiKanaat = request.NihaiKanaat;
                 kopek.KararId = request.KararId;
-                kopek.Cinsiyet=request.Cinsiyet;
+                kopek.Cinsiyet = request.Cinsiyet;
                 kopek.EdinimSekli = request.EdinimSekli;
-                kopek.AnneKopekId=request.AnneKopekId;
-                kopek.BabaKopekId=request.BabaKopekId;
+                kopek.AnneKopekId = request.AnneKopekId;
+                kopek.BabaKopekId = request.BabaKopekId;
                 kopek.EdinilenKisi = request.EdinilenKisi;
                 kopek.EdinilenKisiAdres = request.EdinilenKisiAdres;
-                kopek.EdinilenKisiTelefon=request.EdinilenKisiTelefon;
+                kopek.EdinilenKisiTelefon = request.EdinilenKisiTelefon;
                 kopek.EdinilmeTarihi = request.EdinilmeTarihi;
-                kopek.ProfileImage=request.ProfileImage;
-                
-                
-                var isSaved = await Context.SaveChangesAsync(cancellationToken)>0;
+                kopek.ProfileImage = request.ProfileImage;
+
+
+                var isSaved = await Context.SaveChangesAsync(cancellationToken) > 0;
                 if (isSaved)
                 {
                     Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.KopekAdi, "DemoAccount", DateTime.Now);
@@ -96,18 +97,21 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPut("kopek/{id}/UpdateKopek", async (int id, [FromBody] UpdateKopek.Command model, ISender sender) =>
-            {
-               
-                model.Id = id;
-                var result = await sender.Send(model);
-                if (result.Succeeded)
-                {
-                    return Results.Ok(result);
-                }
-                return Results.BadRequest(result);
-            }).WithTags(EndpointConstants.KOPEK);
+            var mapGet = app.MapPut("kopek/{id}/UpdateKopek", async (int id, [FromBody] UpdateKopek.Command model, ISender sender) =>
+             {
 
+                 model.Id = id;
+                 var result = await sender.Send(model);
+                 if (result.Succeeded)
+                 {
+                     return Results.Ok(result);
+                 }
+                 return Results.BadRequest(result);
+             }).WithTags(EndpointConstants.KOPEK);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

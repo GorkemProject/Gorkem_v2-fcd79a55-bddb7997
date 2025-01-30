@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Authorization;
+using MapsterMapper;
 
 namespace Gorkem_.Features.Kopek
 {
@@ -60,14 +61,14 @@ namespace Gorkem_.Features.Kopek
                 throw new Exception("Geçerli bir karar bulunamadı");
             }
             //Eğer kararın neticesi true ise köpeğin durumu sağlık değil ise sağlık red olacak..
-            Enum_KopekDurum kopekDurum = karar.Neticesi == true ? Enum_KopekDurum.SaglikOlumlu : Enum_KopekDurum.SaglikRed; 
+            Enum_KopekDurum kopekDurum = karar.Neticesi == true ? Enum_KopekDurum.SaglikOlumlu : Enum_KopekDurum.SaglikRed;
 
             return new UT_Kopek
             {
                 KopekAdi = command.Request.KopekAdi,
                 IrkId = command.Request.IrkId,
                 KadroIlId = command.Request.KadroIlId,
-                BransId=command.Request.BransId,
+                BransId = command.Request.BransId,
                 CipNumarasi = command.Request.CipNumarasi,
                 DogumTarihi = command.Request.DogumTarihi,
                 YapilanIslem = command.Request.YapilanIslem,
@@ -76,18 +77,18 @@ namespace Gorkem_.Features.Kopek
                 KararId = command.Request.KararId,
                 T_Aktif = DateTime.Now,
                 Aktifmi = true,
-                Cinsiyet=command.Request.Cinsiyet,
-                EdinimSekli=command.Request.EdinimSekli,
-                AnneKopekId=command.Request.AnneKopekId,
-                BabaKopekId=command.Request.BabaKopekId,
-                EdinilenKisi=command.Request.EdinilenKisi,
-                EdinilenKisiAdres=command.Request.EdinilenKisiAdres,
-                EdinilenKisiTelefon=command.Request.EdinilenKisiTelefon,
-                EdinilmeTarihi=command.Request.EdinilmeTarihi,
-                KopekDurum=kopekDurum,
-                ProfileImage=command.Request.ProfileImage
-                
-                
+                Cinsiyet = command.Request.Cinsiyet,
+                EdinimSekli = command.Request.EdinimSekli,
+                AnneKopekId = command.Request.AnneKopekId,
+                BabaKopekId = command.Request.BabaKopekId,
+                EdinilenKisi = command.Request.EdinilenKisi,
+                EdinilenKisiAdres = command.Request.EdinilenKisiAdres,
+                EdinilenKisiTelefon = command.Request.EdinilenKisiTelefon,
+                EdinilmeTarihi = command.Request.EdinilmeTarihi,
+                KopekDurum = kopekDurum,
+                ProfileImage = command.Request.ProfileImage
+
+
             };
 
         }
@@ -98,22 +99,22 @@ namespace Gorkem_.Features.Kopek
                 var isExist = Context.UT_Kopek_Kopeks.Any(r => r.CipNumarasi == request.Request.CipNumarasi);
                 if (isExist) return await Result<bool>.FailAsync($"{request.Request.CipNumarasi} is already exist");
 
-                
-                if (request.Request.AnneKopekId !=0)
+
+                if (request.Request.AnneKopekId != 0)
                 {
                     var anneKopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.AnneKopekId.Value);
-                    if (anneKopek==null)                    
+                    if (anneKopek == null)
                         return await Result<bool>.FailAsync("anne köpek bulunamadı");
-                    
-                    if (anneKopek.Cinsiyet == Enum_Cinsiyet.Erkek)                    
+
+                    if (anneKopek.Cinsiyet == Enum_Cinsiyet.Erkek)
                         return await Result<bool>.FailAsync("anne köpek sadece dişi olabilir.");
 
                     if (anneKopek.DogumTarihi > request.Request.DogumTarihi)
                         return await Result<bool>.FailAsync("Anne köpek eklenen köpekten küçük olamaz");
-                    
+
                 }
 
-                if (request.Request.BabaKopekId !=0)
+                if (request.Request.BabaKopekId != 0)
                 {
                     var babaKopek = await Context.UT_Kopek_Kopeks.FindAsync(request.Request.BabaKopekId.Value);
                     if (babaKopek == null)
@@ -124,10 +125,10 @@ namespace Gorkem_.Features.Kopek
 
                     if (babaKopek.DogumTarihi > request.Request.DogumTarihi)
                         return await Result<bool>.FailAsync("Baba köpek eklenen köpekten küçük olamaz");
-                    
+
                 }
 
-                if(request.Request.EdinimSekli == Enum_TeminSekli.Satinalma || request.Request.EdinimSekli == Enum_TeminSekli.Hibe)
+                if (request.Request.EdinimSekli == Enum_TeminSekli.Satinalma || request.Request.EdinimSekli == Enum_TeminSekli.Hibe)
                 {
                     request.Request.AnneKopekId = null;
                     request.Request.BabaKopekId = null;
@@ -141,10 +142,10 @@ namespace Gorkem_.Features.Kopek
                 {
                     var isSaved = await Context.SaveChangesAsync() > 0;
                     if (isSaved)
-                {
-                    Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.Request.CipNumarasi, "DemoAccount", DateTime.Now);
-                    return await Result<bool>.SuccessAsync(true);
-                }
+                    {
+                        Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.Request.CipNumarasi, "DemoAccount", DateTime.Now);
+                        return await Result<bool>.SuccessAsync(true);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -152,9 +153,9 @@ namespace Gorkem_.Features.Kopek
                     throw;
                 }
 
-                
+
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");
-                
+
 
             }
         }
@@ -163,7 +164,7 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopek/createKopek", async ([FromBody] KopekEkleRequest model, ISender sender) =>
+           var mapGet= app.MapPost("kopek/createKopek", async ([FromBody] KopekEkleRequest model, ISender sender) =>
             {
                 var request = new CreateKopek.Command(model);
                 var response = await sender.Send(request);
@@ -172,6 +173,10 @@ namespace Gorkem_.Features.Kopek
                 return Results.BadRequest(response.Message);
             })
             .WithTags(EndpointConstants.KOPEK);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

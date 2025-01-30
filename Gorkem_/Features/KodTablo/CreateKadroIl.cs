@@ -61,7 +61,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kodtablo/kadroil", async ([FromBody] KadroIlEkleRequest model, ISender sender) =>
+            var mapGet=app.MapPost("kodtablo/kadroil", async ([FromBody] KadroIlEkleRequest model, ISender sender) =>
             {
                 var request = new CreateKadroIl.Command() { Name = model.KadroIlAdi };
 
@@ -71,6 +71,11 @@ namespace Gorkem_.Features.KodTablo
                     return Results.Ok(response);
                 return Results.BadRequest(response);
             }).WithTags(EndpointConstants.KODTABLO);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 

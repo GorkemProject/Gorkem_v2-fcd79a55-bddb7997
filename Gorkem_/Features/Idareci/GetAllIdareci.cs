@@ -3,13 +3,14 @@ using Carter;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Idareci;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gorkem_.Features.Idareci
 {
-    public  class GetAllIdareci
+    public static class GetAllIdareci
     {
 
         public class Query : IRequest<Result<List<RealIdareciGetirResponse>>>
@@ -41,7 +42,7 @@ namespace Gorkem_.Features.Idareci
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("idareci/GetAllIdareci", async (ISender sender) =>
+            var mapGet=app.MapGet("idareci/GetAllIdareci", async (ISender sender) =>
             {
                 var request =new GetAllIdareci.Query();
                 var response = await sender.Send(request);
@@ -50,6 +51,11 @@ namespace Gorkem_.Features.Idareci
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.IDARECI);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

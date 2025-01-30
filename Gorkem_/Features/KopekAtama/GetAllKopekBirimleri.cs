@@ -14,7 +14,7 @@ namespace Gorkem_.Features.KopekAtama
     public static class GetAllKopekBirimleri
     {
 
-        public record Query () : IRequest<Result<List<KopekBirimGetirResponse>>>;
+        public record Query() : IRequest<Result<List<KopekBirimGetirResponse>>>;
 
 
         public class Handler : IRequestHandler<Query, Result<List<KopekBirimGetirResponse>>>
@@ -29,7 +29,7 @@ namespace Gorkem_.Features.KopekAtama
             public async Task<Result<List<KopekBirimGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var kopekler = await _context.UT_Kopek_Kopeks
-                    .Include(k=>k.Birim)
+                    .Include(k => k.Birim)
                     .ToListAsync(cancellationToken);
 
                 if (kopekler == null)
@@ -53,16 +53,20 @@ namespace Gorkem_.Features.KopekAtama
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekAtama/getAllKopekBirimleri", async (ISender sender) =>
+            var mapGet = app.MapGet("kopekAtama/getAllKopekBirimleri", async (ISender sender) =>
+             {
+
+                 var request = new GetAllKopekBirimleri.Query();
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOPEKATAMA);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-
-                var request = new GetAllKopekBirimleri.Query();
-                var response = await sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKATAMA);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

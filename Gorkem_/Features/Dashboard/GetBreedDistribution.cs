@@ -3,6 +3,7 @@ using Carter;
 using Gorkem_.Context;
 using Gorkem_.Contracts.Dashboard;
 using Gorkem_.EndpointTags;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,7 @@ namespace Gorkem_.Features.Dashboard
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("dashboard/irklaraGoreKopekSayisi", async (ISender sender) =>
+            var mapGet=app.MapGet("dashboard/irklaraGoreKopekSayisi", async (ISender sender) =>
             {
 
                 var request = new GetBreedDistribution.Query();
@@ -42,6 +43,10 @@ namespace Gorkem_.Features.Dashboard
                 return Results.BadRequest(response);
 
             }).WithTags(EndpointConstants.DASHBOARD);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

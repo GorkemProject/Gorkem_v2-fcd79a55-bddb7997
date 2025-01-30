@@ -22,7 +22,7 @@ namespace Gorkem_.Features.KodTablo
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Query, Result<List<IrkGetirResponse>>>
         {
- 
+
 
             public async Task<Result<List<IrkGetirResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -41,14 +41,18 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kodtablo/irk", async (ISender sender) =>
+            var mapGet = app.MapGet("kodtablo/irk", async (ISender sender) =>
+             {
+                 var request = new GetAllIrk.Query();
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KODTABLO);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetAllIrk.Query();
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KODTABLO);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

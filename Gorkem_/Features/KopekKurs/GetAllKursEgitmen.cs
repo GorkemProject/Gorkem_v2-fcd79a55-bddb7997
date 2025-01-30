@@ -23,21 +23,21 @@ namespace Gorkem_.Features.KopekKurs
             {
                 var aktifEgitmenler = await Context.UT_KursEgitmenler
                     .Where(a => a.Aktifmi)
-                    .Include(a=>a.Birim)
-                    .Include(a=>a.Rutbe)
+                    .Include(a => a.Birim)
+                    .Include(a => a.Rutbe)
                     .Select(a => new KursEgitmenGetirResponse
                     {
-                        Id=a.Id,
-                        AdSoyad=a.AdSoyad,
-                        BirimId=a.BirimId,
-                        Birim=a.Birim.Adi,
-                        RutbeId=a.RutbeId,
-                        Rutbe=a.Rutbe.Name,
-                        Sicil=a.Sicil
-                        
+                        Id = a.Id,
+                        AdSoyad = a.AdSoyad,
+                        BirimId = a.BirimId,
+                        Birim = a.Birim.Adi,
+                        RutbeId = a.RutbeId,
+                        Rutbe = a.Rutbe.Name,
+                        Sicil = a.Sicil
+
                     }).ToListAsync(cancellationToken);
                 return Result<List<KursEgitmenGetirResponse>>.Success(aktifEgitmenler);
-            
+
             }
         }
     }
@@ -46,16 +46,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("kopekKurs/GetAllKursEgitmen", async (ISender sender) =>
+            var mapGet = app.MapGet("kopekKurs/GetAllKursEgitmen", async (ISender sender) =>
+             {
+                 var request = new GetAllKursEgitmen.Query();
+                 var response = await sender.Send(request);
+
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+
+             }).WithTags(EndpointConstants.KOPEKKURS);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new GetAllKursEgitmen.Query();
-                var response =await  sender.Send(request);
-
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

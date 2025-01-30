@@ -25,7 +25,7 @@ namespace Gorkem_.Features.KopekKurs
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var existingKurs = await _context.UT_Kurs
-                    .Include(k=>k.Kursiyerler)
+                    .Include(k => k.Kursiyerler)
                     .FirstOrDefaultAsync(k => k.Id == request.Request.KursId);
 
                 if (existingKurs == null)
@@ -54,15 +54,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("kopekKurs/RemoveKursiyerToKurs", async ([FromBody] KurstanKursiyerCikartRequest model, ISender sender) =>
-            {
-                var request = new RemoveKursiyerToKurs.Command(model);
-                var response = await sender.Send(request);
+            var mapGet = app.MapPost("kopekKurs/RemoveKursiyerToKurs", async ([FromBody] KurstanKursiyerCikartRequest model, ISender sender) =>
+             {
+                 var request = new RemoveKursiyerToKurs.Command(model);
+                 var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                 if (response.Succeeded)
+                     return Results.Ok(response);
+                 return Results.BadRequest(response);
+             }).WithTags(EndpointConstants.KOPEKKURS);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

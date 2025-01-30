@@ -23,12 +23,12 @@ namespace Gorkem_.Features.Kopek
         {
             public DeleteKopekValidation()
             {
-                RuleFor(r=>r.Id).GreaterThanOrEqualTo(0).Configure(r=>r.MessageBuilder=_=>"Id Boş Olamaz.");
+                RuleFor(r => r.Id).GreaterThanOrEqualTo(0).Configure(r => r.MessageBuilder = _ => "Id Boş Olamaz.");
             }
         }
         internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
- 
+
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -37,7 +37,7 @@ namespace Gorkem_.Features.Kopek
 
                 currentKopek.Aktifmi = false;
                 currentKopek.T_Pasif = DateTime.Now;
-                var isDeleted = await Context.SaveChangesAsync()>0;
+                var isDeleted = await Context.SaveChangesAsync() > 0;
 
                 if (isDeleted)
                 {
@@ -45,7 +45,7 @@ namespace Gorkem_.Features.Kopek
                     return await Result<bool>.SuccessAsync(true);
                 }
                 return await Result<bool>.FailAsync("Silme işlemi yapılamadı.");
-                
+
             }
         }
     }
@@ -53,14 +53,19 @@ namespace Gorkem_.Features.Kopek
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kopek/deleteKopek", async ([FromBody] KopekSilRequest model, ISender sender) =>
+            var mapGet = app.MapDelete("kopek/deleteKopek", async ([FromBody] KopekSilRequest model, ISender sender) =>
+             {
+                 var request = new DeleteKopek.Command() { Id = model.Id };
+                 var response = await sender.Send(request);
+                 if (response.Succeeded)
+                     return Results.Ok($"With the {model.Id} id data has been deleted");
+                 return Results.BadRequest(response.Message);
+             }).WithTags(EndpointConstants.KOPEK);
+
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                var request = new DeleteKopek.Command() { Id = model.Id };
-                var response = await sender.Send(request);
-                if (response.Succeeded)
-                    return Results.Ok($"With the {model.Id} id data has been deleted");
-                return Results.BadRequest(response.Message);
-            }).WithTags(EndpointConstants.KOPEK);
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

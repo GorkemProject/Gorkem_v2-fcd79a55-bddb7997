@@ -41,7 +41,7 @@ namespace Gorkem_.Features.KopekKurs
                     return await Result<bool>.SuccessAsync(true);
                 }
                 return await Result<bool>.FailAsync("Silme işlemi yapılamadı");
-                
+
             }
         }
     }
@@ -50,16 +50,20 @@ namespace Gorkem_.Features.KopekKurs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapDelete("kopekKurs/DeleteKursEgitmen", async ([FromBody] KursEgitmenSilRequest model, ISender sender) =>
-            {
-                var request = new DeleteKursEgitmen.Command() {Id=model.Id };
-                var response = await sender.Send(request);
+            var mapGet = app.MapDelete("kopekKurs/DeleteKursEgitmen", async ([FromBody] KursEgitmenSilRequest model, ISender sender) =>
+              {
+                  var request = new DeleteKursEgitmen.Command() { Id = model.Id };
+                  var response = await sender.Send(request);
 
-                if (response.Succeeded)
-                    return Results.Ok(response);
-                return Results.BadRequest(response);
-                
-            }).WithTags(EndpointConstants.KOPEKKURS);
+                  if (response.Succeeded)
+                      return Results.Ok(response);
+                  return Results.BadRequest(response);
+
+              }).WithTags(EndpointConstants.KOPEKKURS);
+            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
+            {
+                mapGet.RequireAuthorization();
+            }
         }
     }
 }

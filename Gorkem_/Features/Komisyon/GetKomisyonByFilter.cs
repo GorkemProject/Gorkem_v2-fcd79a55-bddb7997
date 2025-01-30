@@ -31,20 +31,20 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
     public async Task<Result<KomisyonFilterResponse>> Handle(GetKomisyonByFilterQuery request, CancellationToken cancellationToken)
     {
         var query = _context.UT_Komisyons
-            .Where(x=>x.Aktifmi)
-            .Include(x=>x.GorevYeri)
+            .Where(x => x.Aktifmi)
+            .Include(x => x.GorevYeri)
             .AsQueryable();
 
         TypeAdapterConfig<UT_Komisyon, KomisyonGetirFilterResponse>
             .NewConfig()
-            .Map(dest=> dest.GorevYeriId, src =>src.GorevYeri.Id)
+            .Map(dest => dest.GorevYeriId, src => src.GorevYeri.Id)
             .Map(dest => dest.GorevYeri, src => src.GorevYeri.Name);
 
-        if (request.Request.Filters.Count>0)
+        if (request.Request.Filters.Count > 0)
         {
             query = FilterData.Filter(query, request.Request.Filters);
         }
-        if (request.Request.SortedColumn !="")
+        if (request.Request.SortedColumn != "")
         {
             var direction = request.Request.SortDirection == "asc" ? "OrderBy" : "OrderByDescending"; //
             var param = Expression.Parameter(typeof(UT_Komisyon), "x");
@@ -56,7 +56,7 @@ public class GetKomisyonByFilterQueryHandler : IRequestHandler<GetKomisyonByFilt
         var mappedItems = paged.Items.Adapt<List<KomisyonGetirFilterResponse>>();
 
         var columnValues = GorkemReturning.GetUniqueValues(query, "GorevYeri");
-    
+
         var response = new KomisyonFilterResponse(mappedItems, columnValues, query.Count());
 
         return await Result<KomisyonFilterResponse>.SuccessAsync(response);
@@ -67,14 +67,19 @@ public class KomisyonFilterEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("komisyon/komisyonFilter", async ([FromBody] KomisyonGetirFilterRequest request, ISender sender) =>
+        var mapGet = app.MapPost("komisyon/komisyonFilter", async ([FromBody] KomisyonGetirFilterRequest request, ISender sender) =>
+         {
+             var response = await sender.Send(new GetKomisyonByFilterQuery(request));
+             if (response.Succeeded)
+                 return Results.Ok(response);
+             return Results.BadRequest(response);
+
+
+         }).WithTags(EndpointConstants.KOMISYON);
+
+        if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
         {
-            var response = await sender.Send(new GetKomisyonByFilterQuery(request));
-            if (response.Succeeded)
-                return Results.Ok(response);
-            return Results.BadRequest(response);
-
-
-        }).WithTags(EndpointConstants.KOMISYON);
+            mapGet.RequireAuthorization();
+        }
     }
 }
