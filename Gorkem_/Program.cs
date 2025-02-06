@@ -12,20 +12,23 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
-using Gorkem_.Configuration;
-using Gorkem_.Services;
 using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 string ConnectionString = builder.Configuration.GetConnectionString("GorkemAppConnection")??string.Empty;
-
-var authEnabled = builder.Configuration.GetValue<bool>("Authentication:Enabled");
 
 #region SeriLog Start
 
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
+
+var loggerFactory = LoggerFactory.Create(builder =>{
+    builder.AddConsole(); // Logları konsola yazdır
+});
+
+var logger = loggerFactory.CreateLogger<Program>();
+logger.LogInformation("Docker log test mesajı");
 
 
 #endregion
@@ -35,9 +38,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("GorkemCORS", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://gorkem","https://10.203.8.145")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -49,8 +53,6 @@ builder.Services.RegisterApiServiceCollection(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-if (builder.Environment.IsProduction())
-{
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
        .AddJwtBearer(options =>
        {
@@ -63,7 +65,7 @@ if (builder.Environment.IsProduction())
                NameClaimType = ClaimTypes.Name,
                RoleClaimType = ClaimTypes.Role,
                ValidateIssuer = false,
-               ValidateAudience = true,
+               ValidateAudience = false,
                ValidateIssuerSigningKey = false,
                IssuerSigningKeyResolver = (token, securityToken, identifier, validationParameters) =>
                {
@@ -78,9 +80,8 @@ if (builder.Environment.IsProduction())
        });
 
     builder.Services.AddAuthorizationBuilder()
-      .AddPolicy("GorkemAuth", policy =>
-            policy.RequireClaim("scope", "narkoScope"));
-}
+      .AddPolicy("ApiScope", policy =>policy.RequireAuthenticatedUser());
+
 
 
 
@@ -98,23 +99,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("GorkemCORS");
+
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
-
+app.UseCors("GorkemCORS");
 app.UseExceptionHandler();
 
-if (app.Environment.IsProduction())
-{
-    app.UseAuthentication();
-    app.UseAuthorization();
-}
-
-
 app.MapCarter();
-
-
-// Add Authentication middleware
+  app.UseAuthentication();
+    app.UseAuthorization();
 
 app.Run();
 

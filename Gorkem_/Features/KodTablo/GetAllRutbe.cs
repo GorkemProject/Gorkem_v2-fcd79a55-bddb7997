@@ -44,7 +44,7 @@ namespace Gorkem_.Features.KodTablo
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-          var mapGet=  app.MapGet("kodtablo/rutbe", async (ISender sender) =>
+          app.MapGet("kodtablo/rutbe", async   (ISender sender) =>
             {
                 var request = new GetAllRutbe.Query();
                 var response = await sender.Send(request);
@@ -52,12 +52,9 @@ namespace Gorkem_.Features.KodTablo
                 if (response.Succeeded)
                     return Results.Ok(response);
                 return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KODTABLO);
+            }).WithTags(EndpointConstants.KODTABLO).RequireAuthorization();
 
-            if (app.ServiceProvider.GetRequiredService<IWebHostEnvironment>().IsProduction())
-            {
-                mapGet.RequireAuthorization();
-            }
+       
         }
     }
 }
