@@ -41,7 +41,7 @@ namespace Gorkem_.Features.KopekKurs
                         CipNumarasi = k.Kopek.CipNumarasi,
                         DogumTarihi = k.Kopek.DogumTarihi,
                         KopekAdi = k.Kopek.KopekAdi,
-                        KadroIl = k.Kopek.KadroIl.Name,
+                        KadroIl = k.Kopek.GorevYeri.Name,
 
 
 

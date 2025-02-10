@@ -44,7 +44,7 @@ namespace Gorkem_.Features.Kopek
                         KopekAdi = a.KopekAdi,
 
                         IrkId = a.IrkId,
-                        KadroIlId = a.KadroIlId,
+                        GorevYeriId = a.GorevYeriId,
                         BransId = a.BransId,
                         KuvveNumarasi = a.KuvveNumarasi,
                         CipNumarasi = a.CipNumarasi,

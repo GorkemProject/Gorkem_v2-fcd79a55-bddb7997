@@ -4,6 +4,7 @@ using Gorkem_.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gorkem_.Migrations
 {
     [DbContext(typeof(GorkemDbContext))]
-    partial class GorkemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250207083803_GorevYeri")]
+    partial class GorevYeri
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -627,10 +630,10 @@ namespace Gorkem_.Migrations
                     b.Property<int>("Durum")
                         .HasColumnType("int");
 
-                    b.Property<int>("GorevYeriId")
+                    b.Property<int>("IdareciDurumId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdareciDurumId")
+                    b.Property<int>("KadroIlId")
                         .HasColumnType("int");
 
                     b.Property<int>("Puan")
@@ -660,9 +663,9 @@ namespace Gorkem_.Migrations
 
                     b.HasIndex("BransId");
 
-                    b.HasIndex("GorevYeriId");
-
                     b.HasIndex("IdareciDurumId");
+
+                    b.HasIndex("KadroIlId");
 
                     b.HasIndex("RutbeId");
 
@@ -1622,15 +1625,15 @@ namespace Gorkem_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gorkem_.Context.Entities.KT_GorevYeri", "GorevYeri")
-                        .WithMany()
-                        .HasForeignKey("GorevYeriId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Gorkem_.Context.Entities.KT_IdareciDurum", "IdareciDurum")
                         .WithMany()
                         .HasForeignKey("IdareciDurumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gorkem_.Context.Entities.KT_KadroIl", "KadroIl")
+                        .WithMany()
+                        .HasForeignKey("KadroIlId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1644,9 +1647,9 @@ namespace Gorkem_.Migrations
 
                     b.Navigation("Brans");
 
-                    b.Navigation("GorevYeri");
-
                     b.Navigation("IdareciDurum");
+
+                    b.Navigation("KadroIl");
 
                     b.Navigation("Rutbe");
                 });

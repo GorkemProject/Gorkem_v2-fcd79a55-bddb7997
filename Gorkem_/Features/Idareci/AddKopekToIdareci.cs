@@ -48,29 +48,33 @@ namespace Gorkem_.Features.Idareci
 
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var adayIdareci = await context.UT_AdayIdareci.FirstOrDefaultAsync(x=>x.Id.Equals(request.Request.IdareciId));
-                if(adayIdareci is null) return await Result<bool>.FailAsync("Idareci Bulunamadı!!");
 
-                var idareci = await context.UT_Idarecis.FirstOrDefaultAsync(x => x.Id.Equals(request.Request.IdareciId));
+
+                // Önce Aday Idareci'yi kontrol et
+                var adayIdareci = await context.UT_AdayIdareci.FirstOrDefaultAsync(x => x.Id == request.Request.IdareciId);
+                if (adayIdareci is null)
+                    return await Result<bool>.FailAsync("Aday Idareci Bulunamadı!!");
+
+                // Idareci olup olmadığını kontrol et
+                var idareci = await context.UT_Idarecis.FirstOrDefaultAsync(x => x.IdareciId == request.Request.IdareciId);
                 if (idareci is null)
-                {
                     return await Result<bool>.FailAsync("Köpeklere sadece idareci durumunda olan kişiler eklenebilir");
-                }
+
+                // ID'nin doğru tabloya ait olduğunu kontrol et
+                if (idareci.IdareciId != adayIdareci.Id)
+                    return await Result<bool>.FailAsync("Geçersiz ID eşleşmesi!");
 
                 bool mevcutKayitVarMi = await context.UT_IdareciKopekleri
                     .AnyAsync(x => x.AdayIdareciId == request.Request.IdareciId && x.KopekId == request.Request.KopekId, cancellationToken);
 
                 if (mevcutKayitVarMi)
-                {
                     return Result<bool>.Fail("Bu idareciye bu köpek zaten eklenmiş");
 
-                }
-
-                request.Request.IdareciId = idareci.Id;
+                // Burada Id'yi değiştirmeye gerek yok
                 context.UT_IdareciKopekleri.Add(request.Request.toIdareciKopekleri());
                 try
                 {
-                    var isDataSaved = await context.SaveChangesAsync()>0;
+                    var isDataSaved = await context.SaveChangesAsync() > 0;
                     if (isDataSaved) return await Result<bool>.SuccessAsync(true);
                 }
                 catch (Exception ex)
@@ -80,9 +84,7 @@ namespace Gorkem_.Features.Idareci
                     Console.WriteLine($"Stack Trace: {ex.InnerException?.StackTrace}");
                     return await Result<bool>.FailAsync("Idareciye Kopek Eklenemedi!!");
                 }
-                
 
-                
                 return await Result<bool>.FailAsync("Idareciye Kopek Eklenemedi!!");
             }
         }

@@ -19,7 +19,7 @@ namespace Gorkem_.Features.Kopek
             public int Id { get; set; }
             public string KopekAdi { get; set; }
             public int IrkId { get; set; }
-            public int KadroIlId { get; set; }
+            public int GorevYeriId { get; set; }
             public int BransId { get; set; }
             public string? KuvveNumarasi { get; set; }
             public string? CipNumarasi { get; set; }
@@ -43,7 +43,7 @@ namespace Gorkem_.Features.Kopek
             {
                 RuleFor(r => r.KopekAdi).NotEmpty().NotNull().WithMessage("İsim Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.IrkId).NotEmpty().NotNull().WithMessage("Irk Alanı Boş Bırakılamaz.");
-                RuleFor(r => r.KadroIlId).NotEmpty().NotNull().WithMessage("Birim Alanı Boş Bırakılamaz.");
+                RuleFor(r => r.GorevYeriId).NotEmpty().NotNull().WithMessage("Birim Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.KuvveNumarasi).NotEmpty().NotNull().WithMessage("Kuvve Numarası Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.CipNumarasi).NotEmpty().NotNull().WithMessage("Çip Numarası Alanı Boş Bırakılamaz.");
                 RuleFor(r => r.YapilanIslem).NotEmpty().NotNull().WithMessage("Yapılan işlem Alanı Boş Bırakılamaz.");
@@ -64,7 +64,7 @@ namespace Gorkem_.Features.Kopek
 
                 kopek.KopekAdi = request.KopekAdi;
                 kopek.IrkId = request.IrkId;
-                kopek.KadroIlId = request.KadroIlId;
+                kopek.GorevYeriId = request.GorevYeriId;
                 kopek.BransId = request.BransId;
                 kopek.KuvveNumarasi = request.KuvveNumarasi;
                 kopek.CipNumarasi = request.CipNumarasi;

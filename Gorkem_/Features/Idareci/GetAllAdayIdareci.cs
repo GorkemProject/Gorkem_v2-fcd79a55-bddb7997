@@ -41,7 +41,7 @@ namespace Gorkem_.Features.Idareci
                         CepTelefonu = a.CepTelefonu,
                         DogumTarihi = a.DogumTarihi,
                         IdareciDurumId = a.IdareciDurumId,
-                        KadroIlId = a.KadroIlId,
+                        GorevYeriId = a.GorevYeriId,
                         BransId = a.BransId,
                         RutbeId = a.RutbeId,
                         AskerlikId = a.AskerlikId

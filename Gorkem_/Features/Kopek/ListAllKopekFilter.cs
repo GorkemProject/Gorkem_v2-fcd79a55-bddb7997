@@ -40,9 +40,9 @@ namespace Gorkem_.Features.Kopek
                     query = query.Where(x => x.IrkId == request.Request.IrkId);
                 }
                 // KadroIle göre filtreleme
-                if (request.Request.KadroIlId != 0)
+                if (request.Request.GorevYeriId != 0)
                 {
-                    query = query.Where(x => x.KadroIlId == request.Request.KadroIlId);
+                    query = query.Where(x => x.GorevYeriId == request.Request.GorevYeriId);
                 }
                 // Karara göre filtreleme
                 if (request.Request.KararId != 0)
@@ -97,7 +97,7 @@ namespace Gorkem_.Features.Kopek
                     }
                     if (sortBy == "Kadro")
                     {
-                        query = request.Request.IsAscending ? query.OrderBy(x => x.KadroIl.Name) : query.OrderByDescending(x => x.KadroIl);
+                        query = request.Request.IsAscending ? query.OrderBy(x => x.GorevYeri.Name) : query.OrderByDescending(x => x.GorevYeri);
                     }
                     if (sortBy == "Karar")
                     {
@@ -131,7 +131,7 @@ namespace Gorkem_.Features.Kopek
                         CipNumarasi = x.CipNumarasi,
                         EdinimSekli = x.EdinimSekli,
                         IrkId = x.IrkId,
-                        KadroIlId = x.KadroIlId,
+                        KadroIlId = x.GorevYeriId,
                         KararId = x.KararId,
                         KopekDurum = x.KopekDurum,
                         KuvveNumarasi = x.KuvveNumarasi,

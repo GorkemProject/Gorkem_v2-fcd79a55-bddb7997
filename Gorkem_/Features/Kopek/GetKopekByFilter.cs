@@ -33,7 +33,7 @@ public class GetKopekByFilterQueryHandler : IRequestHandler<GetKopekByFilterQuer
     {
         var query = context.UT_Kopek_Kopeks
         .Include(x => x.Irk)
-        .Include(x => x.KadroIl)
+        .Include(x => x.GorevYeri)
         .Include(x => x.Brans)
         .Include(x => x.Karar)
         .AsQueryable();
@@ -41,7 +41,7 @@ public class GetKopekByFilterQueryHandler : IRequestHandler<GetKopekByFilterQuer
         TypeAdapterConfig<UT_Kopek, KopekGetirFilterResponse>
         .NewConfig()
         .Map(dest => dest.Irk, src => src.Irk.Name)
-        .Map(dest => dest.KadroIl, src => src.KadroIl.Name)
+        .Map(dest => dest.KadroIl, src => src.GorevYeri.Name)
         .Map(dest => dest.Brans, src => src.Brans.Name)
         .Map(dest => dest.Karar, src => src.Karar.Name);
 

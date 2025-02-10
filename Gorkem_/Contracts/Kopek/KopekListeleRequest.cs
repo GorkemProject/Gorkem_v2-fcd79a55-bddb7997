@@ -10,7 +10,7 @@ namespace Gorkem_.Contracts.Kopek
 
         public int? CipNumarasiUstSinir { get; set; }
         public int? CipNumarasiAltSinir { get; set; }
-        public int KadroIlId { get; set; }
+        public int GorevYeriId { get; set; }
         public DateTime DogumTarihiBaslangic { get; set; }
         public DateTime DogumTarihiBitis { get; set; }
 
