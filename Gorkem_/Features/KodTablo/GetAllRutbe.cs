@@ -52,7 +52,7 @@ namespace Gorkem_.Features.KodTablo
                 if (response.Succeeded)
                     return Results.Ok(response);
                 return Results.BadRequest(response);
-            }).WithTags(EndpointConstants.KODTABLO).RequireAuthorization();
+            }).WithTags(EndpointConstants.KODTABLO);
 
        
         }

@@ -19,17 +19,7 @@ namespace Gorkem_.Features.Kopek
     {
         public record Command(KopekEkleRequest Request) : IRequest<Result<bool>>
         {
-            ////Parametrelerimizi buraya yazıyoruz.
-            //public string KopekAdi { get; set; }
-            //public int IrkId { get; set; }
-            //public string KuvveNumarasi { get; set; }
-            //public int KadroIlId { get; set; }
-            //public int BransId { get; set; }
-            //public string CipNumarasi { get; set; }
-            //public DateTime DogumTarihi { get; set; }
-            //public string? YapilanIslem { get; set; }
-            //public string? NihaiKanaat { get; set; }
-            //public int KararId { get; set; }
+    
 
         }
         public class CreateKopekValidation : AbstractValidator<Command>
@@ -40,7 +30,7 @@ namespace Gorkem_.Features.Kopek
              // tarih alanlarında valid bir datetime check yapalım
                 RuleFor(r => r.Request.KopekAdi).NotEmpty().NotNull().WithMessage("Köpek ismi boş olamaz");
                 RuleFor(r => r.Request.IrkId).NotEmpty().NotNull().WithMessage("Irk Değeri Boş Olamaz");
-                RuleFor(r => r.Request.KadroIlId).NotEmpty().NotNull().WithMessage("Birim Değeri Boş Olamaz");
+                RuleFor(r => r.Request.GorevYeriId).NotEmpty().NotNull().WithMessage("Birim Değeri Boş Olamaz");
                 RuleFor(r => r.Request.CipNumarasi).NotEmpty().NotNull().WithMessage("Çip Numarası Değeri Boş Olamaz");
                 RuleFor(r => r.Request.DogumTarihi).NotEmpty().NotNull().WithMessage("Doğum Tarihi Değeri Boş Olamaz");
                 RuleFor(r => r.Request.YapilanIslem).NotEmpty().NotNull().WithMessage("Yapılan işlem Değeri Boş Olamaz");
@@ -67,7 +57,7 @@ namespace Gorkem_.Features.Kopek
             {
                 KopekAdi = command.Request.KopekAdi,
                 IrkId = command.Request.IrkId,
-                KadroIlId = command.Request.KadroIlId,
+                GorevYeriId = command.Request.GorevYeriId,
                 BransId = command.Request.BransId,
                 CipNumarasi = command.Request.CipNumarasi,
                 DogumTarihi = command.Request.DogumTarihi,
@@ -92,7 +82,7 @@ namespace Gorkem_.Features.Kopek
             };
 
         }
-        internal sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
+        public sealed record Handler(GorkemDbContext Context, Serilog.ILogger Logger) : IRequestHandler<Command, Result<bool>>
         {
             public async Task<Result<bool>> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -138,22 +128,15 @@ namespace Gorkem_.Features.Kopek
 
                 Context.UT_Kopek_Kopeks.Add(kopek);
 
-                try
-                {
+              
                     var isSaved = await Context.SaveChangesAsync() > 0;
                     if (isSaved)
                     {
                         Logger.Information("{0} kaydı {1} tarafından {2} Zamanında Eklendi", request.Request.CipNumarasi, "DemoAccount", DateTime.Now);
                         return await Result<bool>.SuccessAsync(true);
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.InnerException);
-                    throw;
-                }
-
-
+                
+              
                 return await Result<bool>.FailAsync("Kayıt Başarılı Değil");
 
 

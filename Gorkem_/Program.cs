@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("GorkemCORS", policy =>
     {
-        policy.WithOrigins("https://gorkem","https://10.203.8.145")
+        policy.WithOrigins("https://gorkem","https://10.203.8.145", "http://localhost:3000", "https://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

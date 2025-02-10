@@ -14,8 +14,12 @@ namespace Gorkem_.Context.Entities
         public virtual KT_Brans? Brans { get; set; }
         public string? KuvveNumarasi { get; set; }
         public string? CipNumarasi { get; set; }
-        public int KadroIlId { get; set; }
-        public virtual KT_KadroIl? KadroIl { get; set; }
+
+        //Değişmesi Gereken yer burayayı görev yeri tablosuna bağlaman gerekiyor
+        public int GorevYeriId { get; set; }
+        public virtual KT_GorevYeri? GorevYeri { get; set; }
+
+
         public DateTime DogumTarihi { get; set; }
         public string? YapilanIslem { get; set; }
         public string? NihaiKanaat { get; set; }
